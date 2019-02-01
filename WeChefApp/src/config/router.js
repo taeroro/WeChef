@@ -145,7 +145,7 @@ const TabNavigator = createBottomTabNavigator(
               focused
               ? (
                 <Image
-                  source={require('../../img/icons/icons8-bookmark_ribbon.png')}
+                  source={require('../../img/icons/icons8-bookmark.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
