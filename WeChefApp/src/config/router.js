@@ -66,7 +66,8 @@ export const ProfileStack = createStackNavigator(
     ProfileMain: {
       screen: ProfileMainScreen,
       navigationOptions: () => ({
-        // headerBackTitle: strings('header_back_title.toolbox'),
+        header: null,
+        headerBackTitle: "Profile",
       }),
     },
   }

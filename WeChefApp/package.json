@@ -11,6 +11,8 @@
     "react-native": "0.58.3",
     "react-native-fbsdk": "^0.8.0",
     "react-native-gesture-handler": "^1.0.15",
+    "react-native-iphone-x-helper": "^1.2.0",
+    "react-native-material-kit": "^0.5.1",
     "react-navigation": "^3.0.9"
   },
   "devDependencies": {
