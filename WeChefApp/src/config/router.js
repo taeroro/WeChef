@@ -8,6 +8,7 @@ import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
 import ProfileMainScreen from './../tabScreens/profile/ProfileMainScreen';
+import ProfileSettingsScreen from './../tabScreens/profile/ProfileSettingsScreen';
 
 // =============================================================================
 // Individual Tab's Stack for Screens
@@ -67,7 +68,17 @@ export const ProfileStack = createStackNavigator(
       screen: ProfileMainScreen,
       navigationOptions: () => ({
         header: null,
-        headerBackTitle: "Profile",
+        headerBackTitle: null,
+      }),
+    },
+    ProfileSettings: {
+      screen: ProfileSettingsScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          // borderBottomWidth: 0,
+        }
+
       }),
     },
   }

@@ -4,6 +4,10 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MKButton, MKColor } from 'react-native-material-kit';
 
 class ProfileMainScreen extends Component {
+  openSettings() {
+    this.props.navigation.navigate('ProfileSettings');
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -15,9 +19,7 @@ class ProfileMainScreen extends Component {
             maskBorderRadius={45}
             width={45}
             height={45}
-            onPress={() => {
-              console.log('hi, raised button!');
-            }}
+            onPress={() => this.openSettings()}
             style={styles.mkBt}
           >
             <Image
@@ -25,6 +27,10 @@ class ProfileMainScreen extends Component {
               style={styles.btIcon}
             />
           </MKButton>
+        </View>
+
+        <View style={styles.profileContainer}>
+
         </View>
 
       </View>
@@ -57,8 +63,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btIcon: {
-    width: 35,
-    height: 35,
+    width: 32,
+    height: 32,
     tintColor: '#F56862',
   },
 });
