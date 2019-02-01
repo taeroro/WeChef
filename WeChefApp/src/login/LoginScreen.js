@@ -8,30 +8,30 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-      <LoginButton
-        onLoginFinished={
-          (error, result) => {
-            if (error) {
-              alert("login has error: " + result.error);
-            } else if (result.isCancelled) {
-              console.log("login is cancelled.");
-            } else {
-              AccessToken.getCurrentAccessToken().then(
-                (data) => {
-                  console.log(data.accessToken.toString())
-                  const infoRequest = new GraphRequest(
-                      '/me?fields=name,picture',
-                      null,
-                      this._responseInfoCallback
-                    );
-                    // Start the graph request.
-                    new GraphRequestManager().addRequest(infoRequest).start();
-                }
-              )
+        <LoginButton
+          onLoginFinished={
+            (error, result) => {
+              if (error) {
+                alert("login has error: " + result.error);
+              } else if (result.isCancelled) {
+                console.log("login is cancelled.");
+              } else {
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    console.log(data.accessToken.toString())
+                    const infoRequest = new GraphRequest(
+                        '/me?fields=name,picture',
+                        null,
+                        this._responseInfoCallback
+                      );
+                      // Start the graph request.
+                      new GraphRequestManager().addRequest(infoRequest).start();
+                  }
+                )
+              }
             }
           }
-        }
-        onLogoutFinished={() => console.log("logout.")}/>
+          onLogoutFinished={() => console.log("logout.")}/>
       </View>
     );
   }

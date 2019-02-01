@@ -1,8 +1,81 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { StyleSheet, View, Image } from 'react-native';
+import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 
-export default Root = createBottomTabNavigator(
+// non-packages
+import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
+import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
+import ListMainScreen from './../tabScreens/list/ListMainScreen';
+import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
+import ProfileMainScreen from './../tabScreens/profile/ProfileMainScreen';
+
+// =============================================================================
+// Individual Tab's Stack for Screens
+// =============================================================================
+// 1. Recipe Stack
+export const RecipeStack = createStackNavigator(
+  {
+    RecipeMain: {
+      screen: RecipeMainScreen,
+      navigationOptions: () => ({
+        // headerBackTitle: strings('header_back_title.toolbox'),
+      }),
+    },
+  }
+);
+
+// 2. Saved Stack
+export const SavedStack = createStackNavigator(
+  {
+    SavedMain: {
+      screen: SavedMainScreen,
+      navigationOptions: () => ({
+        // headerBackTitle: strings('header_back_title.toolbox'),
+      }),
+    },
+  }
+);
+
+// 3. List Stack
+export const ListStack = createStackNavigator(
+  {
+    ListMain: {
+      screen: ListMainScreen,
+      navigationOptions: () => ({
+        // headerBackTitle: strings('header_back_title.toolbox'),
+      }),
+    },
+  }
+);
+
+// 4. List Stack
+export const ToolsStack = createStackNavigator(
+  {
+    ToolsMain: {
+      screen: ToolsMainScreen,
+      navigationOptions: () => ({
+        // headerBackTitle: strings('header_back_title.toolbox'),
+      }),
+    },
+  }
+);
+
+// 5. Profile Stack
+export const ProfileStack = createStackNavigator(
+  {
+    ProfileMain: {
+      screen: ProfileMainScreen,
+      navigationOptions: () => ({
+        // headerBackTitle: strings('header_back_title.toolbox'),
+      }),
+    },
+  }
+);
+
+// =============================================================================
+// Bottom Tab
+// =============================================================================
+const TabNavigator = createBottomTabNavigator(
   {
     // Tab 1 Recipe
     Recipe: {
@@ -48,45 +121,46 @@ export default Root = createBottomTabNavigator(
   {
     navigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, tintColor }) => {
-        const { routeName } = navigation.state;
+        // const { routeName } = navigation.state;
 
-        switch(routeName) {
-          case 'Recipe':
-            return (
-              <Image
-                source={require('../images/YintechLabsCrop.png')}
-                style={[ styles.iconStyles, { tintColor: tintColor } ]}
-              />
-            )
-          case 'Saved':
-            return (
-              <Image
-                source={require('../images/icons8-google_news.png')}
-                style={[ styles.iconStyles, { tintColor: tintColor } ]}
-              />
-            )
-          case 'List':
-            return (
-              <Image
-                source={require('../images/icons8-user-96.png')}
-                style={[ styles.iconStyles, { tintColor: tintColor } ]}
-              />
-            )
-          case 'Tools':
-            return (
-              <Image
-                source={require('../images/icons8-user-96.png')}
-                style={[ styles.iconStyles, { tintColor: tintColor } ]}
-              />
-            )
-          case 'Profile':
-            return (
-              <Image
-                source={require('../images/icons8-user-96.png')}
-                style={[ styles.iconStyles, { tintColor: tintColor } ]}
-              />
-            )
-        }
+        // switch(routeName) {
+        //   case 'Recipe':
+        //     return (
+        //       <Image
+        //         source={require('../images/YintechLabsCrop.png')}
+        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
+        //       />
+        //     )
+        //   case 'Saved':
+        //     return (
+        //       <Image
+        //         source={require('../images/icons8-google_news.png')}
+        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
+        //       />
+        //     )
+        //   case 'List':
+        //     return (
+        //       <Image
+        //         source={require('../images/icons8-user-96.png')}
+        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
+        //       />
+        //     )
+        //   case 'Tools':
+        //     return (
+        //       <Image
+        //         source={require('../images/icons8-user-96.png')}
+        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
+        //       />
+        //     )
+        //   case 'Profile':
+        //     return (
+        //       <Image
+        //         source={require('../images/icons8-user-96.png')}
+        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
+        //       />
+        //     )
+        // }
+
       },
     }),
     tabBarOptions: {
@@ -95,6 +169,8 @@ export default Root = createBottomTabNavigator(
     },
   }
 );
+
+export default createAppContainer(TabNavigator);
 
 const styles = StyleSheet.create({
   iconStyles: {
