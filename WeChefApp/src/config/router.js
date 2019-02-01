@@ -119,47 +119,92 @@ const TabNavigator = createBottomTabNavigator(
   },
 
   {
-    navigationOptions: ({ navigation }) => ({
+    defaultNavigationOptions: ({ navigation }) => ({
       tabBarIcon: ({ focused, tintColor }) => {
-        // const { routeName } = navigation.state;
+        const { routeName } = navigation.state;
 
-        // switch(routeName) {
-        //   case 'Recipe':
-        //     return (
-        //       <Image
-        //         source={require('../images/YintechLabsCrop.png')}
-        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
-        //       />
-        //     )
-        //   case 'Saved':
-        //     return (
-        //       <Image
-        //         source={require('../images/icons8-google_news.png')}
-        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
-        //       />
-        //     )
-        //   case 'List':
-        //     return (
-        //       <Image
-        //         source={require('../images/icons8-user-96.png')}
-        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
-        //       />
-        //     )
-        //   case 'Tools':
-        //     return (
-        //       <Image
-        //         source={require('../images/icons8-user-96.png')}
-        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
-        //       />
-        //     )
-        //   case 'Profile':
-        //     return (
-        //       <Image
-        //         source={require('../images/icons8-user-96.png')}
-        //         style={[ styles.iconStyles, { tintColor: tintColor } ]}
-        //       />
-        //     )
-        // }
+        switch(routeName) {
+          case 'Recipe':
+            return (
+              focused
+              ? (
+                <Image
+                  source={require('../../img/icons/icons8-kitchen.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+              : (
+                <Image
+                  source={require('../../img/icons/icons8-cooking_pot.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+            );
+          case 'Saved':
+            return (
+              focused
+              ? (
+                <Image
+                  source={require('../../img/icons/icons8-bookmark_ribbon.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+              : (
+                <Image
+                  source={require('../../img/icons/icons8-bookmark_outline.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+            );
+          case 'List':
+            return (
+              focused
+              ? (
+                <Image
+                  source={require('../../img/icons/icons8-shopping_cart.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+              : (
+                <Image
+                  source={require('../../img/icons/icons8-shopping_cart_outline.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+            );
+          case 'Tools':
+            return (
+              focused
+              ? (
+                <Image
+                  source={require('../../img/icons/icons8-wrench.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+              : (
+                <Image
+                  source={require('../../img/icons/icons8-wrench_outline.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+            );
+          case 'Profile':
+            return (
+              focused
+              ? (
+                <Image
+                  source={require('../../img/icons/icons8-user_male_circle.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+              : (
+                <Image
+                  source={require('../../img/icons/icons8-user_male_circle_outline.png')}
+                  style={[ styles.iconStyles, { tintColor: tintColor } ]}
+                />
+              )
+            );
+        }
 
       },
     }),
