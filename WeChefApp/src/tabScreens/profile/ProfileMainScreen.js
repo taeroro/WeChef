@@ -23,7 +23,7 @@ class ProfileMainScreen extends Component {
             style={styles.mkBt}
           >
             <Image
-              source={require('../../../img/notForTabIcons/icons8-settings.png')}
+              source={require('../../../assets/img/notForTabIcons/icons8-settings.png')}
               style={styles.btIcon}
             />
           </MKButton>

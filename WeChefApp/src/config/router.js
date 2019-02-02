@@ -141,13 +141,13 @@ const TabNavigator = createBottomTabNavigator(
               focused
               ? (
                 <Image
-                  source={require('../../img/icons/icons8-kitchen.png')}
+                  source={require('../../assets/img/icons/icons8-kitchen.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
               : (
                 <Image
-                  source={require('../../img/icons/icons8-cooking_pot.png')}
+                  source={require('../../assets/img/icons/icons8-cooking_pot.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
@@ -157,13 +157,13 @@ const TabNavigator = createBottomTabNavigator(
               focused
               ? (
                 <Image
-                  source={require('../../img/icons/icons8-bookmark.png')}
+                  source={require('../../assets/img/icons/icons8-bookmark.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
               : (
                 <Image
-                  source={require('../../img/icons/icons8-bookmark_outline.png')}
+                  source={require('../../assets/img/icons/icons8-bookmark_outline.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
@@ -173,13 +173,13 @@ const TabNavigator = createBottomTabNavigator(
               focused
               ? (
                 <Image
-                  source={require('../../img/icons/icons8-shopping_cart.png')}
+                  source={require('../../assets/img/icons/icons8-shopping_cart.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
               : (
                 <Image
-                  source={require('../../img/icons/icons8-shopping_cart_outline.png')}
+                  source={require('../../assets/img/icons/icons8-shopping_cart_outline.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
@@ -189,13 +189,13 @@ const TabNavigator = createBottomTabNavigator(
               focused
               ? (
                 <Image
-                  source={require('../../img/icons/icons8-wrench.png')}
+                  source={require('../../assets/img/icons/icons8-wrench.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
               : (
                 <Image
-                  source={require('../../img/icons/icons8-wrench_outline.png')}
+                  source={require('../../assets/img/icons/icons8-wrench_outline.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
@@ -205,13 +205,13 @@ const TabNavigator = createBottomTabNavigator(
               focused
               ? (
                 <Image
-                  source={require('../../img/icons/icons8-user_male_circle.png')}
+                  source={require('../../assets/img/icons/icons8-user_male_circle.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
               : (
                 <Image
-                  source={require('../../img/icons/icons8-user_male_circle_outline.png')}
+                  source={require('../../assets/img/icons/icons8-user_male_circle_outline.png')}
                   style={[ styles.iconStyles, { tintColor: tintColor } ]}
                 />
               )
