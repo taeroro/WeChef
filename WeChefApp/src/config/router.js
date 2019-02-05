@@ -9,6 +9,7 @@ import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
 import ProfileMainScreen from './../tabScreens/profile/ProfileMainScreen';
 import ProfileSettingsScreen from './../tabScreens/profile/ProfileSettingsScreen';
+import LoginScreen from './../login/LoginScreen';
 
 // =============================================================================
 // Individual Tab's Stack for Screens
@@ -79,6 +80,18 @@ export const ProfileStack = createStackNavigator(
           // borderBottomWidth: 0,
         }
 
+      }),
+    },
+  }
+);
+
+// 6. Login Stack
+export const LoginStack = createStackNavigator(
+  {
+    Login: {
+      screen: LoginScreen,
+      navigationOptions: () => ({
+        // headerBackTitle: strings('header_back_title.toolbox'),
       }),
     },
   }
