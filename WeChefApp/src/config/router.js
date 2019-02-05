@@ -240,7 +240,7 @@ const TabNavigator = createBottomTabNavigator(
   }
 );
 
-export default createAppContainer(TabNavigator);
+export default TabNavigator;
 
 const styles = StyleSheet.create({
   iconStyles: {
