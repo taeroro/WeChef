@@ -5,6 +5,10 @@ import FBSDK, { LoginManager,GraphRequest,GraphRequestManager } from 'react-nati
 const { LoginButton, AccessToken } = FBSDK;
 
 class LoginScreen extends Component {
+  login() {
+    this.props.navigation.navigate('Recipe')
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -18,7 +22,8 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
-                    console.log(data.accessToken.toString())
+                    console.log(data.accessToken.toString());
+                    this.login();
                   }
                 )
               }
