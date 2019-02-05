@@ -5,6 +5,12 @@ import FBSDK from 'react-native-fbsdk';
 const { LoginButton } = FBSDK;
 
 class ProfileSettingsScreen extends Component {
+  constructor(props) {
+    super(props)
+
+    this.logout = this.logout.bind(this)
+  }
+
   logout() {
     this.props.navigation.navigate('Login')
   }

@@ -5,6 +5,12 @@ import FBSDK, { LoginManager,GraphRequest,GraphRequestManager } from 'react-nati
 const { LoginButton, AccessToken } = FBSDK;
 
 class LoginScreen extends Component {
+  constructor(props) {
+    super(props)
+
+    this.login = this.login.bind(this)
+  }
+
   login() {
     this.props.navigation.navigate('Recipe')
   }
