@@ -22,14 +22,12 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
-                    console.log(data.accessToken.toString());
                     this.login();
                   }
                 )
               }
             }
-          }
-          onLogoutFinished={() => console.log("logout.")}/>
+          }/>
       </View>
     );
   }

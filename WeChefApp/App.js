@@ -37,9 +37,6 @@ class App extends Component {
   render() {
     const RootScreen = rootNavigator(this.state.accessToken)
     const DisplayScreen = createAppContainer(RootScreen)
-    console.log('access token is: ' + (this.state.accessToken ? 
-      this.state.accessToken.toString() :
-      'not logged in'))
     return <DisplayScreen />
   }
 }
