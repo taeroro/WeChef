@@ -5,6 +5,16 @@ import FBSDK, { LoginManager,GraphRequest,GraphRequestManager } from 'react-nati
 const { LoginButton, AccessToken } = FBSDK;
 
 class LoginScreen extends Component {
+  constructor(props) {
+    super(props)
+
+    this.login = this.login.bind(this)
+  }
+
+  login() {
+    this.props.navigation.navigate('Recipe')
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -18,32 +28,14 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
-                    console.log(data.accessToken.toString())
-                    const infoRequest = new GraphRequest(
-                        '/me?fields=name,picture',
-                        null,
-                        this._responseInfoCallback
-                      );
-                      // Start the graph request.
-                      new GraphRequestManager().addRequest(infoRequest).start();
+                    this.login();
                   }
                 )
               }
             }
-          }
-          onLogoutFinished={() => console.log("logout.")}/>
+          }/>
       </View>
     );
-  }
-
-  //Create response callback.
-  _responseInfoCallback = (error, result) => {
-    if (error) {
-      alert('Error fetching data: ' + error.toString());
-    } else {
-      alert('Your Name: ' + result.name);
-      console.log('Result Picture: ' + result.picture);
-    }
   }
 
 }
