@@ -21,6 +21,7 @@ class ProfileMainScreen extends Component {
             height={45}
             onPress={() => this.openSettings()}
             style={styles.mkBt}
+            testID='profile_page_setting_button'
           >
             <Image
               source={require('../../../img/notForTabIcons/icons8-settings.png')}
