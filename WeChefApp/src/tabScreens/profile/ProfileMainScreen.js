@@ -47,7 +47,7 @@ class ProfileMainScreen extends Component {
     AccessToken.getCurrentAccessToken().then(
       (data) => {
         const infoRequest = new GraphRequest(
-          '/me?fields=name,id,picture',
+          '/me?fields=name,id,picture.type(large)',
           null,
           this._responseInfoCallback
         );
