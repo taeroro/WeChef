@@ -24,7 +24,7 @@ class ProfileMainScreen extends Component {
             testID='profile_page_setting_button'
           >
             <Image
-              source={require('../../../img/notForTabIcons/icons8-settings.png')}
+              source={require('../../../assets/img/notForTabIcons/icons8-settings.png')}
               style={styles.btIcon}
             />
           </MKButton>
