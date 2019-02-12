@@ -28,6 +28,12 @@ class LoginScreen extends Component {
               } else {
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
+                    const infoRequest = new GraphRequest(
+                      '/me?fields=name,id,picture.type(large)',
+                      null,
+                      this._responseInfoCallback
+                    );
+                    new GraphRequestManager().addRequest(infoRequest).start();
                     this.login();
                   }
                 )
@@ -36,6 +42,15 @@ class LoginScreen extends Component {
           }/>
       </View>
     );
+  }
+
+  _responseInfoCallback = (error, result) => {
+    if (error) {
+      alert('Error fetching data: ' + error.toString());
+    } else {
+      console.log('name is ' + result.name + ', id is ' + result.id);
+      console.log('picture is ' + result.picture.data.url);
+    }
   }
 
 }
