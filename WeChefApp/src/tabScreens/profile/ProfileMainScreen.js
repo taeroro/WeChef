@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MKButton, MKColor } from 'react-native-material-kit';
+import { AccessToken, GraphRequest, GraphRequestManager} from 'react-native-fbsdk';
 
 class ProfileMainScreen extends Component {
   openSettings() {
@@ -31,12 +32,12 @@ class ProfileMainScreen extends Component {
         </View>
 
         <View style={styles.profileContainer}>
-
         </View>
 
       </View>
     );
   }
+
 }
 
 export default ProfileMainScreen;

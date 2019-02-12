@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { createSwitchNavigator, createAppContainer } from 'react-navigation'
+import React, { Component, View, Text } from 'react';
+import { createSwitchNavigator, createAppContainer, createStackNavigator } from 'react-navigation'
 import FBSDK from 'react-native-fbsdk';
 
 // non-packages
 import Root from './src/config/router';
 import LoginScreen from './src/login/LoginScreen';
+import LoadingScreen from './src/loading/LoadingScreen';
 
 const { AccessToken } = FBSDK;
 
@@ -17,7 +18,8 @@ class App extends Component {
     super(props)
 
     this.state = {
-      accessToken: null
+      accessToken: null,
+      isLoading: true
     }
   }
 
@@ -36,12 +38,19 @@ class App extends Component {
 //     });
     /********* End of Testing *******/
 
-
     AccessToken.getCurrentAccessToken()
     .then((data) => {
-      this.setState({
-        accessToken: data.accessToken
-      })
+      if (data) {
+        this.setState({
+          accessToken: data.accessToken,
+          isLoading: false
+        })
+      }
+      else {
+        this.setState({
+          isLoading: false
+        })
+      }
     })
     .catch(error => {
       console.log(error)
@@ -50,10 +59,27 @@ class App extends Component {
 
 
   render() {
-    const RootScreen = rootNavigator(this.state.accessToken)
-    const DisplayScreen = createAppContainer(RootScreen)
-    return <DisplayScreen />
+    if (this.state.isLoading) {
+      const LoadingNavigate = loadingNavigator()
+      const Loading = createAppContainer(LoadingNavigate)
+      return <Loading />
+    }
+    else {
+      const RootScreen = rootNavigator(this.state.accessToken)
+      const DisplayScreen = createAppContainer(RootScreen)
+      return <DisplayScreen />
+    }
   }
+}
+
+const loadingNavigator = () => {
+  return createStackNavigator(
+    {
+      Loading: {
+        screen: LoadingScreen
+      },
+    }
+  );
 }
 
 const rootNavigator = (isLoggedIn) => {
