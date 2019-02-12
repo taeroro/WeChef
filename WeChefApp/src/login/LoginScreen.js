@@ -26,6 +26,7 @@ class LoginScreen extends Component {
               } else if (result.isCancelled) {
                 console.log("login is cancelled.");
               } else {
+                this.login();
                 AccessToken.getCurrentAccessToken().then(
                   (data) => {
                     const infoRequest = new GraphRequest(
@@ -34,7 +35,6 @@ class LoginScreen extends Component {
                       this._responseInfoCallback
                     );
                     new GraphRequestManager().addRequest(infoRequest).start();
-                    this.login();
                   }
                 )
               }
