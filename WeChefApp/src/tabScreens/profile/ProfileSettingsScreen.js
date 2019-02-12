@@ -19,26 +19,25 @@ class ProfileSettingsScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-//         <View style={styles.titleHeaderContainer}>
-//           <Text style={styles.headerTitle}>Settings</Text>
-//         </View>
+        <View style={styles.titleHeaderContainer}>
+          <Text style={styles.headerTitle}>Settings</Text>
+        </View>
 
-//         <View style={styles.listConatiner}>
-//           <ListItem
-//             key={10001}
-//             containerStyle={styles.settingContainerStyle}
-//             title={"Log Out"}
-//             titleStyle={styles.settingTitleStyle}
-//             fontFamily="Poppins"
-//             bottomDivider
-//             bottomDividerProps={{style: {paddingLeft: 15}}}
-//             onPress={() => {
-//               console.log("log out pressed");
-//             }}
-//           />
-//         </View>
+      {/* <View style={styles.listConatiner}>
+        <ListItem
+          key={10001}
+          containerStyle={styles.settingContainerStyle}
+          title={"Log Out"}
+          titleStyle={styles.settingTitleStyle}
+          fontFamily="Poppins"
+          bottomDivider
+          bottomDividerProps={{style: {paddingLeft: 15}}}
+          onPress={() => {
+            console.log("log out pressed");
+          }}
+        />
+      </View> */}
 
-        <Text>ProfileSettingsScreen</Text>
         <LoginButton onLogoutFinished={() => this.logout()}/>
 
       </View>
