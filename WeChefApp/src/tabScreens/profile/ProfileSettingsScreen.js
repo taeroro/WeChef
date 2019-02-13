@@ -1,15 +1,42 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, ActionSheetIOS } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import FBSDK from 'react-native-fbsdk';
 
-const { LoginButton } = FBSDK;
+const { LoginButton, LoginManager } = FBSDK;
+const BUTTONS = [
+  'Log Out',
+  'Cancel',
+];
+const DESTRUCTIVE_INDEX = 0
+const CANCEL_INDEX = 1;
 
 class ProfileSettingsScreen extends Component {
   constructor(props) {
     super(props)
 
-    this.logout = this.logout.bind(this)
+    this.state = {
+      clicked: 'none',
+    }
+
+    this.logout = this.logout.bind(this);
+    this.showActionSheet = this.showActionSheet.bind(this);
+  }
+
+  showActionSheet() {
+    ActionSheetIOS.showActionSheetWithOptions({
+      options: BUTTONS,
+      cancelButtonIndex: CANCEL_INDEX,
+      destructiveButtonIndex: DESTRUCTIVE_INDEX,
+    },
+    (buttonIndex) => {
+      if (buttonIndex === DESTRUCTIVE_INDEX) {
+        /* destructive action */
+        LoginManager.logOut();
+        this.logout();
+      }
+      this.setState({ clicked: BUTTONS[buttonIndex] });
+    });
   }
 
   logout() {
@@ -23,22 +50,23 @@ class ProfileSettingsScreen extends Component {
           <Text style={styles.headerTitle}>Settings</Text>
         </View>
 
-      {/* <View style={styles.listConatiner}>
-        <ListItem
-          key={10001}
-          containerStyle={styles.settingContainerStyle}
-          title={"Log Out"}
-          titleStyle={styles.settingTitleStyle}
-          fontFamily="Poppins"
-          bottomDivider
-          bottomDividerProps={{style: {paddingLeft: 15}}}
-          onPress={() => {
-            console.log("log out pressed");
-          }}
-        />
-      </View> */}
+        <View style={styles.listConatiner}>
+          <ListItem
+            key={1}
+            containerStyle={styles.settingContainerStyle}
+            title={"Log Out"}
+            titleStyle={styles.settingTitleStyle}
+            fontFamily="Poppins"
+            bottomDivider
+            bottomDividerProps={{style: {paddingLeft: 15}}}
+            onPress={() => {
+              this.showActionSheet();
+            }}
+          />
 
-        <LoginButton onLogoutFinished={() => this.logout()}/>
+        </View>
+
+      {/* <LoginButton onLogoutFinished={() => this.logout()}/> */}
 
       </View>
     );
@@ -53,17 +81,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
   },
   titleHeaderContainer: {
-    marginTop: 20,
+    marginTop: 10,
     paddingLeft: 25,
     paddingRight: 25,
   },
   headerTitle: {
-    color: '#000',
-    fontSize: 40,
+    color: '#3C3C3C',
+    fontSize: 32,
     fontWeight: 'bold',
   },
   listConatiner: {
     marginTop: 20,
+    backgroundColor: '#FFF',
   },
   settingContainerStyle: {
     paddingTop: 20,
@@ -75,6 +104,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontSize: 16,
     color: '#3C3C3C',
-    letterSpacing: 0.7,
+    letterSpacing: 0.5,
   },
 });
