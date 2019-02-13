@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TouchableHighlight, Text } from 'react-native';
-import FBSDK, { LoginManager,GraphRequest,GraphRequestManager } from 'react-native-fbsdk';
+import FBSDK, { LoginManager, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
-const { LoginButton, AccessToken } = FBSDK;
+const { AccessToken } = FBSDK;
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -48,7 +48,6 @@ class LoginScreen extends Component {
       if(result.isCancelled) {
         console.log('loging cancelled')
       } else {
-        console.log('login success ' + result.grantedPermissions)
         this.login();
         const infoRequest = new GraphRequest(
           '/me?fields=name,id,picture.type(large)',
