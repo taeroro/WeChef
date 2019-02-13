@@ -42,6 +42,7 @@ class LoginScreen extends Component {
   }
 
   _fbAuth = () => {
+    LoginManager.setLoginBehavior('web');
     LoginManager.logInWithReadPermissions(['public_profile','email']).then(
       (result) => {
       if(result.isCancelled) {
