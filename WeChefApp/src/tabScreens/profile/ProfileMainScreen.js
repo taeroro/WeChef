@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    color: '#000',
+    color: '#3C3C3C',
     fontSize: 40,
     fontWeight: 'bold',
   },

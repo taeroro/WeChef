@@ -77,8 +77,11 @@ export const ProfileStack = createStackNavigator(
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
-          // borderBottomWidth: 0,
-        }
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C'
 
       }),
     },

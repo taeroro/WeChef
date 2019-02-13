@@ -89,7 +89,7 @@ const rootNavigator = (isLoggedIn) => {
         screen: LoginScreen
       },
       Main: {
-        screen: Root
+        screen: Root,
       }
     },
     {
