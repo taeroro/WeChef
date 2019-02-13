@@ -56,6 +56,7 @@ export const ToolsStack = createStackNavigator(
     ToolsMain: {
       screen: ToolsMainScreen,
       navigationOptions: () => ({
+        header: null,
         // headerBackTitle: strings('header_back_title.toolbox'),
       }),
     },
