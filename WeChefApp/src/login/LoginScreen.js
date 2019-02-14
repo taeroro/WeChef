@@ -21,11 +21,11 @@ class LoginScreen extends Component {
           <TouchableHighlight onPress={() => {
             this._fbAuth();
           }}>
-                <View style={styles.container}>
-                    <View>
-                        <Text>Login with Facebook</Text>
-                    </View>
-                </View>
+            <View style={styles.container}>
+              <View>
+                <Text>Login with Facebook</Text>
+              </View>
+            </View>
           </TouchableHighlight>
       </View>
     );

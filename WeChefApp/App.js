@@ -9,11 +9,7 @@ import LoadingScreen from './src/loading/LoadingScreen';
 
 const { AccessToken } = FBSDK;
 
-// type Props = {};
-// export default class App extends Component<Props> {
-
 class App extends Component {
-
   constructor(props) {
     super(props)
 
