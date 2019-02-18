@@ -7,6 +7,9 @@ import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
+import ToolsAppTemp from './../tabScreens/tools/ToolsAppTemp';
+import ToolsAppWeight from './../tabScreens/tools/ToolsAppWeight';
+import ToolsAppVolume from './../tabScreens/tools/ToolsAppVolume';
 import ProfileMainScreen from './../tabScreens/profile/ProfileMainScreen';
 import ProfileSettingsScreen from './../tabScreens/profile/ProfileSettingsScreen';
 import LoginScreen from './../login/LoginScreen';
@@ -57,7 +60,46 @@ export const ToolsStack = createStackNavigator(
       screen: ToolsMainScreen,
       navigationOptions: () => ({
         header: null,
-        // headerBackTitle: strings('header_back_title.toolbox'),
+        headerBackTitle: null,
+      }),
+    },
+    ToolsTemp: {
+      screen: ToolsAppTemp,
+      navigationOptions: () => ({
+        headerTitle: "Temperature",
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C'
+      }),
+    },
+    ToolsWeight: {
+      screen: ToolsAppWeight,
+      navigationOptions: () => ({
+        headerTitle: "Weight",
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C'
+      }),
+    },
+    ToolsVolume: {
+      screen: ToolsAppVolume,
+      navigationOptions: () => ({
+        headerTitle: "Volume",
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C'
       }),
     },
   }
