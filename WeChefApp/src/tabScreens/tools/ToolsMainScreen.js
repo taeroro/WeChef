@@ -22,7 +22,7 @@ class ToolsMainScreen extends Component {
             bottomDivider
             bottomDividerProps={{style: {paddingLeft: 15}}}
             onPress={() => {
-              console.log("Temperature");
+              this.props.navigation.navigate('ToolsTemp');
             }}
           />
           <ListItem
@@ -35,7 +35,7 @@ class ToolsMainScreen extends Component {
             bottomDivider
             bottomDividerProps={{style: {paddingLeft: 15}}}
             onPress={() => {
-              console.log("Weight");
+              this.props.navigation.navigate('ToolsTemp');
             }}
           />
           <ListItem
@@ -48,7 +48,7 @@ class ToolsMainScreen extends Component {
             bottomDivider
             bottomDividerProps={{style: {paddingLeft: 15}}}
             onPress={() => {
-              console.log("Volume");
+              this.props.navigation.navigate('ToolsVolume');
             }}
           />
         </View>
