@@ -29,12 +29,13 @@ let user = new Schema({
     },
     userImageURL: {
         type: String,
-        default: 'null', // save a default image in cloudinary
+        required: [ true, 'User profile image url must be provided.', ],
     },
     userImageID: {
         type: String,
         unique: true,
         sparse: true,
+        default: null,
     },
     favoriteRecipeIDs: [ {
         type: ObjectId,
