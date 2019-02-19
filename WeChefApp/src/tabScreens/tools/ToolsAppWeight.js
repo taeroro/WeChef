@@ -35,7 +35,7 @@ class ToolsAppWeight extends Component {
 
   convertResult() {
     let input = this.state.inputValue;
-    if (input === '') input = '0';
+    if (input === '') return '-';
     let output = convert(parseFloat(input)).from(this.state.unit1).to(this.state.unit2);
     return output.toFixed(2);
   }

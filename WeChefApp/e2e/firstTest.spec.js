@@ -15,7 +15,7 @@ describe('Example', () => {
     await element(by.text('Profile')).tap();
 
     await element(by.id('profile_page_setting_button')).tap();
-    await expect(element(by.text('ProfileSettingsScreen'))).toBeVisible();
+    await expect(element(by.text('Log Out'))).toBeVisible();
   });
 
 /*
