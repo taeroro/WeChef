@@ -1,9 +1,17 @@
 let express = require('express');
 let mongoose = require('mongoose');
+let cloudinary = require('cloudinary');
 let User = require('../models/user');
+let ImageUpload = require('../middlewares/image_parser')
 let Transaction = require('mongoose-transactions');
 
 let userRouter = express.Router();
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
 
 userRouter.get('/login/:facebookID', (req, res, err) => {
 
@@ -75,6 +83,12 @@ userRouter.put('/profile/:userID', (req, res, err) => {
         });
     }
 
+    if (!('facebookID' in req.headers)) {
+        return res.status(422).send({
+            message: 'Facebook ID must be provided in request header.',
+        });
+    }
+
     User.findById(req.path.userID, (err, user) => {
         if (err){
             return res.status(500).send({
@@ -101,7 +115,7 @@ userRouter.put('/profile/:userID', (req, res, err) => {
                         });
                     } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
                         return res.status(409).send({
-                            message: 'This FacebookID/Email has already benen registered.',
+                            message: 'This Email has already benen registered.',
                         });
                     } else {
                         return res.status(500).send({
@@ -113,6 +127,71 @@ userRouter.put('/profile/:userID', (req, res, err) => {
         
                 return res.status(200).send({
                     message: 'OK',
+                });
+            });
+        } else {
+            return res.status(404).send({
+                message: 'No user exists with given userID.',
+            });
+        }
+    });
+
+});
+
+userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) => {
+    if (!('facebookID' in req.headers)) {
+        return res.status(422).send({
+            message: 'Facebook ID must be provided in request header.',
+        });
+    }
+
+    if (!req.file || !req.file.url || !req.file.public_id) {
+        return res.status(500).send({
+            message: 'Internal error in uploading images.',
+        });
+    }
+
+    User.findById(req.path.userID, (err, user) => {
+        if (err){
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (user) {
+            if (user.facebookID !== req.headers.facebookID) {
+                return res.status(403).send({
+                    message: 'Permission denied: changing profile image of other user.',
+                });
+            }
+
+            let prevImage = user.userImageID;
+
+            user.userImageURL = req.file.url;
+            user.userImageID = req.file.public_id;
+            
+            user.save((err, user2) => {
+                if (err) {
+
+                    cloudinary.v2.api.delete_resources([ user.userImageID, ]);
+
+                    if (err.name === 'ValidationError') {
+                        return res.status(422).send({
+                            message: err.errors,
+                        });
+                    } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                        return res.status(409).send({
+                            message: 'This FacebookID/Email has already benen registered.',
+                        });
+                    } else {
+                        return res.status(500).send({
+                            errorType: 'InternalError',
+                            message: err,
+                        });
+                    }
+                }
+                cloudinary.v2.api.delete_resources([ prevImage, ]);
+                return res.status(200).send({
+                    userImageURL: user.userImageURL,
                 });
             });
         } else {
