@@ -59,7 +59,7 @@ userRouter.post('/signup', (req, res, err) => {
                 });
             } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
                 return res.status(409).send({
-                    message: 'This FacebookID/Email has already benen registered.',
+                    message: 'This FacebookID/Email has already been registered.',
                 });
             } else {
                 return res.status(500).send({
@@ -115,7 +115,7 @@ userRouter.put('/profile/:userID', (req, res, err) => {
                         });
                     } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
                         return res.status(409).send({
-                            message: 'This Email has already benen registered.',
+                            message: 'This Email has already been registered.',
                         });
                     } else {
                         return res.status(500).send({
@@ -180,7 +180,7 @@ userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) =>
                         });
                     } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
                         return res.status(409).send({
-                            message: 'This FacebookID/Email has already benen registered.',
+                            message: 'This Imge has already been used.',
                         });
                     } else {
                         return res.status(500).send({
@@ -189,7 +189,9 @@ userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) =>
                         });
                     }
                 }
-                cloudinary.v2.api.delete_resources([ prevImage, ]);
+                if (prevImage) {
+                    cloudinary.v2.api.delete_resources([ prevImage, ]);
+                }
                 return res.status(200).send({
                     userImageURL: user.userImageURL,
                 });
