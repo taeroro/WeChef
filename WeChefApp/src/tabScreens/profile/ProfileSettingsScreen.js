@@ -13,11 +13,11 @@ const CANCEL_INDEX = 1;
 
 class ProfileSettingsScreen extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       clicked: 'none',
-    }
+    };
 
     this.logout = this.logout.bind(this);
     this.showActionSheet = this.showActionSheet.bind(this);
