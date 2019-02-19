@@ -33,3 +33,37 @@ userRouter.get('/login/:facebookID', (req, res, err) => {
     });
 
 });
+
+userRouter.post('/signup', (req, res, err) => {
+    let new_user = new User();
+    new_user.userName = req.body.userName;
+    new_user.facebookID = req.body.facebookID;
+    new_user.email = req.body.email;
+    new_user.userImageURL = req.body.userImageURL;
+    new_user.age = req.body.age;
+    new_user.gender = req.body.gender;
+
+    new_user.save((err, user) => {
+        if (err) {
+            if (err.name === 'ValidationError') {
+                return res.status(422).send({
+                    message: err.errors,
+                });
+            } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                return res.status(409).send({
+                    message: 'This FacebookID/Email has already benen registered.',
+                });
+            } else {
+                return res.status(500).send({
+                    errorType: 'InternalError',
+                    message: err,
+                });
+            }
+        }
+
+        return res.status(201).send({
+            userID: user._id,
+        });
+    });
+
+});
