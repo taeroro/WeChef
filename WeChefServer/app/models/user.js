@@ -29,6 +29,7 @@ let user = new Schema({
     },
     userImageURL: {
         type: String,
+        unique: true,
         required: [ true, 'User profile image url must be provided.', ],
     },
     userImageID: {
