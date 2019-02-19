@@ -35,7 +35,7 @@ class ToolsMainScreen extends Component {
             bottomDivider
             bottomDividerProps={{style: {paddingLeft: 15}}}
             onPress={() => {
-              this.props.navigation.navigate('ToolsTemp');
+              this.props.navigation.navigate('ToolsWeight');
             }}
           />
           <ListItem
