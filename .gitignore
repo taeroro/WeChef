@@ -1,2 +1,11 @@
 # Ignore Mac DS_Store files
 .DS_Store
+
+# Ignore local env vars setup
+.env
+
+# Ignore node modules
+node_modules/
+
+# Ignore package lock
+package-lock.json
