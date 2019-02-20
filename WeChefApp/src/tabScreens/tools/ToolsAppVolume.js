@@ -64,6 +64,7 @@ class ToolsAppVolume extends Component {
                 ref="defaultInput"
                 onChangeText={(inputValue) => this.setState({inputValue})}
                 value={inputValue.toString()}
+                testID='inputAmountTextField'
               />
             </View>
 
