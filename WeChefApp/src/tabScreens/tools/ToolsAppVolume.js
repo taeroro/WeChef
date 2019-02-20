@@ -10,15 +10,15 @@ class ToolsAppVolume extends Component {
     super(props);
 
     this.state = {
-      unit1: 'l',
-      unit2: 'ml',
+      unit1: 'gal',
+      unit2: 'l',
       inputValue: '',
     };
 
     this.onChangeText = this.onChangeText.bind(this);
 
     this.unit1Ref = this.updateRef.bind(this, 'unit1');
-    this.unit2Ref = this.updateRef.bind(this, 'unit2'); 
+    this.unit2Ref = this.updateRef.bind(this, 'unit2');
   }
 
   onChangeText(text) {
