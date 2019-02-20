@@ -22,8 +22,7 @@ module.exports = mongoose.model('Review', new Schema({
         required: true,
     },
     reviewOwnerID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+        type: String,
         required: true,
     },
 }));
