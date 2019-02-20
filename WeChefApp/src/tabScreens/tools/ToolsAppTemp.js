@@ -57,7 +57,6 @@ class ToolsAppTemp extends Component {
                 containerStyle={styles.unitContainer}
                 label='Input Unit'
                 data={unitData}
-                testID='inputUnit1DropDown'
               />
 
               <TextfieldWithFloatingLabel
@@ -78,12 +77,11 @@ class ToolsAppTemp extends Component {
                 containerStyle={styles.unitContainer}
                 label='Convert Unit'
                 data={unitData}
-                testID='inputUnit2DropDown'
               />
 
               <View style={styles.outputLabelContainer}>
                 <Text style={styles.outputLabel}>Converted Amount</Text>
-                <Text style={styles.outputText} selectable testID='outputText'>
+                <Text style={styles.outputText} selectable>
                   {this.convertResult()}
                 </Text>
               </View>
