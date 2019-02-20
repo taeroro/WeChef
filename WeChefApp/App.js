@@ -22,16 +22,16 @@ class App extends Component {
   componentDidMount() {
     /********* For Testing Purpose *******/
     /* DO NOT DELETE. UNCOMMENT WHEN TESTING */
-//     AccessToken.setCurrentAccessToken({
-//        accessToken: 'EAAghoBEJy9UBAJGYJchXi24ha1mnXMyqWPKFVOQcykZByeUNp2VDFa7LwlZCH8yReKd137FWVzeRQCY47parY4hSnzNWSrE10VmaYeiANbQ5lN871grxo1Ri39wsjttFHNvleFlEG3EqpCKtLYZCYLIrxhKHe3GKfGWxuGSEIApNouuEj5ynrrTpx9ZBhDDTQGZBncz708Yf3F1XpBRWwAMWLAsTK4AjaKUZCScH6IGfAI08RdNEwz',
-//        applicationID: '2288771178023893',
-//        userID: '100033517541289',
-//        permissions: ['public_profile'],
-//        declinedPermissions: [],
-//        //accessTokenSource: '',
-//        expirationTime: new Date().getTime()*2,
-//        lastRefreshTime: new Date().getTime()
-//     });
+    AccessToken.setCurrentAccessToken({
+       accessToken: 'EAAghoBEJy9UBAJGYJchXi24ha1mnXMyqWPKFVOQcykZByeUNp2VDFa7LwlZCH8yReKd137FWVzeRQCY47parY4hSnzNWSrE10VmaYeiANbQ5lN871grxo1Ri39wsjttFHNvleFlEG3EqpCKtLYZCYLIrxhKHe3GKfGWxuGSEIApNouuEj5ynrrTpx9ZBhDDTQGZBncz708Yf3F1XpBRWwAMWLAsTK4AjaKUZCScH6IGfAI08RdNEwz',
+       applicationID: '2288771178023893',
+       userID: '100033517541289',
+       permissions: ['public_profile'],
+       declinedPermissions: [],
+       //accessTokenSource: '',
+       expirationTime: new Date().getTime()*2,
+       lastRefreshTime: new Date().getTime()
+    });
     /********* End of Testing *******/
 
     AccessToken.getCurrentAccessToken()

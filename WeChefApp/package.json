@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "convert-units": "^2.3.4",
+    "detox-cli": "^10.0.7",
     "react": "16.6.3",
     "react-native": "^0.58.4",
     "react-native-elements": "^1.0.0",
@@ -25,8 +26,8 @@
   "devDependencies": {
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "24.0.0",
-    "detox": "^10.0.5",
-    "jest": "^24.0.0",
+    "detox": "^10.0.9",
+    "jest": "^24.1.0",
     "metro-react-native-babel-preset": "0.51.1",
     "mocha": "^5.2.0",
     "react-test-renderer": "16.6.3"
