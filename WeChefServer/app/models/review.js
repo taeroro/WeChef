@@ -17,12 +17,12 @@ module.exports = mongoose.model('Review', new Schema({
         required: true,    
     },
     reviewRecipeIDs: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'recipe',
         required: true,
     },
     reviewOwnerID: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true,
     },

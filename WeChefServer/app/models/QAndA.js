@@ -10,12 +10,12 @@ module.exports = mongoose.model('QAndA', new Schema({
         type: String,
     },
     qRecipeIDs: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'recipe',
         required: true,
     },
     qOwnerID: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
         required: true,
     },
