@@ -36,8 +36,16 @@ class LoginScreen extends Component {
     if (error) {
       alert('Error fetching data: ' + error.toString());
     } else {
-      console.log('name is ' + result.name + ', id is ' + result.id);
+      console.log('name is ' + result.name + ', id is ' + result.id + ', email is ' + result.email);
       console.log('picture is ' + result.picture.data.url);
+      fetch('https://wechef-server-dev.herokuapp.com/user/login/1001', {
+        method: 'GET',
+      })
+      .then((response) => response.json())
+      .then((responsejson) => console.log('user id is ' + responsejson['userID']))
+      .catch((error) => {
+        alert(error);
+      });
     }
   }
 
@@ -50,7 +58,7 @@ class LoginScreen extends Component {
       } else {
         this.login();
         const infoRequest = new GraphRequest(
-          '/me?fields=name,id,picture.type(large)',
+          '/me?fields=name,id,email,picture.type(large)',
           null,
           this._responseInfoCallback
         );
