@@ -58,8 +58,7 @@ if (!user.options.toObject) {
 }
 
 user.options.toObject.transform = (doc, ret, options) => {
-
-    delete ret.facebookID;
+    delete ret._id;
     delete ret.__v;
     return ret;
 };
@@ -69,8 +68,7 @@ if (!user.options.toJSON) {
 }
 
 user.options.toJSON.transform = (doc, ret, options) => {
-
-    delete ret.facebookID;
+    delete ret._id
     delete ret.__v;
     return ret;
 };

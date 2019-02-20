@@ -30,9 +30,7 @@ userRouter.get('/login/:facebookID', (req, res, err) => {
             });
         }
         if (user) {
-            res.status(200).send({
-                userID: user._id,
-            });
+            res.status(200).send(user);
         } else {
             return res.status(404).send({
                 message: 'No user exists with given FacebookID.',
@@ -42,9 +40,9 @@ userRouter.get('/login/:facebookID', (req, res, err) => {
 
 });
 
-userRouter.get('/:userID', (req, res, err) => {
+userRouter.get('/:facebookID', (req, res, err) => {
 
-    User.findById(req.params.userID, (err, user) => {
+    User.findOne({ facebookID: req.params.facebookID, }, (err, user) => {
         if (err){
 
             return res.status(500).send({
@@ -90,39 +88,27 @@ userRouter.post('/signup', (req, res, err) => {
         }
 
         return res.status(201).send({
-            userID: user._id,
+            message: 'OK',
         });
     });
 
 });
 
-userRouter.put('/profile/:userID', (req, res, err) => {
+userRouter.put('/profile/:facebookID', (req, res, err) => {
     if ('facebookID' in req.body) {
         return res.status(403).send({
             message: 'Permission denied: changing facebookID.',
         });
     }
-    /*
-    if (!('facebookID' in req.headers)) {
-        return res.status(422).send({
-            message: 'Facebook ID must be provided in request header.',
-        });
-    }
-    */
-    User.findById(req.params.userID, (err, user) => {
+
+    User.findOne({ facebookID: req.params.facebookID, }, (err, user) => {
         if (err){
             return res.status(500).send({
                 message: err,
             });
         }
         if (user) {
-            /*
-            if (user.facebookID !== req.headers.facebookID) {
-                return res.status(403).send({
-                    message: 'Permission denied: changing profile of other user.',
-                });
-            }
-            */
+
             user.userName = req.body.userName || user.userName;
             user.email = req.body.email || user.email;
             user.age = req.body.age || user.age;
@@ -152,34 +138,27 @@ userRouter.put('/profile/:userID', (req, res, err) => {
             });
         } else {
             return res.status(404).send({
-                message: 'No user exists with given userID.',
+                message: 'No user exists with given facebookID.',
             });
         }
     });
 
 });
 
-userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) => {
+userRouter.put('/photo/:facebookID', ImageUpload.userPhotoUpload, (req, res, err) => {
 
     if (!req.file || !req.file.url || !req.file.public_id) {
         return res.status(500).send({
             message: 'Internal error in uploading images.',
         });
     }
-    User.findById(req.params.userID, (err, user) => {
+    User.findOne({ facebookID: req.params.facebookID, }, (err, user) => {
         if (err){
             return res.status(500).send({
                 message: err,
             });
         }
         if (user) {
-            /*
-            if (user.facebookID !== req.headers.facebookID) {
-                return res.status(403).send({
-                    message: 'Permission denied: changing profile image of other user.',
-                });
-            }
-            */
             let prevImage = user.userImageID;
 
             user.userImageURL = req.file.url;
@@ -214,7 +193,7 @@ userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) =>
             });
         } else {
             return res.status(404).send({
-                message: 'No user exists with given userID.',
+                message: 'No user exists with given facebookID.',
             });
         }
     });

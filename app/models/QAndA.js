@@ -15,8 +15,7 @@ module.exports = mongoose.model('QAndA', new Schema({
         required: true,
     },
     qOwnerID: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
+        type: String,
         required: true,
     },
 }));

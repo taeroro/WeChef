@@ -11,13 +11,13 @@ let ingredient_schema = new Schema({
     },
 }, { noId: true, });
 
-module.exports = mongoose.model('Recipe', new Schema({
+let recipe = mongoose.model('Recipe', new Schema({
     title: {
         type: String,
         required: [ true, 'Recipe title must be provided.', ],
     },
     ownderID: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         required: [ true, 'OwnerID must be provided.']
     },
     content: {
