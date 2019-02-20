@@ -3,7 +3,7 @@ let mongoose = require('mongoose');
 let cloudinary = require('cloudinary');
 let User = require('../models/user');
 let ImageUpload = require('../middlewares/image_parser')
-let Transaction = require('mongoose-transactions');
+//let Transaction = require('mongoose-transactions');
 
 let userRouter = express.Router();
 
@@ -22,7 +22,7 @@ userRouter.get('/login/:facebookID', (req, res, err) => {
         });
     }
 
-    User.findOne({ fbID: facebookID, }, (err, user) => {
+    User.findOne({ facebookID: fbID, }, (err, user) => {
         if (err){
 
             return res.status(500).send({
@@ -36,6 +36,26 @@ userRouter.get('/login/:facebookID', (req, res, err) => {
         } else {
             return res.status(404).send({
                 message: 'No user exists with given FacebookID.',
+            });
+        }
+    });
+
+});
+
+userRouter.get('/:userID', (req, res, err) => {
+
+    User.findById(req.params.userID, (err, user) => {
+        if (err){
+
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (user) {
+            res.status(200).send(user);
+        } else {
+            return res.status(404).send({
+                message: 'No user exists with given id.',
             });
         }
     });
@@ -82,26 +102,27 @@ userRouter.put('/profile/:userID', (req, res, err) => {
             message: 'Permission denied: changing facebookID.',
         });
     }
-
+    /*
     if (!('facebookID' in req.headers)) {
         return res.status(422).send({
             message: 'Facebook ID must be provided in request header.',
         });
     }
-
-    User.findById(req.path.userID, (err, user) => {
+    */
+    User.findById(req.params.userID, (err, user) => {
         if (err){
             return res.status(500).send({
                 message: err,
             });
         }
         if (user) {
+            /*
             if (user.facebookID !== req.headers.facebookID) {
                 return res.status(403).send({
                     message: 'Permission denied: changing profile of other user.',
                 });
             }
-
+            */
             user.userName = req.body.userName || user.userName;
             user.email = req.body.email || user.email;
             user.age = req.body.age || user.age;
@@ -139,31 +160,26 @@ userRouter.put('/profile/:userID', (req, res, err) => {
 });
 
 userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) => {
-    if (!('facebookID' in req.headers)) {
-        return res.status(422).send({
-            message: 'Facebook ID must be provided in request header.',
-        });
-    }
 
     if (!req.file || !req.file.url || !req.file.public_id) {
         return res.status(500).send({
             message: 'Internal error in uploading images.',
         });
     }
-
-    User.findById(req.path.userID, (err, user) => {
+    User.findById(req.params.userID, (err, user) => {
         if (err){
             return res.status(500).send({
                 message: err,
             });
         }
         if (user) {
+            /*
             if (user.facebookID !== req.headers.facebookID) {
                 return res.status(403).send({
                     message: 'Permission denied: changing profile image of other user.',
                 });
             }
-
+            */
             let prevImage = user.userImageID;
 
             user.userImageURL = req.file.url;
@@ -204,3 +220,5 @@ userRouter.put('/photo/:userID', ImageUpload.userPhotoUpload, (req, res, err) =>
     });
 
 });
+
+module.exports = userRouter;

@@ -39,15 +39,15 @@ let user = new Schema({
         default: null,
     },
     favoriteRecipeIDs: [ {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'recipe',
     }, ],
     shoppingListRecipeIDs: [ {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'recipe',
     }, ],
     myRecipeIDs: [ {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'recipe',
     }, ],
 });
