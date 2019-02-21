@@ -32,12 +32,9 @@ class LoginScreen extends Component {
   }
 
   _responseInfoCallback = (error, result) => {
-    console.log('_responseInfoCallback')
     if (error) {
       alert('Error fetching data: ' + error.toString());
     } else {
-      console.log('name is ' + result.name + ', id is ' + result.id + ', email is ' + result.email);
-      console.log('picture is ' + result.picture.data.url);
       const login_request = 'https://wechef-server-dev.herokuapp.com/user/' + result.id
       const create_user_request = 'https://wechef-server-dev.herokuapp.com/user/signup'
       fetch(login_request, {
@@ -46,7 +43,6 @@ class LoginScreen extends Component {
       .then((response) => response.status)
       .then((response_status) => {
         const user_not_exist = response_status == 404
-        console.log('equality = ' + user_not_exist)
         if (user_not_exist) {
           return fetch(create_user_request, {
             method: 'POST',
