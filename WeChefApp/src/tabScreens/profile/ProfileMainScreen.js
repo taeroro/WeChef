@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, ActionSheetIOS, ImagePickerIOS } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MKButton, MKColor,  MKSpinner } from 'react-native-material-kit';
 import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
@@ -7,12 +7,14 @@ import ImagePicker from 'react-native-image-picker';
 import axios from 'axios';
 
 const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
-const BUTTONS = [
-  'Choose from Library',
-  'Use Facebook Profile Picture',
-  'Cancel',
-];
-const CANCEL_INDEX = 2;
+const options = {
+  title: 'Change Profile Picture',
+  // customButtons: [{ name: 'fb', title: 'Use Facebook Profile Picture' }],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 
 class ProfileMainScreen extends Component {
   constructor(props) {
@@ -22,32 +24,59 @@ class ProfileMainScreen extends Component {
       userID: null,
       avatarSource: null,
       username: '',
-      // clicked: 'none',
       updateAvatarSource: null,
       updateUsername: '',
     };
 
     this.fetchUserData = this.fetchUserData.bind(this);
+    this.changeAvatar = this.changeAvatar.bind(this);
+    this.uploadPictureRequest = this.uploadPictureRequest.bind(this);
   }
 
   openSettings() {
     this.props.navigation.navigate('ProfileSettings');
   }
 
-  changeAvatar() {
-    ActionSheetIOS.showActionSheetWithOptions({
-      title: 'Change Profile Picture',
-      options: BUTTONS,
-      cancelButtonIndex: CANCEL_INDEX,
-    },
-    (buttonIndex) => {
-      // this.setState({ clicked: BUTTONS[buttonIndex] });
-      if (buttonIndex === 0) {
-        ImagePickerIOS.openSelectDialog({}, imageUri => {
-          this.setState({ updateAvatarSource: imageUri });
-        }, error => console.error(error));
-      }
+  uploadPictureRequest() {
+    let requestURL = DB_PREFIX + 'user/photo/' + this.state.userID;
+    let requestBody = JSON.stringify({
+      image: this.state.updateAvatarSource
+    });
 
+    axios.put(requestURL, requestBody)
+      .then(res => {
+        console.log(res);
+        this.forceUpdate();
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
+  changeAvatar() {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        const source = { uri: response.uri };
+
+        console.log(source);
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({ updateAvatarSource: source, }, () => {
+          this.uploadPictureRequest(source);
+        });
+      }
     });
   }
 
@@ -74,14 +103,12 @@ class ProfileMainScreen extends Component {
 
   componentDidMount() {
     AccessToken.getCurrentAccessToken().then((data) => {
-
       this.setState({
         userID: data.userID
       }, () => {
         this.fetchUserData();
       });
     });
-
   }
 
   render() {
@@ -114,7 +141,7 @@ class ProfileMainScreen extends Component {
           )
           : (
             <View style={styles.profileContainer}>
-              <TouchableOpacity onPress={()=>this.changeAvatar()}>
+              <TouchableOpacity onPress={() => this.changeAvatar()}>
                 <Image
                   source={this.state.avatarSource}
                   style={styles.avatarStyle}
