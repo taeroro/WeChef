@@ -9,6 +9,7 @@
     "test:e2e:build": "detox build"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "convert-units": "^2.3.4",
     "detox-cli": "^10.0.7",
     "react": "16.6.3",

@@ -4,15 +4,21 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MKButton, MKColor } from 'react-native-material-kit';
 import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import ImagePicker from 'react-native-image-picker';
+import axios from 'axios';
+
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 
 class ProfileMainScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      userID: null,
       avatarSource: null,
-      username: 'username',
+      username: 'user',
     };
+
+    this.fetchUserData = this.fetchUserData.bind(this);
   }
 
   openSettings() {
@@ -27,6 +33,34 @@ class ProfileMainScreen extends Component {
   changeUsername() {
     // TODO
     alert("change username");
+  }
+
+  fetchUserData() {
+    let requestURL = DB_PREFIX + 'user/' + this.state.userID;
+
+    axios.get(requestURL)
+      .then(res => {
+        let userData = res.data;
+        this.setState({
+          username: userData.userName,
+          avatarSource: { uri: userData.userImageURL }
+        });
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
+  componentDidMount() {
+    AccessToken.getCurrentAccessToken().then((data) => {
+
+      this.setState({
+        userID: data.userID
+      }, () => {
+        this.fetchUserData();
+      });
+    });
+
   }
 
   render() {
