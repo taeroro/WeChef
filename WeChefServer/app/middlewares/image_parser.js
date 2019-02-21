@@ -11,6 +11,7 @@ cloudinary.config({
 let userStorage = cloudinaryStorage({
     cloudinary: cloudinary,
     folder: 'user',
+    transformation: [{ width: 500, height: 500, crop: 'fill', }],
 });
 
 let userPhotoUpload = multer({ storage: userStorage, }).single('image');

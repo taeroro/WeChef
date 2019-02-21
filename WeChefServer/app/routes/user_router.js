@@ -76,6 +76,7 @@ userRouter.post('/signup', (req, res, err) => {
                     message: err.errors,
                 });
             } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                console.log(err);
                 return res.status(409).send({
                     message: 'This FacebookID/Email has already been registered.',
                 });
