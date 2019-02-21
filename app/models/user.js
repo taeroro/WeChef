@@ -36,7 +36,6 @@ let user = new Schema({
         type: String,
         unique: true,
         sparse: true,
-        default: null,
     },
     favoriteRecipeIDs: [ {
         type: mongoose.Schema.Types.ObjectId,
