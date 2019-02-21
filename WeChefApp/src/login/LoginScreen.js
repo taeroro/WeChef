@@ -38,11 +38,36 @@ class LoginScreen extends Component {
     } else {
       console.log('name is ' + result.name + ', id is ' + result.id + ', email is ' + result.email);
       console.log('picture is ' + result.picture.data.url);
-      fetch('https://wechef-server-dev.herokuapp.com/user/login/1001', {
+      const login_request = 'https://wechef-server-dev.herokuapp.com/user/' + result.id
+      const create_user_request = 'https://wechef-server-dev.herokuapp.com/user/signup'
+      fetch(login_request, {
         method: 'GET',
       })
-      .then((response) => response.json())
-      .then((responsejson) => console.log('user id is ' + responsejson['userID']))
+      .then((response) => response.status)
+      .then((response_status) => {
+        const user_not_exist = response_status == 404
+        console.log('equality = ' + user_not_exist)
+        if (user_not_exist) {
+          return fetch(create_user_request, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json',},
+            body: JSON.stringify({
+              facebookID: result.id,
+              userName: result.name,
+              userImageURL: result.picture.data.url,
+              email: result.email,
+            }),
+          })
+        } else {
+          return null
+        }
+      })
+      .then((create_response) => create_response ? create_response.status : null)
+      .then((create_response_status) => {
+        if (create_response_status) {
+          console.log('create status is ' + create_response_status)
+        }
+      })
       .catch((error) => {
         alert(error);
       });
