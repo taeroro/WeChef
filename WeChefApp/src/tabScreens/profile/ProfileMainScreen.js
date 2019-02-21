@@ -39,11 +39,17 @@ class ProfileMainScreen extends Component {
 
   uploadPictureRequest() {
     let requestURL = DB_PREFIX + 'user/photo/' + this.state.userID;
-    let requestBody = JSON.stringify({
-      image: this.state.updateAvatarSource
-    });
+    let formdata = new FormData();
+    formdata.append('image', { uri: this.state.updateAvatarSource, name: 'new_profile_image.jpg', type: 'image/jpg' });
 
-    axios.put(requestURL, requestBody)
+    // axios.interceptors.request.use(request => {
+    //   console.log('Starting Request', JSON.stringify(request))
+    //   return request;
+    // })
+
+    axios.put(requestURL, formdata, { headers: {
+          'Content-Type': 'multipart/form-data',
+        }})
       .then(res => {
         console.log(res);
         this.forceUpdate();
@@ -67,7 +73,8 @@ class ProfileMainScreen extends Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        const source = { uri: response.uri };
+        // const source = { uri: response.uri };
+        const source = response.uri;
 
         console.log(source);
         // You can also display the image using data:
