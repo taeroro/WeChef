@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, ActionSheetIOS, ImagePickerIOS } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { MKButton, MKColor } from 'react-native-material-kit';
+import { MKButton, MKColor,  MKSpinner } from 'react-native-material-kit';
 import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import ImagePicker from 'react-native-image-picker';
 import axios from 'axios';
 
 const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
+const BUTTONS = [
+  'Choose from Library',
+  'Use Facebook Profile Picture',
+  'Cancel',
+];
+const CANCEL_INDEX = 2;
 
 class ProfileMainScreen extends Component {
   constructor(props) {
@@ -15,7 +21,10 @@ class ProfileMainScreen extends Component {
     this.state = {
       userID: null,
       avatarSource: null,
-      username: 'user',
+      username: '',
+      // clicked: 'none',
+      updateAvatarSource: null,
+      updateUsername: '',
     };
 
     this.fetchUserData = this.fetchUserData.bind(this);
@@ -26,8 +35,20 @@ class ProfileMainScreen extends Component {
   }
 
   changeAvatar() {
-    // TODO
-    alert("change profile pic");
+    ActionSheetIOS.showActionSheetWithOptions({
+      title: 'Change Profile Picture',
+      options: BUTTONS,
+      cancelButtonIndex: CANCEL_INDEX,
+    },
+    (buttonIndex) => {
+      // this.setState({ clicked: BUTTONS[buttonIndex] });
+      if (buttonIndex === 0) {
+        ImagePickerIOS.openSelectDialog({}, imageUri => {
+          this.setState({ updateAvatarSource: imageUri });
+        }, error => console.error(error));
+      }
+
+    });
   }
 
   changeUsername() {
@@ -85,21 +106,30 @@ class ProfileMainScreen extends Component {
           </MKButton>
         </View>
 
-        <View style={styles.profileContainer}>
-          <TouchableOpacity onPress={()=>this.changeAvatar()}>
-            <Image
-              source={this.state.avatarSource}
-              style={styles.avatarStyle}
-            />
-          </TouchableOpacity>
-          <Text
-            style={styles.nameStyle}
-            onPress={() => this.changeUsername()}
-          >
-            {this.state.username}
-          </Text>
-        </View>
+        {this.state.avatarSource === null && this.state.username === ''
+          ? (
+            <View style={styles.loadingContainer}>
+              <SingleColorSpinner strokeColor="#F56862" />
+            </View>
+          )
+          : (
+            <View style={styles.profileContainer}>
+              <TouchableOpacity onPress={()=>this.changeAvatar()}>
+                <Image
+                  source={this.state.avatarSource}
+                  style={styles.avatarStyle}
+                />
+              </TouchableOpacity>
 
+              <Text
+                style={styles.nameStyle}
+                onPress={() => this.changeUsername()}
+              >
+                {this.state.username}
+              </Text>
+            </View>
+          )
+        }
       </View>
     );
   }
@@ -144,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 200,
     height: 200,
-    backgroundColor: '#d2d2d2',
+    backgroundColor: '#D2D2D2',
   },
   nameStyle: {
     marginTop: 20,
@@ -153,4 +183,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#3C3C3C',
   },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  spinner: {
+    width: 35,
+    height: 35,
+  },
 });
+
+const SingleColorSpinner = MKSpinner.singleColorSpinner()
+  .withStyle(styles.spinner)
+  .build();
