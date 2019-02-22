@@ -4,6 +4,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MKButton, MKColor,  MKSpinner } from 'react-native-material-kit';
 import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import ImagePicker from 'react-native-image-picker';
+import Dialog from "react-native-dialog";
 import axios from 'axios';
 
 const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
@@ -26,16 +27,39 @@ class ProfileMainScreen extends Component {
       username: '',
       updateAvatarSource: null,
       updateUsername: '',
+      dialogVisible: false,
     };
 
     this.fetchUserData = this.fetchUserData.bind(this);
     this.changeAvatar = this.changeAvatar.bind(this);
     this.uploadPictureRequest = this.uploadPictureRequest.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
 
   openSettings() {
     this.props.navigation.navigate('ProfileSettings');
   }
+
+  handleCancel() {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleSave() {
+    let requestURL = DB_PREFIX + 'user/profile/' + this.state.userID;
+
+    this.setState({ dialogVisible: false });
+
+    axios.put(requestURL, { userName: this.state.updateUsername })
+      .then(res => {
+        console.log(res);
+        this.setState({ updateUsername: '' });
+        this.fetchUserData();
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  };
 
   uploadPictureRequest() {
     let requestURL = DB_PREFIX + 'user/photo/' + this.state.userID;
@@ -52,6 +76,7 @@ class ProfileMainScreen extends Component {
         }})
       .then(res => {
         console.log(res);
+        this.setState({ updateAvatarSource: null });
         this.fetchUserData();
       })
       .catch(error => {
@@ -87,8 +112,7 @@ class ProfileMainScreen extends Component {
   }
 
   changeUsername() {
-    // TODO
-    alert("change username");
+    this.setState({ dialogVisible: true });
   }
 
   fetchUserData() {
@@ -120,6 +144,19 @@ class ProfileMainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Dialog.Container visible={this.state.dialogVisible}>
+          <Dialog.Title>Update user name</Dialog.Title>
+          <Dialog.Description>
+            Enter the new user name below:
+          </Dialog.Description>
+          <Dialog.Input
+            onChangeText={(updateUsername) => this.setState({updateUsername})}
+            value={this.state.updateUsername}
+          />
+          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+          <Dialog.Button label="Save" onPress={this.handleSave} />
+        </Dialog.Container>
+
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Profile</Text>
           <MKButton
