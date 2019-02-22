@@ -52,7 +52,7 @@ class ProfileMainScreen extends Component {
         }})
       .then(res => {
         console.log(res);
-        this.forceUpdate();
+        this.fetchUserData();
       })
       .catch(error => {
         console.log(error);
@@ -73,7 +73,6 @@ class ProfileMainScreen extends Component {
         console.log('User tapped custom button: ', response.customButton);
       }
       else {
-        // const source = { uri: response.uri };
         const source = response.uri;
 
         console.log(source);
