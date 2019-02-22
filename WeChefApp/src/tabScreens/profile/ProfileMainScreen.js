@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { MKButton, MKColor } from 'react-native-material-kit';
+import { MKButton, MKColor,  MKSpinner } from 'react-native-material-kit';
 import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 import ImagePicker from 'react-native-image-picker';
+import Dialog from "react-native-dialog";
 import axios from 'axios';
 
 const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
+const options = {
+  title: 'Change Profile Picture',
+  // customButtons: [{ name: 'fb', title: 'Use Facebook Profile Picture' }],
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 
 class ProfileMainScreen extends Component {
   constructor(props) {
@@ -15,24 +24,95 @@ class ProfileMainScreen extends Component {
     this.state = {
       userID: null,
       avatarSource: null,
-      username: 'user',
+      username: '',
+      updateAvatarSource: null,
+      updateUsername: '',
+      dialogVisible: false,
     };
 
     this.fetchUserData = this.fetchUserData.bind(this);
+    this.changeAvatar = this.changeAvatar.bind(this);
+    this.uploadPictureRequest = this.uploadPictureRequest.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
 
   openSettings() {
     this.props.navigation.navigate('ProfileSettings');
   }
 
+  handleCancel() {
+    this.setState({ dialogVisible: false });
+  };
+
+  handleSave() {
+    let requestURL = DB_PREFIX + 'user/profile/' + this.state.userID;
+
+    this.setState({ dialogVisible: false });
+
+    axios.put(requestURL, { userName: this.state.updateUsername })
+      .then(res => {
+        console.log(res);
+        this.setState({ updateUsername: '' });
+        this.fetchUserData();
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  };
+
+  uploadPictureRequest() {
+    let requestURL = DB_PREFIX + 'user/photo/' + this.state.userID;
+    let formdata = new FormData();
+    formdata.append('image', { uri: this.state.updateAvatarSource, name: 'new_profile_image.jpg', type: 'image/jpg' });
+
+    // axios.interceptors.request.use(request => {
+    //   console.log('Starting Request', JSON.stringify(request))
+    //   return request;
+    // })
+
+    axios.put(requestURL, formdata, { headers: {
+          'Content-Type': 'multipart/form-data',
+        }})
+      .then(res => {
+        console.log(res);
+        this.setState({ updateAvatarSource: null });
+        this.fetchUserData();
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
   changeAvatar() {
-    // TODO
-    alert("change profile pic");
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        const source = response.uri;
+
+        console.log(source);
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({ updateAvatarSource: source, }, () => {
+          this.uploadPictureRequest(source);
+        });
+      }
+    });
   }
 
   changeUsername() {
-    // TODO
-    alert("change username");
+    this.setState({ dialogVisible: true });
   }
 
   fetchUserData() {
@@ -53,19 +133,30 @@ class ProfileMainScreen extends Component {
 
   componentDidMount() {
     AccessToken.getCurrentAccessToken().then((data) => {
-
       this.setState({
         userID: data.userID
       }, () => {
         this.fetchUserData();
       });
     });
-
   }
 
   render() {
     return (
       <View style={styles.container}>
+        <Dialog.Container visible={this.state.dialogVisible}>
+          <Dialog.Title>Update user name</Dialog.Title>
+          <Dialog.Description>
+            Enter the new user name below:
+          </Dialog.Description>
+          <Dialog.Input
+            onChangeText={(updateUsername) => this.setState({updateUsername})}
+            value={this.state.updateUsername}
+          />
+          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+          <Dialog.Button label="Save" onPress={this.handleSave} />
+        </Dialog.Container>
+
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Profile</Text>
           <MKButton
@@ -85,21 +176,30 @@ class ProfileMainScreen extends Component {
           </MKButton>
         </View>
 
-        <View style={styles.profileContainer}>
-          <TouchableOpacity onPress={()=>this.changeAvatar()}>
-            <Image
-              source={this.state.avatarSource}
-              style={styles.avatarStyle}
-            />
-          </TouchableOpacity>
-          <Text
-            style={styles.nameStyle}
-            onPress={() => this.changeUsername()}
-          >
-            {this.state.username}
-          </Text>
-        </View>
+        {this.state.avatarSource === null && this.state.username === ''
+          ? (
+            <View style={styles.loadingContainer}>
+              <SingleColorSpinner strokeColor="#F56862" />
+            </View>
+          )
+          : (
+            <View style={styles.profileContainer}>
+              <TouchableOpacity onPress={() => this.changeAvatar()}>
+                <Image
+                  source={this.state.avatarSource}
+                  style={styles.avatarStyle}
+                />
+              </TouchableOpacity>
 
+              <Text
+                style={styles.nameStyle}
+                onPress={() => this.changeUsername()}
+              >
+                {this.state.username}
+              </Text>
+            </View>
+          )
+        }
       </View>
     );
   }
@@ -144,7 +244,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     width: 200,
     height: 200,
-    backgroundColor: '#d2d2d2',
+    backgroundColor: '#D2D2D2',
   },
   nameStyle: {
     marginTop: 20,
@@ -153,4 +253,18 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#3C3C3C',
   },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  spinner: {
+    width: 35,
+    height: 35,
+  },
 });
+
+const SingleColorSpinner = MKSpinner.singleColorSpinner()
+  .withStyle(styles.spinner)
+  .build();
