@@ -58,8 +58,12 @@ class LoginScreen extends Component {
           return null
         }
       })
-      .then((create_response) => create_response.json())
-      .then((create_response_json) => console.log(JSON.stringify(create_response_json)))
+      .then((create_response) => create_response ? create_response.status : null)
+      .then((create_response_status) => {
+        if (create_response_status) {
+          console.log('create status is ' + create_response_status)
+        }
+      })
       .catch((error) => {
         alert(error);
       });
