@@ -66,8 +66,6 @@ userRouter.post('/signup', (req, res, err) => {
     new_user.facebookID = req.body.facebookID;
     new_user.email = req.body.email;
     new_user.userImageURL = req.body.userImageURL;
-    new_user.age = req.body.age;
-    new_user.gender = req.body.gender;
 
     new_user.save((err, user) => {
         if (err) {
@@ -76,13 +74,11 @@ userRouter.post('/signup', (req, res, err) => {
                     message: err.errors,
                 });
             } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
-                console.log(err);
                 return res.status(409).send({
                     message: 'This FacebookID/Email has already been registered.',
                 });
             } else {
                 return res.status(500).send({
-                    errorType: 'InternalError',
                     message: err,
                 });
             }
@@ -96,11 +92,6 @@ userRouter.post('/signup', (req, res, err) => {
 });
 
 userRouter.put('/profile/:facebookID', (req, res, err) => {
-    if ('facebookID' in req.body) {
-        return res.status(403).send({
-            message: 'Permission denied: changing facebookID.',
-        });
-    }
 
     User.findOne({ facebookID: req.params.facebookID, }, (err, user) => {
         if (err){
@@ -112,8 +103,6 @@ userRouter.put('/profile/:facebookID', (req, res, err) => {
 
             user.userName = req.body.userName || user.userName;
             user.email = req.body.email || user.email;
-            user.age = req.body.age || user.age;
-            user.gender = req.body.gender || user.gender;
             
             user.save((err, user2) => {
                 if (err) {
