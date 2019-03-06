@@ -23,7 +23,7 @@ app.use(body_parser.json());
 //app.use(token());
 
 let user_router = require('./app/routes/user_router');
-
+let user_router = require('./app/routes/recipe_router');
 
 app.get('/', (req, res) => {
     res.send('Wechef API');
