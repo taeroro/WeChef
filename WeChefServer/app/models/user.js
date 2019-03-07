@@ -18,15 +18,6 @@ let user = new Schema({
         trim: true,
         match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
     },
-    age: {
-        type: Number,
-        validate: { validator: Number.isInteger, },
-        min: [ 1, 'Age must not be negative.', ],
-    },
-    gender: {
-        type: String,
-        enum: [ 'male', 'female', 'other', ],
-    },
     userImageURL: {
         type: String,
         unique: true,
@@ -36,7 +27,6 @@ let user = new Schema({
         type: String,
         unique: true,
         sparse: true,
-        default: null,
     },
     favoriteRecipeIDs: [ {
         type: mongoose.Schema.Types.ObjectId,
