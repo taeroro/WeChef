@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Dimensions, ActionSheetIOS } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, ActionSheetIOS, StatusBar } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import FBSDK from 'react-native-fbsdk';
 
@@ -21,6 +21,16 @@ class ProfileSettingsScreen extends Component {
 
     this.logout = this.logout.bind(this);
     this.showActionSheet = this.showActionSheet.bind(this);
+  }
+
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBarStyle('dark-content');
+    });
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove();
   }
 
   showActionSheet() {

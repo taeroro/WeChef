@@ -23,7 +23,8 @@ export const RecipeStack = createStackNavigator(
     RecipeMain: {
       screen: RecipeMainScreen,
       navigationOptions: () => ({
-        // headerBackTitle: strings('header_back_title.toolbox'),
+        header: null,
+        headerBackTitle: null,
       }),
     },
   }

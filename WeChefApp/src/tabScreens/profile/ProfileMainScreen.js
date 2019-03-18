@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MKButton, MKColor,  MKSpinner } from 'react-native-material-kit';
 import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
@@ -132,6 +132,10 @@ class ProfileMainScreen extends Component {
   }
 
   componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBarStyle('dark-content');
+    });
+
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
         userID: data.userID
@@ -139,6 +143,10 @@ class ProfileMainScreen extends Component {
         this.fetchUserData();
       });
     });
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove();
   }
 
   render() {
