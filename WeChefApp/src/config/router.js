@@ -15,7 +15,6 @@ import {
 
 // non-packages
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
-import SearchBarViewScreen from './../tabScreens/recipe/SearchBarViewScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
@@ -84,29 +83,11 @@ export const RecipeStack = createStackNavigator(
   {
     RecipeMain: {
       screen: RecipeMainScreen,
-      navigationOptions: ({ navigation }) => {
-        return {
-          header: null,
-          headerBackTitle: null,
-        }
-      },
-      // navigationOptions: () => ({
-      //   header: null,
-      //   headerBackTitle: null,
-      // }),
+      navigationOptions: () => ({
+        header: null,
+        headerBackTitle: null,
+      }),
     },
-    // SearchBarView: {
-    //   screen: SearchBarViewScreen,
-    //   navigationOptions: () => ({
-    //     headerTransparent: true,
-    //     headerStyle: {
-    //       marginHorizontal: 10,
-    //       marginVertical: 5,
-    //       borderBottomWidth: 0,
-    //     },
-    //     headerTintColor: '#FFF',
-    //   }),
-    // },
   },
   {
     // navigationOptions: ({ navigation }) => {

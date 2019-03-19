@@ -15,6 +15,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 // components
 import SearchBar from '../components/SearchBar';
+import RecipeList from '../components/RecipeList';
 
 class RecipeMainScreen extends Component {
   constructor(props) {
@@ -96,7 +97,7 @@ class RecipeMainScreen extends Component {
     });
 
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <Animated.View
             style={{
@@ -109,30 +110,24 @@ class RecipeMainScreen extends Component {
               colors={['#FA967B', '#F56862']}
               style={styles.searchBarContainer}
             >
-              {/* <TouchableWithoutFeedback
-                onPressIn={() => this.searchBarExpand(!this.state.isFocusedOnTouchBar)}
-              > */}
-                <View style={styles.touchContainer}>
-                  <SearchBar
-                    callbackFromParent={this.searchBarFocusCallback}
-                    ref="childrenSearchBarRef"
-                  />
-                  {
-                    this.state.isFocusedOnTouchBar
-                    ? this.renderCancelButton()
-                    : <View></View>
-                  }
+              <View style={styles.touchContainer}>
+                <SearchBar
+                  callbackFromParent={this.searchBarFocusCallback}
+                  ref="childrenSearchBarRef"
+                />
+                {
+                  this.state.isFocusedOnTouchBar
+                  ? this.renderCancelButton()
+                  : <View></View>
+                }
 
-                </View>
-              {/* </TouchableWithoutFeedback> */}
+              </View>
             </LinearGradient>
           </Animated.View>
 
-          <View>
-            <Text>Content</Text>
-          </View>
+          <RecipeList />
         </View>
-      </TouchableWithoutFeedback>
+      // </TouchableWithoutFeedback>
     );
   }
 }
