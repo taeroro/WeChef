@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { ListItem, Icon } from 'react-native-elements';
 
 class ToolsMainScreen extends Component {
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBarStyle('dark-content');
+    });
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove();
+  }
+
   render() {
     return (
       <View style={styles.container}>

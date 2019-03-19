@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native';
 import { Dropdown } from 'react-native-material-dropdown';
 import { MKTextField, MKColor } from 'react-native-material-kit';
 import convert from 'convert-units';
@@ -18,6 +18,16 @@ class ToolsAppWeight extends Component {
 
     this.unit1Ref = this.updateRef.bind(this, 'unit1');
     this.unit2Ref = this.updateRef.bind(this, 'unit2');
+  }
+
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBarStyle('dark-content');
+    });
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove();
   }
 
   onChangeText(text) {

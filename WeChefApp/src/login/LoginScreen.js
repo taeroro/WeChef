@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableHighlight, Text } from 'react-native';
+import { StyleSheet, View, TouchableHighlight, Text, StatusBar } from 'react-native';
 import FBSDK, { LoginManager, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 const { AccessToken } = FBSDK;
@@ -13,6 +13,16 @@ class LoginScreen extends Component {
 
   login() {
     this.props.navigation.navigate('Recipe')
+  }
+
+  componentDidMount() {
+    this._navListener = this.props.navigation.addListener('didFocus', () => {
+      StatusBar.setBarStyle('dark-content');
+    });
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove();
   }
 
   render() {

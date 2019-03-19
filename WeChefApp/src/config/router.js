@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Animated,
+  Easing,
+} from 'react-native';
+import {
+  createAppContainer,
+  createBottomTabNavigator,
+  createStackNavigator,
+  CardStackStyleInterpolator
+} from 'react-navigation';
 
 // non-packages
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
+import SearchBarViewScreen from './../tabScreens/recipe/SearchBarViewScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
@@ -17,16 +29,93 @@ import LoginScreen from './../login/LoginScreen';
 // =============================================================================
 // Individual Tab's Stack for Screens
 // =============================================================================
+// const tabbarVisible = (navigation) => {
+//   const { routes } = navigation.state;
+//
+//   let showTabbar = true;
+//   routes.forEach((route) => {
+//     if (route.routeName === 'SearchBarView') {
+//       showTabbar = false;
+//     }
+//   });
+//
+//   return showTabbar;
+// };
+
+// const TransitionConfiguration = () => {
+//   return {
+//     transitionSpec: {
+//       duration: 400,
+//       easing: Easing.out(Easing.poly(4)),
+//       timing: Animated.timing,
+//       useNativeDriver: true,
+//     },
+//     screenInterpolator: (sceneProps) => {
+//       const { layout, position, scene } = sceneProps;
+//       const height = layout.initHeight;
+//       const { index, route } = scene
+//       const params = route.params || {};
+//       const transition = params.transition || 'default';
+//       return {
+//         default: slideFromBottom(index, position, height),
+//       }[transition];
+//     },
+//   }
+// }
+//
+// let slideFromBottom = (index, position, height) => {
+//   const inputRange = [index - 1, index, index + 1];
+//   const translateY = position.interpolate({
+//     inputRange: [index - 1, index, index + 1],
+//     outputRange: [-height, 0, 0]
+//   })
+//   // const opacity = position.interpolate({
+//   //   inputRange,
+//   //   outputRange: [0, 1, 1],
+//   // });
+//   const slideFromBottom = { transform: [{ translateY }] }
+//   return slideFromBottom;
+// };
+
 // 1. Recipe Stack
+let showBottomBar = true;
+
 export const RecipeStack = createStackNavigator(
   {
     RecipeMain: {
       screen: RecipeMainScreen,
-      navigationOptions: () => ({
-        // headerBackTitle: strings('header_back_title.toolbox'),
-      }),
+      navigationOptions: ({ navigation }) => {
+        return {
+          header: null,
+          headerBackTitle: null,
+        }
+      },
+      // navigationOptions: () => ({
+      //   header: null,
+      //   headerBackTitle: null,
+      // }),
     },
-  }
+    // SearchBarView: {
+    //   screen: SearchBarViewScreen,
+    //   navigationOptions: () => ({
+    //     headerTransparent: true,
+    //     headerStyle: {
+    //       marginHorizontal: 10,
+    //       marginVertical: 5,
+    //       borderBottomWidth: 0,
+    //     },
+    //     headerTintColor: '#FFF',
+    //   }),
+    // },
+  },
+  {
+    // navigationOptions: ({ navigation }) => {
+      // tabBarVisible: tabbarVisible(navigation),
+    // },
+    headerMode: "screen",
+  //   mode: "modal",
+    // transitionConfig: TransitionConfiguration,
+  },
 );
 
 // 2. Saved Stack
@@ -102,6 +191,9 @@ export const ToolsStack = createStackNavigator(
         headerTintColor: '#3C3C3C'
       }),
     },
+  },
+  {
+    headerMode: "screen",
   }
 );
 
@@ -128,6 +220,9 @@ export const ProfileStack = createStackNavigator(
 
       }),
     },
+  },
+  {
+    headerMode: "screen",
   }
 );
 
