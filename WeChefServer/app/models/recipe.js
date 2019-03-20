@@ -16,7 +16,7 @@ let recipe = mongoose.model('Recipe', new Schema({
         type: String,
         required: [ true, 'Recipe title must be provided.', ],
     },
-    ownderID: {
+    ownerID: {
         type: String,
         required: [ true, 'OwnerID must be provided.']
     },
