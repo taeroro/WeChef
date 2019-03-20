@@ -66,7 +66,43 @@ recipeRouter.get('/:recipeID', (req, res, err) => {
 });
 
 // create recipe
-recipeRouter.post('/create', ImageUpload.userPhotoUpload, (req, res, err) => {
+recipeRouter.post('/create', ImageUpload.recipeImageUpload, (req, res, err) => {
+    let new_recipe = new Recipe();
+    new_recipe.title = req.body.title;
+    new_recipe.ownerID = req.body.ownerID;
+    new_recipe.content = req.body.content;
+    new_recipe.ingredients = req.body.ingredients;
+    new_recipe.difficulty = req.body.difficulty ? req.body.difficulty : 0 ;
+    if (req.file) {
+      new_recipe.recipeImageURL = req.file.url;
+      new_recipe.recipeImageID = req.file.public_id;
+    }
+
+    new_recipe.save((err, recipe) => {
+      if (err) {
+        if (new_recipe.recipeImageID) {
+          cloudinary.v2.api.delete_resources(new_recipe.recipeImageID);
+        }
+        if (err.name === 'ValidationError') {
+            return res.status(422).send({
+                message: err.errors,
+            });
+        } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+            return res.status(409).send({
+                message: 'This recipe has already been created.',
+            });
+        } else {
+            return res.status(500).send({
+                message: err,
+            });
+        }
+      }
+      return res.status(201).send({
+          message: 'OK',
+          recipeID: new_recipe._id,
+          recipeImage: new_recipe.recipeImageURL
+      });
+    })
     /*
     if (!req.file || !req.file.url || !req.file.public_id) {
         return res.status(500).send({
@@ -84,7 +120,7 @@ recipeRouter.post('/create', ImageUpload.userPhotoUpload, (req, res, err) => {
 
             user.userImageURL = req.file.url;
             user.userImageID = req.file.public_id;
-            
+
             user.save((err, user2) => {
                 if (err) {
 
@@ -141,7 +177,7 @@ recipeRouter.put('/:recipeID', ImageUpload.userPhotoUpload, (req, res, err) => {
 
             user.userImageURL = req.file.url;
             user.userImageID = req.file.public_id;
-            
+
             user.save((err, user2) => {
                 if (err) {
 

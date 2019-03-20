@@ -50,3 +50,5 @@ let recipe = mongoose.model('Recipe', new Schema({
         default: 0,
     },
 }));
+
+module.exports = recipe;
