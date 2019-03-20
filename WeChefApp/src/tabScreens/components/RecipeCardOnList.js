@@ -11,40 +11,43 @@ import {
   MKIconToggle,
   getTheme,
 } from 'react-native-material-kit';
+import { Rating } from 'react-native-elements';
+
 
 const theme = getTheme();
-const base64Icon = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
-const action = <Text> My action</Text>;
-// const menu = (
-//     <MKIconToggle
-//         checked={true}
-//         onCheckedChange={this._onIconChecked}
-//         onPress={this._onIconClicked}
-//     >
-//       <Text pointerEvents="none"
-//             style={styles.toggleTextOff}>Off</Text>
-//       <Text state_checked={true}
-//             pointerEvents="none"
-//             style={[styles.toggleText, styles.toggleTextOn]}>On</Text>
-//     </MKIconToggle>
-// );
+const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 
 class RecipeCardOnList extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-
     };
   }
 
   render() {
     return (
       <View style={[theme.cardStyle, styles.cardContainer]}>
-        <Image source={{uri: base64Icon}} style={[theme.cardImageStyle, styles.cardImage]}/>
-        <Text style={theme.cardContentStyle}>
-          Healthy Granola Bowl
+        <Image
+          source={{uri: image}}
+          style={[theme.cardImageStyle, {
+            height: this.props.size - 16
+          }]}
+        />
+        <Text style={styles.titleStyle} numberOfLines={1}>
+          {this.props.item.name}
         </Text>
+        <View style={styles.ratingContainer}>
+          <Rating
+            imageSize={8}
+            readonly
+            type={'custom'}
+            ratingColor={'#F56862'}
+            startingValue={this.props.item.difficultyRating}
+            ratingCount={this.props.item.difficultyRating}
+            style={styles.rating}
+          />
+        </View>
       </View>
     );
   }
@@ -56,9 +59,22 @@ const styles = StyleSheet.create({
   cardContainer: {
     flex: 1,
     margin: 7,
+    // backgroundColor: 'lightblue',
     shadowColor: 'transparent',
   },
-  cardImage: {
-
+  titleStyle: {
+    marginTop: 5,
+    fontFamily: 'Poppins',
+    fontSize: 12,
+    fontWeight: '500',
+    color: '#3C3C3C',
+  },
+  ratingContainer: {
+    width: '100%',
+    // backgroundColor: 'red',
+    alignItems: 'flex-start',
+  },
+  rating: {
+    backgroundColor: 'transparent',
   },
 });
