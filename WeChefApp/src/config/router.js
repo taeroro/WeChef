@@ -5,16 +5,21 @@ import {
   Image,
   Animated,
   Easing,
+  Dimensions,
 } from 'react-native';
 import {
   createAppContainer,
   createBottomTabNavigator,
   createStackNavigator,
-  CardStackStyleInterpolator
+  createMaterialTopTabNavigator,
 } from 'react-navigation';
+import StackViewStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator';
 
 // non-packages
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
+import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
+import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
+import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
@@ -28,18 +33,18 @@ import LoginScreen from './../login/LoginScreen';
 // =============================================================================
 // Individual Tab's Stack for Screens
 // =============================================================================
-// const tabbarVisible = (navigation) => {
-//   const { routes } = navigation.state;
-//
-//   let showTabbar = true;
-//   routes.forEach((route) => {
-//     if (route.routeName === 'SearchBarView') {
-//       showTabbar = false;
-//     }
-//   });
-//
-//   return showTabbar;
-// };
+const tabbarVisible = (navigation) => {
+  const { routes } = navigation.state;
+
+  let showTabbar = true;
+  routes.forEach((route) => {
+    if (route.routeName === 'RecipeSingle') {
+      showTabbar = false;
+    }
+  });
+
+  return showTabbar;
+};
 
 // const TransitionConfiguration = () => {
 //   return {
@@ -77,7 +82,27 @@ import LoginScreen from './../login/LoginScreen';
 // };
 
 // 1. Recipe Stack
-let showBottomBar = true;
+const IngAndDirTab = createMaterialTopTabNavigator({
+  ingredients: IngredientsScreen,
+  directions: DirectionsScreen,
+}, {
+  tabBarOptions: {
+    scrollEnabled: true,
+    labelStyle: {
+      fontSize: 13,
+      color: '#3C3C3C',
+    },
+    tabStyle: {
+      width: Dimensions.get('window').width / 2,
+    },
+    style: {
+      backgroundColor: '#fff',
+    },
+    indicatorStyle: {
+      backgroundColor: '#3C3C3C'
+    }
+  },
+});
 
 export const RecipeStack = createStackNavigator(
   {
@@ -88,14 +113,58 @@ export const RecipeStack = createStackNavigator(
         headerBackTitle: null,
       }),
     },
+    RecipeSingle: {
+      screen: RecipeSingleScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
+    IngAndDir: {
+      screen: IngAndDirTab,
+      navigationOptions: () => ({
+        // header: null,
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    }
   },
   {
-    // navigationOptions: ({ navigation }) => {
-      // tabBarVisible: tabbarVisible(navigation),
-    // },
     headerMode: "screen",
-  //   mode: "modal",
-    // transitionConfig: TransitionConfiguration,
+    navigationOptions: ({ navigation }) => ({
+      tabBarVisible: tabbarVisible(navigation),
+    }),
+    transitionConfig: () => ({
+      screenInterpolator: props => {
+        // Basically you need to create a condition for individual scenes
+       if (props.scene.route.routeName === 'IngAndDir') {
+
+         // forVertical makes the scene transition for Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       const last = props.scenes[props.scenes.length - 1];
+
+       // This controls the transition when navigation back to a specific scene
+       if (last.route.routeName === 'IngAndDir') {
+
+         // Here, forVertical flows from Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       return StackViewStyleInterpolator.forHorizontal(props);
+      }
+    }),
   },
 );
 

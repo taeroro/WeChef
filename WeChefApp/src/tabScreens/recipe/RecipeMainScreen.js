@@ -69,7 +69,6 @@ class RecipeMainScreen extends Component {
     }
   }
 
-
   searchBarFocusCallback = focused => {
     this.searchBarExpand(focused);
   }
