@@ -35,6 +35,7 @@ class RecipeMainScreen extends Component {
 
     this.state = {
       isFocusedOnTouchBar: false,
+      displayData: data,
     };
 
     this.searchBarExpand = this.searchBarExpand.bind(this);
@@ -140,7 +141,7 @@ class RecipeMainScreen extends Component {
             </LinearGradient>
           </Animated.View>
 
-          <RecipeList queryData={data}/>
+          <RecipeList queryData={this.state.displayData}/>
         </View>
       // </TouchableWithoutFeedback>
     );
