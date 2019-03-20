@@ -28,6 +28,7 @@ import ToolsAppWeight from './../tabScreens/tools/ToolsAppWeight';
 import ToolsAppVolume from './../tabScreens/tools/ToolsAppVolume';
 import ProfileMainScreen from './../tabScreens/profile/ProfileMainScreen';
 import ProfileSettingsScreen from './../tabScreens/profile/ProfileSettingsScreen';
+import ProfileRecipesScreen from './../tabScreens/profile/ProfileRecipesScreen';
 import LoginScreen from './../login/LoginScreen';
 
 // =============================================================================
@@ -175,8 +176,35 @@ export const SavedStack = createStackNavigator(
       screen: SavedMainScreen,
       navigationOptions: () => ({
         // headerBackTitle: strings('header_back_title.toolbox'),
+        header: null,
+        headerBackTitle: null,
       }),
     },
+    RecipeSingle: {
+      screen: RecipeSingleScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
+    IngAndDir: {
+      screen: IngAndDirTab,
+      navigationOptions: () => ({
+        // header: null,
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    }
   }
 );
 
@@ -270,6 +298,44 @@ export const ProfileStack = createStackNavigator(
 
       }),
     },
+    ProfileRecipes: {
+      screen: ProfileRecipesScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C'
+
+      }),
+    },
+    RecipeSingle: {
+      screen: RecipeSingleScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
+    IngAndDir: {
+      screen: IngAndDirTab,
+      navigationOptions: () => ({
+        // header: null,
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    }
   },
   {
     headerMode: "screen",

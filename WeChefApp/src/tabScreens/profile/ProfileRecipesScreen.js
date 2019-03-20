@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { StyleSheet, View, Text, Dimensions, ActionSheetIOS, StatusBar } from 'react-native';
+import { ListItem } from 'react-native-elements';
 
-// components
 import RecipeList from '../components/RecipeList';
 
 const data = [
@@ -15,12 +14,12 @@ const data = [
   {id: '7', name: 'Cinnamon Rolls', difficultyRating: 1},
 ];
 
-class SavedMainScreen extends Component {
+class ProfileRecipesScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      displayData: data,
+      displayData: data
     };
   }
 
@@ -38,17 +37,19 @@ class SavedMainScreen extends Component {
     return (
       <View style={styles.container}>
         <View style={styles.titleHeaderContainer}>
-          <Text style={styles.headerTitle}>Saved Recipes</Text>
+          <Text style={styles.headerTitle}>My Recipes</Text>
         </View>
+
         <View style={styles.listContainer}>
           <RecipeList queryData={data} />
         </View>
+
       </View>
     );
   }
 }
 
-export default SavedMainScreen;
+export default ProfileRecipesScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -62,16 +63,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleHeaderContainer: {
-    marginTop: getStatusBarHeight() + 40,
-    marginLeft: 25,
-    marginRight: 25,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    marginTop: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
   },
   headerTitle: {
     color: '#3C3C3C',
-    fontSize: 37,
+    fontSize: 32,
     fontWeight: 'bold',
+  },
+  listConatiner: {
+    marginTop: 20,
+    backgroundColor: '#FFF',
+  },
+  settingContainerStyle: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderBottomColor: '#D2D2D2',
+  },
+  settingTitleStyle: {
+    marginLeft: 15,
+    fontWeight: '400',
+    fontSize: 16,
+    color: '#3C3C3C',
+    letterSpacing: 0.5,
   },
 });
