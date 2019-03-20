@@ -18,6 +18,13 @@ class SearchBar extends Component {
       isFocused: false,
       firstQuery: '',
     };
+
+    this.searchSubmitEvent = this.searchSubmitEvent.bind(this);
+  }
+
+  searchSubmitEvent() {
+    // TODO:
+    // this.state.firstQuery is the search term.
   }
 
   focusedAnimation(focused) {
@@ -80,6 +87,7 @@ class SearchBar extends Component {
           onBlur={() => {
             // this.focusedAnimation(false);
           }}
+          onSubmitEditing={this.searchSubmitEvent}
         />
       </View>
     );
