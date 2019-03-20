@@ -5,17 +5,21 @@ import {
   Image,
   Animated,
   Easing,
+  Dimensions,
 } from 'react-native';
 import {
   createAppContainer,
   createBottomTabNavigator,
   createStackNavigator,
-  CardStackStyleInterpolator
+  createMaterialTopTabNavigator,
 } from 'react-navigation';
+import StackViewStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator';
 
 // non-packages
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
 import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
+import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
+import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
@@ -78,7 +82,27 @@ const tabbarVisible = (navigation) => {
 // };
 
 // 1. Recipe Stack
-let showBottomBar = true;
+const IngAndDirTab = createMaterialTopTabNavigator({
+  ingredients: IngredientsScreen,
+  directions: DirectionsScreen,
+}, {
+  tabBarOptions: {
+    scrollEnabled: true,
+    labelStyle: {
+      fontSize: 13,
+      color: '#3C3C3C',
+    },
+    tabStyle: {
+      width: Dimensions.get('window').width / 2,
+    },
+    style: {
+      backgroundColor: '#fff',
+    },
+    indicatorStyle: {
+      backgroundColor: '#3C3C3C'
+    }
+  },
+});
 
 export const RecipeStack = createStackNavigator(
   {
@@ -92,7 +116,6 @@ export const RecipeStack = createStackNavigator(
     RecipeSingle: {
       screen: RecipeSingleScreen,
       navigationOptions: () => ({
-        // headerTitle: "Recipe",
         headerStyle: {
           backgroundColor: '#fff',
           marginHorizontal: 10,
@@ -102,11 +125,45 @@ export const RecipeStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     },
+    IngAndDir: {
+      screen: IngAndDirTab,
+      navigationOptions: () => ({
+        // header: null,
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    }
   },
   {
     headerMode: "screen",
     navigationOptions: ({ navigation }) => ({
       tabBarVisible: tabbarVisible(navigation),
+    }),
+    transitionConfig: () => ({
+      screenInterpolator: props => {
+        // Basically you need to create a condition for individual scenes
+       if (props.scene.route.routeName === 'IngAndDir') {
+
+         // forVertical makes the scene transition for Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       const last = props.scenes[props.scenes.length - 1];
+
+       // This controls the transition when navigation back to a specific scene
+       if (last.route.routeName === 'IngAndDir') {
+
+         // Here, forVertical flows from Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       return StackViewStyleInterpolator.forHorizontal(props);
+      }
     }),
   },
 );

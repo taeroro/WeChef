@@ -29,9 +29,8 @@ class RecipeCardOnList extends Component {
   render() {
     return (
       <TouchableOpacity onPress={() => {
-        console.log("Pressed " + this.props.item.id);
         this.props.navigation.navigate('RecipeSingle',
-        {id: this.props.item.id}
+          {id: this.props.item.id}
         );
       }}>
         <View style={[theme.cardStyle, styles.cardContainer]}>

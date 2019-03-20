@@ -41,7 +41,25 @@ class RecipeSingleScreen extends Component {
     return (
       <View style={styles.bottomBarContainer}>
         <View style={styles.bottomBarSafeArea}>
-          <Text>Bottom Bar</Text>
+          <TouchableOpacity
+            style={bottomBarstyles.ingredientsButtonContainer}
+            onPress={() => {
+              console.log("ingredients");
+              this.props.navigation.navigate('IngAndDir');
+            }}
+          >
+            <Text style={bottomBarstyles.ingredientsText}>ingredients</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={bottomBarstyles.directionsButtonContainer}
+            onPress={() => {
+              console.log("directions");
+            }}
+          >
+            <Text style={bottomBarstyles.directionsText}>directions</Text>
+          </TouchableOpacity>
+
         </View>
       </View>
     );
@@ -85,9 +103,34 @@ const styles = StyleSheet.create({
   bottomBarSafeArea: {
     height: 49,
     width: '100%',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
 
     backgroundColor: 'yellow',
-  }
+  },
+});
+const bottomBarstyles = StyleSheet.create({
+  ingredientsButtonContainer: {
+    width: '50%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    backgroundColor: 'brown',
+  },
+  ingredientsText: {
+    textTransform: 'uppercase',
+  },
+  directionsButtonContainer: {
+    width: '50%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    backgroundColor: 'blue',
+  },
+  directionsText: {
+    textTransform: 'uppercase',
+  },
 });
