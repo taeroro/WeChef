@@ -21,7 +21,7 @@ let recipe = mongoose.model('Recipe', new Schema({
         required: [ true, 'OwnerID must be provided.']
     },
     content: {
-        type: String,
+        type: [ String ],
     },
     recipeImageURL: {
         type: String,
