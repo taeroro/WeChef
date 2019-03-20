@@ -4,6 +4,7 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import {
   MKButton,
@@ -12,7 +13,7 @@ import {
   getTheme,
 } from 'react-native-material-kit';
 import { Rating } from 'react-native-elements';
-
+import { withNavigation } from 'react-navigation';
 
 const theme = getTheme();
 const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
@@ -27,33 +28,40 @@ class RecipeCardOnList extends Component {
 
   render() {
     return (
-      <View style={[theme.cardStyle, styles.cardContainer]}>
-        <Image
-          source={{uri: image}}
-          style={[theme.cardImageStyle, {
-            height: this.props.size - 16
-          }]}
-        />
-        <Text style={styles.titleStyle} numberOfLines={1}>
-          {this.props.item.name}
-        </Text>
-        <View style={styles.ratingContainer}>
-          <Rating
-            imageSize={8}
-            readonly
-            type={'custom'}
-            ratingColor={'#F56862'}
-            startingValue={this.props.item.difficultyRating}
-            ratingCount={this.props.item.difficultyRating}
-            style={styles.rating}
+      <TouchableOpacity onPress={() => {
+        console.log("Pressed " + this.props.item.id);
+        this.props.navigation.navigate('RecipeSingle',
+        {id: this.props.item.id}
+        );
+      }}>
+        <View style={[theme.cardStyle, styles.cardContainer]}>
+          <Image
+            source={{uri: image}}
+            style={[theme.cardImageStyle, {
+              height: this.props.size - 16
+            }]}
           />
+          <Text style={styles.titleStyle} numberOfLines={1}>
+            {this.props.item.name}
+          </Text>
+          <View style={styles.ratingContainer}>
+            <Rating
+              imageSize={8}
+              readonly
+              type={'custom'}
+              ratingColor={'#F56862'}
+              startingValue={this.props.item.difficultyRating}
+              ratingCount={this.props.item.difficultyRating}
+              style={styles.rating}
+            />
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
 
-export default RecipeCardOnList;
+export default withNavigation(RecipeCardOnList);
 
 const styles = StyleSheet.create({
   cardContainer: {

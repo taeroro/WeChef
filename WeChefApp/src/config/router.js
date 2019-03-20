@@ -15,6 +15,7 @@ import {
 
 // non-packages
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
+import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
@@ -28,18 +29,18 @@ import LoginScreen from './../login/LoginScreen';
 // =============================================================================
 // Individual Tab's Stack for Screens
 // =============================================================================
-// const tabbarVisible = (navigation) => {
-//   const { routes } = navigation.state;
-//
-//   let showTabbar = true;
-//   routes.forEach((route) => {
-//     if (route.routeName === 'SearchBarView') {
-//       showTabbar = false;
-//     }
-//   });
-//
-//   return showTabbar;
-// };
+const tabbarVisible = (navigation) => {
+  const { routes } = navigation.state;
+
+  let showTabbar = true;
+  routes.forEach((route) => {
+    if (route.routeName === 'RecipeSingle') {
+      showTabbar = false;
+    }
+  });
+
+  return showTabbar;
+};
 
 // const TransitionConfiguration = () => {
 //   return {
@@ -88,14 +89,25 @@ export const RecipeStack = createStackNavigator(
         headerBackTitle: null,
       }),
     },
+    RecipeSingle: {
+      screen: RecipeSingleScreen,
+      navigationOptions: () => ({
+        // headerTitle: "Recipe",
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
   },
   {
-    // navigationOptions: ({ navigation }) => {
-      // tabBarVisible: tabbarVisible(navigation),
-    // },
     headerMode: "screen",
-  //   mode: "modal",
-    // transitionConfig: TransitionConfiguration,
+    navigationOptions: ({ navigation }) => ({
+      tabBarVisible: tabbarVisible(navigation),
+    }),
   },
 );
 

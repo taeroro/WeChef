@@ -6,6 +6,7 @@ import {
   Dimensions,
   FlatList,
 } from 'react-native';
+import { withNavigation } from 'react-navigation';
 
 // components
 import RecipeCardOnList from './RecipeCardOnList';
@@ -51,7 +52,7 @@ class RecipeList extends Component {
   }
 }
 
-export default RecipeList;
+export default withNavigation(RecipeList);
 
 const styles = StyleSheet.create({
   listContentStyle: {
