@@ -21,7 +21,7 @@ let recipeImageStorage = cloudinaryStorage({
     folder: 'recipe',
 });
 
-let recipeImageUpload = multer({ storage: recipeImageStorage, }).array('image', 10);
+let recipeImageUpload = multer({ storage: recipeImageStorage, }).single('image');
 
 let reviewStorage = cloudinaryStorage({
     cloudinary: cloudinary,
