@@ -7,6 +7,11 @@ import {
 } from 'react-native';
 import { Searchbar as _Searchbar } from 'react-native-paper';
 
+const results = [
+  {id: '1', name: 'Healthy Granola Bowl', difficultyRating: 4},
+  {id: '2', name: 'Butternut Squash Soup', difficultyRating: 3},
+];
+
 
 class SearchBar extends Component {
   constructor(props) {
@@ -23,8 +28,13 @@ class SearchBar extends Component {
   }
 
   searchSubmitEvent() {
-    // TODO:
     // this.state.firstQuery is the search term.
+    // need to undo expansion and lengthen the search bar
+
+    // TODO: when backend is done, use query to get actual results.
+    this.props.callbackFromParent(false);
+    this.props.submitCallback(results);
+    this.focusedAnimation(false);
   }
 
   focusedAnimation(focused) {
@@ -68,7 +78,12 @@ class SearchBar extends Component {
         <_Searchbar
           ref="searchBarRef"
           placeholder="Search..."
-          onChangeText={query => { this.setState({ firstQuery: query }); }}
+          onChangeText={query => {
+             this.setState({ firstQuery: query });
+             if (query == "") {
+               this.props.showAllCallback();
+             }
+           }}
           value={firstQuery}
           style={{
             width: animatedWidth,
