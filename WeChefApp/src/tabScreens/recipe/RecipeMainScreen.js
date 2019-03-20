@@ -89,6 +89,10 @@ class RecipeMainScreen extends Component {
     this.setState({ displayData: results });
   }
 
+  searchBarShowAllCallback = () => {
+    this.setState({ displayData: data });
+  }
+
   renderCancelButton() {
     return (
       <TouchableOpacity
@@ -129,6 +133,7 @@ class RecipeMainScreen extends Component {
                 <SearchBar
                   callbackFromParent={this.searchBarFocusCallback}
                   submitCallback={this.searchBarSubmitCallback}
+                  showAllCallback={this.searchBarShowAllCallback}
                   ref="childrenSearchBarRef"
                 />
                 {

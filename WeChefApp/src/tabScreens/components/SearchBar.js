@@ -28,9 +28,10 @@ class SearchBar extends Component {
   }
 
   searchSubmitEvent() {
-    // TODO:
     // this.state.firstQuery is the search term.
     // need to undo expansion and lengthen the search bar
+
+    // TODO: when backend is done, use query to get actual results.
     this.props.callbackFromParent(false);
     this.props.submitCallback(results);
     this.focusedAnimation(false);
@@ -77,7 +78,12 @@ class SearchBar extends Component {
         <_Searchbar
           ref="searchBarRef"
           placeholder="Search..."
-          onChangeText={query => { this.setState({ firstQuery: query }); }}
+          onChangeText={query => {
+             this.setState({ firstQuery: query });
+             if (query == "") {
+               this.props.showAllCallback();
+             }
+           }}
           value={firstQuery}
           style={{
             width: animatedWidth,
