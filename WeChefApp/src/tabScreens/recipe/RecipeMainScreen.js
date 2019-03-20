@@ -85,8 +85,8 @@ class RecipeMainScreen extends Component {
     this.searchBarExpand(focused);
   }
 
-  searchBarSubmitCallback = query => {
-    console.log("query is " + query);
+  searchBarSubmitCallback = results => {
+    this.setState({ displayData: results });
   }
 
   renderCancelButton() {

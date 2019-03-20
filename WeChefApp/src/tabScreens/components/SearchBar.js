@@ -7,6 +7,11 @@ import {
 } from 'react-native';
 import { Searchbar as _Searchbar } from 'react-native-paper';
 
+const results = [
+  {id: '1', name: 'Healthy Granola Bowl', difficultyRating: 4},
+  {id: '2', name: 'Butternut Squash Soup', difficultyRating: 3},
+];
+
 
 class SearchBar extends Component {
   constructor(props) {
@@ -27,7 +32,7 @@ class SearchBar extends Component {
     // this.state.firstQuery is the search term.
     // need to undo expansion and lengthen the search bar
     this.props.callbackFromParent(false);
-    this.props.submitCallback(this.state.firstQuery);
+    this.props.submitCallback(results);
     this.focusedAnimation(false);
   }
 
