@@ -17,6 +17,16 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import SearchBar from '../components/SearchBar';
 import RecipeList from '../components/RecipeList';
 
+const data = [
+  {id: '1', name: 'Healthy Granola Bowl', difficultyRating: 4},
+  {id: '2', name: 'Butternut Squash Soup', difficultyRating: 3},
+  {id: '3', name: 'Buttermilk Pancakes', difficultyRating: 2},
+  {id: '4', name: 'Shrimp Dumplings', difficultyRating: 4},
+  {id: '5', name: 'Lamb Burger', difficultyRating: 5},
+  {id: '6', name: 'Pesto Pasta with sliced Tomato', difficultyRating: 4},
+  {id: '7', name: 'Cinnamon Rolls', difficultyRating: 1},
+];
+
 class RecipeMainScreen extends Component {
   constructor(props) {
     super(props);
@@ -74,6 +84,10 @@ class RecipeMainScreen extends Component {
     this.searchBarExpand(focused);
   }
 
+  searchBarSubmitCallback = query => {
+    console.log("query is " + query);
+  }
+
   renderCancelButton() {
     return (
       <TouchableOpacity
@@ -113,6 +127,7 @@ class RecipeMainScreen extends Component {
               <View style={styles.touchContainer}>
                 <SearchBar
                   callbackFromParent={this.searchBarFocusCallback}
+                  submitCallback={this.searchBarSubmitCallback}
                   ref="childrenSearchBarRef"
                 />
                 {
@@ -125,7 +140,7 @@ class RecipeMainScreen extends Component {
             </LinearGradient>
           </Animated.View>
 
-          <RecipeList />
+          <RecipeList queryData={data}/>
         </View>
       // </TouchableWithoutFeedback>
     );

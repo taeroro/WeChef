@@ -25,6 +25,10 @@ class SearchBar extends Component {
   searchSubmitEvent() {
     // TODO:
     // this.state.firstQuery is the search term.
+    // need to undo expansion and lengthen the search bar
+    this.props.callbackFromParent(false);
+    this.props.submitCallback(this.state.firstQuery);
+    this.focusedAnimation(false);
   }
 
   focusedAnimation(focused) {
