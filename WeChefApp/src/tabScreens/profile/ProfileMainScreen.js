@@ -6,6 +6,8 @@ import { AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbs
 import ImagePicker from 'react-native-image-picker';
 import Dialog from "react-native-dialog";
 import axios from 'axios';
+import { ListItem, Icon } from 'react-native-elements';
+
 
 const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 const options = {
@@ -39,6 +41,10 @@ class ProfileMainScreen extends Component {
 
   openSettings() {
     this.props.navigation.navigate('ProfileSettings');
+  }
+
+  openRecipes() {
+    this.props.navigation.navigate('ProfileRecipes');
   }
 
   handleCancel() {
@@ -182,6 +188,7 @@ class ProfileMainScreen extends Component {
               style={styles.btIcon}
             />
           </MKButton>
+
         </View>
 
         {this.state.avatarSource === null && this.state.username === ''
@@ -205,9 +212,24 @@ class ProfileMainScreen extends Component {
               >
                 {this.state.username}
               </Text>
+              
             </View>
           )
         }
+
+        <View style={styles.listConatiner}>
+          <ListItem
+            key={1}
+            containerStyle={styles.toolsContainerStyle}
+            title={"My Recipes"}
+            titleStyle={styles.toolsTitleStyle}
+            fontFamily="Poppins"
+            rightIcon={<Icon name='book-multiple' type='material-community' size={20} color='#3C3C3C' containerStyle={{marginRight: 15}} />}
+            bottomDivider
+            bottomDividerProps={{style: {paddingLeft: 15}}}
+            onPress={() => this.openRecipes()}
+          />
+        </View>
       </View>
     );
   }
@@ -270,6 +292,22 @@ const styles = StyleSheet.create({
   spinner: {
     width: 35,
     height: 35,
+  },
+  listConatiner: {
+    marginTop: 20,
+    backgroundColor: '#FFF',
+  },
+  toolsContainerStyle: {
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderBottomColor: '#D2D2D2',
+  },
+  toolsTitleStyle: {
+    marginLeft: 15,
+    fontWeight: '400',
+    fontSize: 16,
+    color: '#3C3C3C',
+    letterSpacing: 0.5,
   },
 });
 
