@@ -47,41 +47,6 @@ const tabbarVisible = (navigation) => {
   return showTabbar;
 };
 
-// const TransitionConfiguration = () => {
-//   return {
-//     transitionSpec: {
-//       duration: 400,
-//       easing: Easing.out(Easing.poly(4)),
-//       timing: Animated.timing,
-//       useNativeDriver: true,
-//     },
-//     screenInterpolator: (sceneProps) => {
-//       const { layout, position, scene } = sceneProps;
-//       const height = layout.initHeight;
-//       const { index, route } = scene
-//       const params = route.params || {};
-//       const transition = params.transition || 'default';
-//       return {
-//         default: slideFromBottom(index, position, height),
-//       }[transition];
-//     },
-//   }
-// }
-//
-// let slideFromBottom = (index, position, height) => {
-//   const inputRange = [index - 1, index, index + 1];
-//   const translateY = position.interpolate({
-//     inputRange: [index - 1, index, index + 1],
-//     outputRange: [-height, 0, 0]
-//   })
-//   // const opacity = position.interpolate({
-//   //   inputRange,
-//   //   outputRange: [0, 1, 1],
-//   // });
-//   const slideFromBottom = { transform: [{ translateY }] }
-//   return slideFromBottom;
-// };
-
 // 1. Recipe Stack
 const IngAndDirTab = createMaterialTopTabNavigator({
   ingredients: IngredientsScreen,
@@ -129,7 +94,6 @@ export const RecipeStack = createStackNavigator(
     IngAndDir: {
       screen: IngAndDirTab,
       navigationOptions: () => ({
-        // header: null,
         headerStyle: {
           backgroundColor: '#fff',
           marginHorizontal: 10,
@@ -137,6 +101,10 @@ export const RecipeStack = createStackNavigator(
           borderBottomWidth: 0,
         },
         headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
       }),
     }
   },
