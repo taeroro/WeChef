@@ -22,22 +22,21 @@ recipeRouter.get('/by-owner/:facebookID', (req, res, err) => {
     let fbID = req.params.facebookID;
     if (!fbID) {
         return res.status(422).send({
-            message: 'No FacebookID provided for login.',
+            message: 'No FacebookID provided.',
         });
     }
 
-    User.findOne({ facebookID: fbID, }, (err, user) => {
+    Recipe.find({ ownerID: fbID, }, (err, recipes) => {
         if (err){
-
             return res.status(500).send({
                 message: err,
             });
         }
-        if (user) {
-            res.status(200).send(user);
+        if (recipes) {
+            res.status(200).send(recipes);
         } else {
             return res.status(404).send({
-                message: 'No user exists with given FacebookID.',
+                message: 'No recipes for the given user id.',
             });
         }
     });
