@@ -26,7 +26,7 @@ recipeRouter.get('/by-owner/:facebookID', (req, res, err) => {
         });
     }
 
-    Recipe.find({ ownerID: fbID, }, (err, recipes) => {
+    Recipe.find({ ownerID: fbID, }, '_id title recipeImageURL difficulty', (err, recipes) => {
         if (err){
             return res.status(500).send({
                 message: err,
