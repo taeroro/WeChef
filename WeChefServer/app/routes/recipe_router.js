@@ -22,22 +22,21 @@ recipeRouter.get('/by-owner/:facebookID', (req, res, err) => {
     let fbID = req.params.facebookID;
     if (!fbID) {
         return res.status(422).send({
-            message: 'No FacebookID provided for login.',
+            message: 'No FacebookID provided.',
         });
     }
 
-    User.findOne({ facebookID: fbID, }, (err, user) => {
+    Recipe.find({ ownerID: fbID, }, '_id title recipeImageURL difficulty', (err, recipes) => {
         if (err){
-
             return res.status(500).send({
                 message: err,
             });
         }
-        if (user) {
-            res.status(200).send(user);
+        if (recipes) {
+            res.status(200).send(recipes);
         } else {
             return res.status(404).send({
-                message: 'No user exists with given FacebookID.',
+                message: 'No recipes for the given user id.',
             });
         }
     });
@@ -47,7 +46,7 @@ recipeRouter.get('/by-owner/:facebookID', (req, res, err) => {
 // get one recipe
 recipeRouter.get('/:recipeID', (req, res, err) => {
 
-    Recipe.findByID( recipeID, (err, recipe) => {
+    Recipe.findByID(req.params.recipeID, (err, recipe) => {
         if (err){
 
             return res.status(500).send({
@@ -66,94 +65,75 @@ recipeRouter.get('/:recipeID', (req, res, err) => {
 });
 
 // create recipe
-recipeRouter.post('/create', ImageUpload.userPhotoUpload, (req, res, err) => {
-    /*
-    if (!req.file || !req.file.url || !req.file.public_id) {
-        return res.status(500).send({
-            message: 'Internal error in uploading images.',
-        });
+recipeRouter.post('/create', ImageUpload.recipeImageUpload, (req, res, err) => {
+    let new_recipe = new Recipe();
+    new_recipe.title = req.body.title;
+    new_recipe.ownerID = req.body.ownerID;
+    new_recipe.content = req.body.content;
+    new_recipe.ingredients = req.body.ingredients;
+    new_recipe.difficulty = req.body.difficulty ? req.body.difficulty : 0 ;
+    if (req.file) {
+      new_recipe.recipeImageURL = req.file.url;
+      new_recipe.recipeImageID = req.file.public_id;
     }
-    User.findOne({ facebookID: req.params.facebookID, }, (err, user) => {
-        if (err){
+
+    new_recipe.save((err, recipe) => {
+      if (err) {
+        if (new_recipe.recipeImageID) {
+          cloudinary.v2.api.delete_resources(new_recipe.recipeImageID);
+        }
+        if (err.name === 'ValidationError') {
+            return res.status(422).send({
+                message: err.errors,
+            });
+        } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+            return res.status(409).send({
+                message: 'This recipe has already been created.',
+            });
+        } else {
             return res.status(500).send({
                 message: err,
             });
         }
-        if (user) {
-            let prevImage = user.userImageID;
-
-            user.userImageURL = req.file.url;
-            user.userImageID = req.file.public_id;
-            
-            user.save((err, user2) => {
-                if (err) {
-
-                    cloudinary.v2.api.delete_resources([ user.userImageID, ]);
-
-                    if (err.name === 'ValidationError') {
-                        return res.status(422).send({
-                            message: err.errors,
-                        });
-                    } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
-                        return res.status(409).send({
-                            message: 'This Imge has already been used.',
-                        });
-                    } else {
-                        return res.status(500).send({
-                            errorType: 'InternalError',
-                            message: err,
-                        });
-                    }
-                }
-                if (prevImage) {
-                    cloudinary.v2.api.delete_resources([ prevImage, ]);
-                }
-                return res.status(200).send({
-                    userImageURL: user.userImageURL,
-                });
-            });
-        } else {
-            return res.status(404).send({
-                message: 'No user exists with given facebookID.',
-            });
-        }
-    });
-    */
-
+      }
+      return res.status(201).send({
+          message: 'OK',
+          recipeID: new_recipe._id,
+          recipeImage: new_recipe.recipeImageURL
+      });
+    })
 });
 
-// update recipe
-recipeRouter.put('/:recipeID', ImageUpload.userPhotoUpload, (req, res, err) => {
-    /*
-    if (!req.file || !req.file.url || !req.file.public_id) {
-        return res.status(500).send({
-            message: 'Internal error in uploading images.',
-        });
-    }
-    User.findOne({ facebookID: req.params.facebookID, }, (err, user) => {
+// edit recipe
+recipeRouter.put('/edit/:recipeID', ImageUpload.recipeImageUpload, (req, res, err) => {
+
+    Recipe.findById(req.params.recipeID, (err, recipe) => {
         if (err){
             return res.status(500).send({
                 message: err,
             });
         }
-        if (user) {
-            let prevImage = user.userImageID;
+        if (recipe) {
+            recipe.title = req.body.title || recipe.title;
+            recipe.content = req.body.content || recipe.content;
+            recipe.ingredients = req.body.ingredients || recipe.ingredients;
+            recipe.difficulty = req.body.difficulty || recipe.difficulty;
+            let prevImage = recipe.recipeImageID;
 
-            user.userImageURL = req.file.url;
-            user.userImageID = req.file.public_id;
-            
-            user.save((err, user2) => {
+            if (req.file) {
+              recipe.recipeImageURL = req.file.url;
+              recipe.recipeImageID = req.file.public_id;
+            }
+
+            recipe.save((err, recipe2) => {
                 if (err) {
-
-                    cloudinary.v2.api.delete_resources([ user.userImageID, ]);
-
                     if (err.name === 'ValidationError') {
                         return res.status(422).send({
                             message: err.errors,
                         });
                     } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
                         return res.status(409).send({
-                            message: 'This Imge has already been used.',
+                            message: 'Violated value unique.',
                         });
                     } else {
                         return res.status(500).send({
@@ -162,20 +142,19 @@ recipeRouter.put('/:recipeID', ImageUpload.userPhotoUpload, (req, res, err) => {
                         });
                     }
                 }
-                if (prevImage) {
+                if (req.file && prevImage) {
                     cloudinary.v2.api.delete_resources([ prevImage, ]);
                 }
                 return res.status(200).send({
-                    userImageURL: user.userImageURL,
+                    message: 'OK',
                 });
             });
         } else {
             return res.status(404).send({
-                message: 'No user exists with given facebookID.',
+                message: 'No recipe exists with given recipeID.',
             });
         }
     });
-    */
 
 });
 
