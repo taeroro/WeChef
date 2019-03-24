@@ -164,6 +164,63 @@ recipeRouter.get('/homepage', (req, res, err) => {});
 // get my fav recipes
 recipeRouter.get('/:facebookID/favourite', (req, res, err) => {});
 
+// Add Q&A to a recipe
+recipeRouter.post('/qa/create/:recipeID', (req, res, err) => {
+    let new_qAndA = new QAndA();
+    new_qAndA.qContent = req.body.qContent;
+    new_qAndA.qRecipeIDs = req.params.recipeID;
+    new_qAndA.qOwnerID = req.body.qOwnerID;
+    console.log(new_qAndA.qContent);
+    console.log(new_qAndA.qRecipeIDs);
+    console.log(new_qAndA.qOwnerID);
 
+    new_qAndA.save((error, qAndA) => {
+      if (error) {
+        if (err.name === 'ValidationError') {
+            return res.status(422).send({
+                message: err.errors,
+            });
+        } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+            return res.status(409).send({
+                message: 'This Q and A has already been created.',
+            });
+        } else {
+            return res.status(500).send({
+                message: err,
+            });
+        }
+      }
+      return res.status(201).send({
+          message: 'OK',
+          qAndA: qAndA,
+      });
+    })
+});
+
+// Get Q and A's of a recipe
+recipeRouter.get('/qa/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    QAndA.find({qRecipeIDs: recipeID}, (err, qAndAs) => {
+      if (err){
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (qAndAs) {
+          res.status(200).send(qAndAs);
+      } else {
+          return res.status(404).send({
+              message: 'No qAndAs for the given recipe id.',
+          });
+      }
+    })
+})
 
 module.exports = recipeRouter;
