@@ -197,4 +197,30 @@ recipeRouter.post('/qa/create/:recipeID', (req, res, err) => {
     })
 });
 
+// Get Q and A's of a recipe
+recipeRouter.get('/qa/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    QAndA.find({qRecipeIDs: recipeID}, (err, qAndAs) => {
+      if (err){
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (qAndAs) {
+          res.status(200).send(qAndAs);
+      } else {
+          return res.status(404).send({
+              message: 'No qAndAs for the given recipe id.',
+          });
+      }
+    })
+})
+
 module.exports = recipeRouter;
