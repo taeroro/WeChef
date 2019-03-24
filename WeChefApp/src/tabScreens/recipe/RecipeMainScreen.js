@@ -107,6 +107,26 @@ class RecipeMainScreen extends Component {
     );
   }
 
+  renderAddButton() {
+    return (
+      <TouchableOpacity
+        style={styles.addButtonContainer}
+        onPress={() => {
+          console.log("posting");
+          this.props.navigation.navigate('RecipePosting');
+        }}
+      >
+        <LinearGradient
+          start={{x: 0, y: 0}} end={{x: 1, y: 1}}
+          colors={['#FA967B', '#F56862']}
+          style={styles.addButtonBackground}
+        >
+
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  }
+
   render() {
     const endHeight = Dimensions.get('window').height;
     const animatedHeight = this.animatedValue.interpolate({
@@ -146,6 +166,8 @@ class RecipeMainScreen extends Component {
           </Animated.View>
 
           <RecipeList queryData={this.state.displayData}/>
+
+          {this.renderAddButton()}
         </View>
       // </TouchableWithoutFeedback>
     );
@@ -187,5 +209,17 @@ const styles = StyleSheet.create({
   cancelText: {
     color: '#FFF',
     fontSize: 13,
-  }
+  },
+  addButtonContainer: {
+    position: 'absolute',
+    right: 18,
+    bottom: 20,
+  },
+  addButtonBackground: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
