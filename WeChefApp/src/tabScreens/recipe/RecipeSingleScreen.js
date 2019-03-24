@@ -6,9 +6,13 @@ import {
   Image,
   StatusBar,
   TouchableOpacity,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { Rating } from 'react-native-elements';
+
+const imageSize = Dimensions.get('window').width;
 
 class RecipeSingleScreen extends Component {
   constructor(props) {
@@ -29,10 +33,37 @@ class RecipeSingleScreen extends Component {
     this._navListener.remove();
   }
 
+  // Recipe image, name, rating
+  renderRecipeSection1() {
+    // TODO: replace image source, name of the recipe, and difficulty rating
+
+    const tempName = "delicious blueberry and orange pancakes with organic maple syrup";
+
+    return (
+      <View style={recipeStyles.section1Container}>
+        <Image
+          resizeMode={"center"}
+          style={recipeStyles.recipeImg}
+          source={require('./../../../assets/img/photo-1490457843367-34b21b6ccd85.jpeg')}
+        />
+        <View style={recipeStyles.recipeNameWrapper}>
+          <Text style={recipeStyles.recipeName}>
+            {tempName}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
   renderRecipe() {
     return (
-      <View style={styles.recipeContainer}>
-        <Text>Recipe Section</Text>
+      <View style={recipeStyles.container}>
+        <ScrollView
+          contentContainerStyle={recipeStyles.recipeContainer}
+          style={{width: "100%"}}
+        >
+          {this.renderRecipeSection1()}
+        </ScrollView>
       </View>
     );
   }
@@ -83,14 +114,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
-  recipeContainer: {
-    flex: 1,
-    width: '100%',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-
-    backgroundColor: 'green',
-  },
   bottomBarContainer: {
     height: 49 + getBottomSpace(),
     width: '100%',
@@ -108,6 +131,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     backgroundColor: 'yellow',
+  },
+});
+const recipeStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+  },
+  recipeContainer: {
+    flex: 0,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+
+    backgroundColor: 'rgba(0, 255, 0, 0.2)',
+  },
+  section1Container: {
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  recipeImg: {
+    flex: 1,
+    width: imageSize,
+    height: imageSize,
+  },
+  recipeNameWrapper: {
+    marginTop: 20,
+    marginRight: 15,
+    marginLeft: 15,
+    width: '100%',
+  },
+  recipeName: {
+    fontSize: 22,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#3C3C3C',
+    textTransform: 'capitalize',
+
+    backgroundColor: 'rgba(0, 0, 255, 0.2)',
   },
 });
 const bottomBarstyles = StyleSheet.create({

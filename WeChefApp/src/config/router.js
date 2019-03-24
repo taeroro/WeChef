@@ -18,6 +18,7 @@ import StackViewStyleInterpolator from 'react-navigation-stack/dist/views/StackV
 // non-packages
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
 import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
+import RecipePostingScreen from './../tabScreens/recipe/RecipePostingScreen';
 import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
 import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
@@ -106,7 +107,19 @@ export const RecipeStack = createStackNavigator(
           color: '#fff'
         },
       }),
-    }
+    },
+    RecipePosting: {
+      screen: RecipePostingScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
   },
   {
     headerMode: "screen",
