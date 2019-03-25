@@ -49,6 +49,8 @@ let recipe = mongoose.model('Recipe', new Schema({
         type: Number,
         default: 0,
     },
+}, {
+  timestamps: { createdAt: true, updatedAt: true }
 }));
 
 module.exports = recipe;
