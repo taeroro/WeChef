@@ -13,6 +13,7 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { Rating } from 'react-native-elements';
 
 const imageSize = Dimensions.get('window').width;
+const sectionSize = Dimensions.get('window').width - 40;
 
 class RecipeSingleScreen extends Component {
   constructor(props) {
@@ -46,13 +47,94 @@ class RecipeSingleScreen extends Component {
           style={recipeStyles.recipeImg}
           source={require('./../../../assets/img/photo-1490457843367-34b21b6ccd85.jpeg')}
         />
+
         <View style={recipeStyles.recipeNameWrapper}>
           <Text style={recipeStyles.recipeName}>
             {tempName}
           </Text>
         </View>
+
+        <View style={recipeStyles.ratingWrapper}>
+          <Text style={recipeStyles.ratingText}>Difficulty Rating: </Text>
+
+          <Rating
+            imageSize={18}
+            readonly
+            // type={'custom'}
+            // ratingColor={'#F56862'}
+            startingValue={3}
+            ratingCount={3}
+            style={styles.rating}
+          />
+        </View>
+
       </View>
     );
+  }
+
+  // Q & A
+  renderRecipeSection2() {
+    const tempQuestion = "Should I use large free-range organic eggs or just normal eggs?";
+    const tempAnswer = "Large top-shelf free-range organic eggs are recommended for the best result";
+
+    return (
+      <View style={recipeStyles.section2Container}>
+        <Text style={recipeStyles.qnaText}>Q & A</Text>
+
+        <View style={recipeStyles.qnaSingleContainer}>
+          <Text style={recipeStyles.qnaContentText}>
+            Q: {tempQuestion}
+          </Text>
+          <Text style={recipeStyles.qnaContentText}>
+            A: {tempAnswer}
+          </Text>
+
+          <TouchableOpacity
+            style={recipeStyles.moreQnaButtonContainer}
+            onPress={() => {
+              console.log("more q n a");
+
+            }}
+          >
+            <Text style={recipeStyles.moreQnaText}>Read All Q & As</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  renderRecipeSection3() {
+    const tempComment = "I tried it out this recipe and it is super delicious!";
+    const tempUserName = "Ryan Fan";
+
+    return (
+      <View style={recipeStyles.section3Container}>
+        <Text style={recipeStyles.qnaText}>Reviews</Text>
+
+        <View style={recipeStyles.qnaSingleContainer}>
+          <Text style={recipeStyles.reviewsUserNameText}>
+            {tempUserName}:
+          </Text>
+          <Text style={recipeStyles.qnaContentText}>
+            {tempComment}
+          </Text>
+
+          <TouchableOpacity
+            style={recipeStyles.moreQnaButtonContainer}
+            onPress={() => {
+              console.log("more reviews");
+
+            }}
+          >
+            <Text style={recipeStyles.moreQnaText}>Read All Reviews</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  renderDivider() {
+    return ( <View style={styles.divider} /> );
   }
 
   renderRecipe() {
@@ -63,6 +145,10 @@ class RecipeSingleScreen extends Component {
           style={{width: "100%"}}
         >
           {this.renderRecipeSection1()}
+          {this.renderDivider()}
+          {this.renderRecipeSection2()}
+          {this.renderDivider()}
+          {this.renderRecipeSection3()}
         </ScrollView>
       </View>
     );
@@ -132,6 +218,15 @@ const styles = StyleSheet.create({
 
     backgroundColor: 'yellow',
   },
+  divider: {
+    marginTop: 20,
+    marginBottom: 20,
+    marginRight: 20,
+    marginLeft: 20,
+    height: 0.8,
+    width: sectionSize,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  }
 });
 const recipeStyles = StyleSheet.create({
   container: {
@@ -140,10 +235,9 @@ const recipeStyles = StyleSheet.create({
   },
   recipeContainer: {
     flex: 0,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
 
-    backgroundColor: 'rgba(0, 255, 0, 0.2)',
+    paddingBottom: 25,
+    // backgroundColor: 'rgba(0, 255, 0, 0.2)',
   },
   section1Container: {
     justifyContent: 'flex-start',
@@ -156,9 +250,9 @@ const recipeStyles = StyleSheet.create({
   },
   recipeNameWrapper: {
     marginTop: 20,
-    marginRight: 15,
-    marginLeft: 15,
-    width: '100%',
+    marginRight: 20,
+    marginLeft: 20,
+    width: sectionSize,
   },
   recipeName: {
     fontSize: 22,
@@ -167,7 +261,82 @@ const recipeStyles = StyleSheet.create({
     color: '#3C3C3C',
     textTransform: 'capitalize',
 
-    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+    // backgroundColor: 'rgba(0, 0, 255, 0.2)',
+  },
+  ratingWrapper: {
+    marginTop: 10,
+    width: sectionSize,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+
+    // backgroundColor: 'rgba(255, 0, 0, 0.2)',
+  },
+  ratingText: {
+    marginRight: 5,
+    fontSize: 13,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    color: '#3C3C3C',
+  },
+
+  section2Container: {
+    marginRight: 20,
+    marginLeft: 20,
+    width: sectionSize,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+
+    // backgroundColor: 'rgba(100, 0, 0, 0.4)',
+  },
+  qnaText: {
+    marginBottom: 3,
+    fontSize: 17,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#3C3C3C',
+  },
+  qnaContentText: {
+    fontSize: 14,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    color: '#3C3C3C',
+  },
+  moreQnaButtonContainer: {
+    marginTop: 10,
+    width: sectionSize,
+    alignItems: 'center',
+
+    // backgroundColor: 'rgba(100, 0, 0, 0.4)',
+  },
+  moreQnaText: {
+    fontSize: 15,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#F56862',
+  },
+
+  section3Container: {
+    marginRight: 20,
+    marginLeft: 20,
+    width: sectionSize,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+
+    // backgroundColor: 'rgba(100, 0, 0, 0.4)',
+  },
+  reviewsText: {
+    marginBottom: 3,
+    fontSize: 17,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#3C3C3C',
+  },
+  reviewsUserNameText: {
+    fontSize: 14,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#3C3C3C',
   },
 });
 const bottomBarstyles = StyleSheet.create({
