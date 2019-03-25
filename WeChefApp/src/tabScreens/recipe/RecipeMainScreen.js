@@ -112,7 +112,6 @@ class RecipeMainScreen extends Component {
       <TouchableOpacity
         style={styles.addButtonContainer}
         onPress={() => {
-          console.log("posting");
           this.props.navigation.navigate('RecipePosting');
         }}
       >
@@ -121,7 +120,7 @@ class RecipeMainScreen extends Component {
           colors={['#FA967B', '#F56862']}
           style={styles.addButtonBackground}
         >
-
+          <Text style={styles.addButtonText}>+</Text>
         </LinearGradient>
       </TouchableOpacity>
     );
@@ -221,5 +220,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#FFF',
+    fontSize: 32,
+    marginTop: -4,
+    marginLeft: 1,
   },
 });

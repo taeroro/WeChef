@@ -19,6 +19,7 @@ import StackViewStyleInterpolator from 'react-navigation-stack/dist/views/StackV
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
 import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
 import RecipePostingScreen from './../tabScreens/recipe/RecipePostingScreen';
+import QandAScreen from './../tabScreens/recipe/QandAScreen';
 import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
 import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
@@ -108,6 +109,22 @@ export const RecipeStack = createStackNavigator(
         },
       }),
     },
+    QandA: {
+      screen: QandAScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
     RecipePosting: {
       screen: RecipePostingScreen,
       navigationOptions: () => ({
@@ -129,7 +146,7 @@ export const RecipeStack = createStackNavigator(
     transitionConfig: () => ({
       screenInterpolator: props => {
         // Basically you need to create a condition for individual scenes
-       if (props.scene.route.routeName === 'IngAndDir') {
+       if (props.scene.route.routeName === 'IngAndDir' || props.scene.route.routeName === 'QandA') {
 
          // forVertical makes the scene transition for Top to Bottom
          return StackViewStyleInterpolator.forVertical(props);
@@ -138,7 +155,7 @@ export const RecipeStack = createStackNavigator(
        const last = props.scenes[props.scenes.length - 1];
 
        // This controls the transition when navigation back to a specific scene
-       if (last.route.routeName === 'IngAndDir') {
+       if (last.route.routeName === 'IngAndDir' || last.route.routeName === 'QandA') {
 
          // Here, forVertical flows from Top to Bottom
          return StackViewStyleInterpolator.forVertical(props);
