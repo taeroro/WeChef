@@ -16,6 +16,8 @@ const options = {
     path: 'images',
   },
 };
+
+// TODO: after deployment, change localhost to heroku url
 const DB_PREFIX = 'http://localhost:8080/';
 
 class RecipePostingScreen extends Component {
@@ -38,6 +40,9 @@ class RecipePostingScreen extends Component {
     };
 
     this.handleRatingChange = this.handleRatingChange.bind(this);
+    this.backToMain = this.backToMain.bind(this);
+    this.handleSubmitForm = this.handleSubmitForm.bind(this);
+    this.createAndUploadForm = this.createAndUploadForm.bind(this);
   }
 
   componentDidMount() {
@@ -54,6 +59,11 @@ class RecipePostingScreen extends Component {
 
   componentWillUnmount() {
     this._navListener.remove();
+  }
+
+  backToMain() {
+    console.log('backToMain');
+    this.props.navigation.navigate('RecipeMain');
   }
 
   handleTitleChange = text => {
@@ -148,20 +158,25 @@ class RecipePostingScreen extends Component {
     });
   };
 
-  handleSubmitForm = () => {
+  handleSubmitForm () {
     console.log(this.state)
 
-    //TODO: upload all data in this.state to db
+    // upload all data in this.state to db, if success navigate to main page
     this.createAndUploadForm(this.state);
   }
 
-  createAndUploadForm = (state) => {
-    console.log("createAndUploadForm");
+  createAndUploadForm (state) {
     let requestURL = DB_PREFIX + 'recipe/create/';
     let formdata = new FormData();
     formdata.append('title', state.title);
     formdata.append('ownerID', state.ownerID);
     formdata.append('difficulty', state.difficultyRating);
+    const isDummyImage = this.state.imageSource == image ? true : false;
+    console.log('isDummyImage = ' + isDummyImage);
+    // do not upload the dummy image
+    if (!isDummyImage) {
+      formdata.append('image', { uri: this.state.imageSource, name: 'new_recipe_image.jpg', type: 'image/jpg' });
+    }
     state.ingredients.forEach((ing, idx) => {
       const cnt_name = ing.name;
       const cnt_amount = ing.quantity;
@@ -177,10 +192,14 @@ class RecipePostingScreen extends Component {
         }})
       .then(res => {
         console.log(res);
+        if (res.status == 201) {
+          console.log("success!");
+          this.backToMain();
+        }
       })
       .catch(error => {
         console.log(error);
-      })
+      });
   }
 
   render() {
@@ -285,9 +304,7 @@ class RecipePostingScreen extends Component {
 
 
         <TouchableOpacity
-            onPress={() => {
-              this.handleSubmitForm();
-            }}>
+            onPress={this.handleSubmitForm}>
             <Text> Submit </Text>
         </TouchableOpacity>
 
