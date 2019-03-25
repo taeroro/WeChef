@@ -44,9 +44,9 @@ recipeRouter.get('/by-owner/:facebookID', (req, res, err) => {
 });
 
 // get one recipe
-recipeRouter.get('/:recipeID', (req, res, err) => {
+recipeRouter.get('recipe-byid/:recipeID', (req, res, err) => {
 
-    Recipe.findByID(req.params.recipeID, (err, recipe) => {
+    Recipe.findById(req.params.recipeID, (err, recipe) => {
         if (err){
 
             return res.status(500).send({
@@ -158,8 +158,24 @@ recipeRouter.put('/edit/:recipeID', ImageUpload.recipeImageUpload, (req, res, er
 
 });
 
-// get all recipe limit 10 for home page, sort by date
-recipeRouter.get('/homepage', (req, res, err) => {});
+// get all recipe for home page, sort by date
+recipeRouter.get('/homepage', (req, res, err) => {
+
+    Recipe.find({}, '_id title recipeImageURL difficulty', {sort: { updatedAt: -1 }}, (err, recipes) => {
+      if (err){
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (recipes) {
+          res.status(200).send(recipes);
+      } else {
+          return res.status(404).send({
+              message: 'No recipes can be found.',
+          });
+      }
+    });
+});
 
 // get my fav recipes
 recipeRouter.get('/:facebookID/favourite', (req, res, err) => {});
