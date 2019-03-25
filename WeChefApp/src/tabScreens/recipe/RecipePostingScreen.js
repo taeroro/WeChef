@@ -62,7 +62,6 @@ class RecipePostingScreen extends Component {
   }
 
   backToMain() {
-    console.log('backToMain');
     this.props.navigation.navigate('RecipeMain');
   }
 
@@ -172,7 +171,6 @@ class RecipePostingScreen extends Component {
     formdata.append('ownerID', state.ownerID);
     formdata.append('difficulty', state.difficultyRating);
     const isDummyImage = this.state.imageSource == image ? true : false;
-    console.log('isDummyImage = ' + isDummyImage);
     // do not upload the dummy image
     if (!isDummyImage) {
       formdata.append('image', { uri: this.state.imageSource, name: 'new_recipe_image.jpg', type: 'image/jpg' });
@@ -193,7 +191,6 @@ class RecipePostingScreen extends Component {
       .then(res => {
         console.log(res);
         if (res.status == 201) {
-          console.log("success!");
           this.backToMain();
         }
       })
