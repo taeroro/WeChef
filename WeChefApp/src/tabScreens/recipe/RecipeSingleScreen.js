@@ -79,7 +79,18 @@ class RecipeSingleScreen extends Component {
 
     return (
       <View style={recipeStyles.section2Container}>
-        <Text style={recipeStyles.qnaText}>Q & A</Text>
+        <View style={recipeStyles.qnaFirstLine}>
+          <Text style={recipeStyles.qnaText}>Q & A</Text>
+
+          <TouchableOpacity
+            style={recipeStyles.addQContainer}
+            onPress={() => {
+              console.log("user add Question");
+            }}
+          >
+            <Text style={recipeStyles.addQText}>Post A New Question</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={recipeStyles.qnaSingleContainer}>
           <Text style={recipeStyles.qnaContentText}>
@@ -93,7 +104,7 @@ class RecipeSingleScreen extends Component {
             style={recipeStyles.moreQnaButtonContainer}
             onPress={() => {
               console.log("more q n a");
-
+              this.props.navigation.navigate('QandA');
             }}
           >
             <Text style={recipeStyles.moreQnaText}>Read All Q & As</Text>
@@ -165,18 +176,10 @@ class RecipeSingleScreen extends Component {
               this.props.navigation.navigate('IngAndDir');
             }}
           >
-            <Text style={bottomBarstyles.ingredientsText}>ingredients</Text>
+            <View style={bottomBarstyles.textWrapper}>
+              <Text style={bottomBarstyles.buttonText}>ingredients & directions</Text>
+            </View>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={bottomBarstyles.directionsButtonContainer}
-            onPress={() => {
-              console.log("directions");
-            }}
-          >
-            <Text style={bottomBarstyles.directionsText}>directions</Text>
-          </TouchableOpacity>
-
         </View>
       </View>
     );
@@ -207,7 +210,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
 
-    backgroundColor: 'red',
+    // backgroundColor: '#3C3C3C',
+    backgroundColor: '#F56862',
   },
   bottomBarSafeArea: {
     height: 49,
@@ -216,7 +220,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    backgroundColor: 'yellow',
+    // backgroundColor: 'yellow',
   },
   divider: {
     marginTop: 20,
@@ -289,6 +293,23 @@ const recipeStyles = StyleSheet.create({
 
     // backgroundColor: 'rgba(100, 0, 0, 0.4)',
   },
+  qnaFirstLine: {
+    width: sectionSize,
+    flexDirection: 'row',
+    alignItems: 'center',
+
+    // backgroundColor: 'rgba(0, 255, 0, 0.4)',
+  },
+  addQContainer: {
+    position: 'absolute',
+    right: 0,
+  },
+  addQText: {
+    fontSize: 13,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#F56862',
+  },
   qnaText: {
     marginBottom: 3,
     fontSize: 17,
@@ -341,25 +362,22 @@ const recipeStyles = StyleSheet.create({
 });
 const bottomBarstyles = StyleSheet.create({
   ingredientsButtonContainer: {
-    width: '50%',
+    width: '100%',
+    height: '100%',
+  },
+  textWrapper: {
+    width: '100%',
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-
-    backgroundColor: 'brown',
+    // backgroundColor: '#3C3C3C',
+    backgroundColor: '#F56862',
   },
-  ingredientsText: {
+  buttonText: {
     textTransform: 'uppercase',
-  },
-  directionsButtonContainer: {
-    width: '50%',
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    backgroundColor: 'blue',
-  },
-  directionsText: {
-    textTransform: 'uppercase',
+    color: '#FFF',
+    fontSize: 15,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
   },
 });
