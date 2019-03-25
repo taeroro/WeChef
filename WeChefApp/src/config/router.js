@@ -100,7 +100,7 @@ export const RecipeStack = createStackNavigator(
               name: "bookmark",
               type:'material-community',
               size: 26,
-              color: navigation.getParam('saved') ? '#FE444D' : '#3C3C3C'
+              color: navigation.getParam('saved') ? '#FE444D' : '#A0A2A5'
             }}
             buttonStyle={{
               backgroundColor: 'transparent'
