@@ -85,7 +85,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.addQContainer}
             onPress={() => {
-              console.log("user add Question");
+              this.props.navigation.navigate('PostNewQuestion');
             }}
           >
             <Text style={recipeStyles.addQText}>Post A New Question</Text>
@@ -103,7 +103,6 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.moreQnaButtonContainer}
             onPress={() => {
-              console.log("more q n a");
               this.props.navigation.navigate('QandA');
             }}
           >
