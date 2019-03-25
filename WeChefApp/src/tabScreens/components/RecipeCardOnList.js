@@ -48,7 +48,7 @@ class RecipeCardOnList extends Component {
               imageSize={8}
               readonly
               type={'custom'}
-              ratingColor={'#F56862'}
+              // ratingColor={'#F56862'}
               startingValue={this.props.item.difficultyRating}
               ratingCount={this.props.item.difficultyRating}
               style={styles.rating}
