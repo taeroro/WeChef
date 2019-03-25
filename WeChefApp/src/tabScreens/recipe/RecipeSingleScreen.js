@@ -21,6 +21,7 @@ class RecipeSingleScreen extends Component {
 
     this.state = {
       recipeID: this.props.navigation.state.params.id,
+      isRecipeSaved: false,
     };
   }
 
@@ -28,6 +29,10 @@ class RecipeSingleScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
+
+    // TODO: fetch the correct !!!inital!!! saved status of this recipe, I
+    // already handled whether or not it should be display as saved or not saved.
+    this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
   }
 
   componentWillUnmount() {
