@@ -18,4 +18,6 @@ module.exports = mongoose.model('QAndA', new Schema({
         type: String,
         required: true,
     },
+}, {
+  timestamps: { createdAt: true, updatedAt: true }
 }));

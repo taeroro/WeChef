@@ -46,6 +46,7 @@ class QandAScreen extends Component {
   */
 
   render() {
+    console.log(this.state.displayQandAs);
     return (
       <View style={styles.container}>
         <Text>QandAScreen</Text>
