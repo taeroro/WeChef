@@ -1,25 +1,20 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, ActionSheetIOS, StatusBar } from 'react-native';
 import { ListItem } from 'react-native-elements';
+import axios from 'axios';
 
 import RecipeList from '../components/RecipeList';
 
-const data = [
-  {id: '1', name: 'Healthy Granola Bowl', difficultyRating: 4},
-  {id: '2', name: 'Butternut Squash Soup', difficultyRating: 3},
-  {id: '3', name: 'Buttermilk Pancakes', difficultyRating: 2},
-  {id: '4', name: 'Shrimp Dumplings', difficultyRating: 4},
-  {id: '5', name: 'Lamb Burger', difficultyRating: 5},
-  {id: '6', name: 'Pesto Pasta with sliced Tomato', difficultyRating: 4},
-  {id: '7', name: 'Cinnamon Rolls', difficultyRating: 1},
-];
+// TODO: after deployment, change localhost to heroku url
+const DB_PREFIX = 'http://localhost:8080/';
 
 class ProfileRecipesScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      displayData: data
+      displayData: null,
+      userID: this.props.navigation.state.params.userID,
     };
   }
 
@@ -27,10 +22,25 @@ class ProfileRecipesScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
+
+    this.fetchMyRecipes();
   }
 
   componentWillUnmount() {
     this._navListener.remove();
+  }
+
+  fetchMyRecipes = () => {
+    let requestURL = DB_PREFIX + 'recipe/by-owner/' + this.state.userID;
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        this.setState({ displayData: res.data });
+      })
+      .catch(error => {
+        alert(error);
+      })
   }
 
   render() {
@@ -41,7 +51,7 @@ class ProfileRecipesScreen extends Component {
         </View>
 
         <View style={styles.listContainer}>
-          <RecipeList queryData={data} />
+          <RecipeList queryData={this.state.displayData} />
         </View>
 
       </View>

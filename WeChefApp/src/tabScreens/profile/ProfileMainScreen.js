@@ -44,7 +44,7 @@ class ProfileMainScreen extends Component {
   }
 
   openRecipes() {
-    this.props.navigation.navigate('ProfileRecipes');
+    this.props.navigation.navigate('ProfileRecipes', {userID: this.state.userID});
   }
 
   handleCancel() {
@@ -212,7 +212,7 @@ class ProfileMainScreen extends Component {
               >
                 {this.state.username}
               </Text>
-              
+
             </View>
           )
         }
