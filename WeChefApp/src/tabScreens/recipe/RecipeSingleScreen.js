@@ -203,13 +203,23 @@ class RecipeSingleScreen extends Component {
   }
 
   renderBottomBar() {
+    const {recipeObj} = this.state;
+
+    if (!recipeObj) {
+      return (
+        <View style={styles.loadingContainer}>
+          <SingleColorSpinner strokeColor="#F56862" />
+        </View>
+      );
+    }
+
     return (
       <View style={styles.bottomBarContainer}>
         <View style={styles.bottomBarSafeArea}>
           <TouchableOpacity
             style={bottomBarstyles.ingredientsButtonContainer}
             onPress={() => {
-              this.props.navigation.navigate('IngAndDir', {test: 1});
+              this.props.navigation.navigate('IngAndDir', {ingredients: recipeObj.ingredients, content: recipeObj.content});
             }}
           >
             <View style={bottomBarstyles.textWrapper}>
