@@ -6,13 +6,13 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import RecipeList from '../components/RecipeList';
 
 const data = [
-  {id: '1', name: 'Healthy Granola Bowl', difficultyRating: 4},
-  {id: '2', name: 'Butternut Squash Soup', difficultyRating: 3},
-  {id: '3', name: 'Buttermilk Pancakes', difficultyRating: 2},
-  {id: '4', name: 'Shrimp Dumplings', difficultyRating: 4},
-  {id: '5', name: 'Lamb Burger', difficultyRating: 5},
-  {id: '6', name: 'Pesto Pasta with sliced Tomato', difficultyRating: 4},
-  {id: '7', name: 'Cinnamon Rolls', difficultyRating: 1},
+  {_id: '1', title: 'Healthy Granola Bowl', difficulty: 4, recipeImageURL: 'null'},
+  {_id: '2', title: 'Butternut Squash Soup', difficulty: 3, recipeImageURL: 'null'},
+  {_id: '3', title: 'Buttermilk Pancakes', difficulty: 2, recipeImageURL: 'null'},
+  {_id: '4', title: 'Shrimp Dumplings', difficulty: 4, recipeImageURL: 'null'},
+  {_id: '5', title: 'Lamb Burger', difficulty: 5, recipeImageURL: 'null'},
+  {_id: '6', title: 'Pesto Pasta with sliced Tomato', difficulty: 4, recipeImageURL: 'null'},
+  {_id: '7', title: 'Cinnamon Rolls', difficulty: 1, recipeImageURL: 'null'},
 ];
 
 class SavedMainScreen extends Component {
