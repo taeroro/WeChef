@@ -15,6 +15,7 @@ class DirectionsScreen extends Component {
   }
 
   /*
+  * TODO: display directions
   * Backend data stored in params.content.
   * e.g. ["Put sugar into milk", "Grind mix of ice and milk"]
   */

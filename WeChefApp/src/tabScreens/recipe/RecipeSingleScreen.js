@@ -151,7 +151,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.moreQnaButtonContainer}
             onPress={() => {
-              this.props.navigation.navigate('QandA');
+              this.props.navigation.navigate('QandA', {recipeID: recipeObj._id});
             }}
           >
             <Text style={recipeStyles.moreQnaText}>Read All Q & As</Text>
