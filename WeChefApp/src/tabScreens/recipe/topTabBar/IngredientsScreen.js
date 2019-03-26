@@ -14,7 +14,14 @@ class IngredientsScreen extends Component {
     };
   }
 
+  /*
+  * TODO: display ingredients
+  * Backend data stored in params.ingredients.
+  * e.g. [{name: "Milk", amount: "100ml"}, {name: "Sugar", amount: "100g"}, {name: "Ice", amount: "100g"}]
+  */
+
   render() {
+    console.log(this.props.navigation.state.params.ingredients);
     return (
       <View style={styles.container}>
         <Text>IngredientsScreen</Text>

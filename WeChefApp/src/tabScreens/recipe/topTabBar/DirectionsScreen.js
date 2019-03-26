@@ -14,8 +14,14 @@ class DirectionsScreen extends Component {
     };
   }
 
+  /*
+  * TODO: display directions
+  * Backend data stored in params.content.
+  * e.g. ["Put sugar into milk", "Grind mix of ice and milk"]
+  */
+
   render() {
-    console.log('test = '+this.props.navigation.state.params.test);
+    console.log(this.props.navigation.state.params.content);
     return (
       <View style={styles.container}>
         <Text>DirectionsScreen</Text>
