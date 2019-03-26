@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity} from 'react-native';
 import { TextInput } from 'react-native-paper';
+import FBSDK from 'react-native-fbsdk';
+import axios from 'axios';
+
+const { AccessToken } = FBSDK;
+// TODO: after deployment, change localhost to heroku url
+const DB_PREFIX = 'http://localhost:8080/';
 
 const sectionSize = Dimensions.get('window').width - 40;
 
@@ -10,6 +16,8 @@ class PostNewQuestionScreen extends Component {
     super(props);
 
     this.state = {
+      recipeID: this.props.navigation.state.params.recipeID,
+      qOwnerID: null,
       question: '',
     };
   }
@@ -17,6 +25,12 @@ class PostNewQuestionScreen extends Component {
   componentDidMount() {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
+    });
+
+    AccessToken.getCurrentAccessToken().then((data) => {
+      this.setState({
+        qOwnerID: data.userID
+      });
     });
   }
 
@@ -26,7 +40,27 @@ class PostNewQuestionScreen extends Component {
 
   handleSubmit = () => {
     console.log(this.state.question);
-    
+
+    this.uploadQuestion(this.state);
+  }
+
+  backToRecipe = () => {
+    this.props.navigation.navigate('RecipeSingle', {id: this.state.recipeID});
+  }
+
+  uploadQuestion = (state) => {
+    let requestURL = DB_PREFIX + 'recipe/qa/create/' + state.recipeID;
+
+    axios.post(requestURL, { qContent: state.question, qOwnerID: state.qOwnerID })
+      .then(res => {
+        console.log(res);
+        if (res.status == 201) {
+          this.backToRecipe();
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   render() {
