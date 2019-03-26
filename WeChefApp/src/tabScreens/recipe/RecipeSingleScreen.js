@@ -29,6 +29,7 @@ class RecipeSingleScreen extends Component {
       recipeID: this.props.navigation.state.params.id,
       recipeObj: null,
       isRecipeSaved: false,
+      firstQandA: null,
     };
   }
 
@@ -38,6 +39,7 @@ class RecipeSingleScreen extends Component {
     });
 
     this.fetchOneRecipes();
+    this.fetchFirstQandA();
 
     // TODO: fetch the correct !!!inital!!! saved status of this recipe, I
     // already handled whether or not it should be display as saved or not saved.
@@ -56,6 +58,20 @@ class RecipeSingleScreen extends Component {
         console.log(res);
         let recipeInfo = res.data;
         this.setState({recipeObj: recipeInfo});
+      })
+      .catch(error => {
+        alert(error);
+      })
+  }
+
+  fetchFirstQandA = () => {
+    let requestURL = DB_PREFIX + 'recipe/qa/first/' + this.state.recipeID;
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        let latestQandA = res.data;
+        this.setState({firstQandA: latestQandA});
       })
       .catch(error => {
         alert(error);

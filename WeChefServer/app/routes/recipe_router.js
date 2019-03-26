@@ -223,8 +223,9 @@ recipeRouter.get('/qa/:recipeID', (req, res, err) => {
         });
     }
 
-    QAndA.find({qRecipeIDs: recipeID}, (err, qAndAs) => {
+    QAndA.find({qRecipeIDs: recipeID}, {}, {sort: { createdAt: -1 }}, (err, qAndAs) => {
       if (err){
+          console.log(err);
           return res.status(500).send({
               message: err,
           });
@@ -236,7 +237,33 @@ recipeRouter.get('/qa/:recipeID', (req, res, err) => {
               message: 'No qAndAs for the given recipe id.',
           });
       }
-    })
-})
+    });
+});
+
+// Get the latest Q and A of a recipe
+recipeRouter.get('/qa/first/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    QAndA.find({qRecipeIDs: recipeID}, {}, {sort: { createdAt: -1 }, limit: 1}, (err, qAndA) => {
+      if (err){
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (qAndA) {
+          res.status(200).send(qAndA);
+      } else {
+          return res.status(404).send({
+              message: 'No qAndAs for the given recipe id.',
+          });
+      }
+    });
+});
 
 module.exports = recipeRouter;
