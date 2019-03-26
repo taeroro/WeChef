@@ -57,6 +57,10 @@ class RecipeMainScreen extends Component {
     this._navListener.remove();
   }
 
+  handleOnNavigateBack = () => {
+    this.fetchRecipes();
+  }
+
   fetchRecipes = () => {
     let requestURL = DB_PREFIX + 'recipe/homepage/';
 
@@ -131,7 +135,7 @@ class RecipeMainScreen extends Component {
       <TouchableOpacity
         style={styles.addButtonContainer}
         onPress={() => {
-          this.props.navigation.navigate('RecipePosting');
+          this.props.navigation.navigate('RecipePosting', {onNavigateBack: this.handleOnNavigateBack});
         }}
       >
         <LinearGradient
