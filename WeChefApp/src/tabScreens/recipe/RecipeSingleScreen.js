@@ -11,6 +11,12 @@ import {
 } from 'react-native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { Rating } from 'react-native-elements';
+import { MKSpinner } from 'react-native-material-kit';
+import axios from 'axios';
+
+// TODO: after deployment, change localhost to heroku url
+const DB_PREFIX = 'http://localhost:8080/';
+const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 
 const imageSize = Dimensions.get('window').width;
 const sectionSize = Dimensions.get('window').width - 40;
@@ -21,6 +27,7 @@ class RecipeSingleScreen extends Component {
 
     this.state = {
       recipeID: this.props.navigation.state.params.id,
+      recipeObj: null,
       isRecipeSaved: false,
     };
   }
@@ -29,6 +36,8 @@ class RecipeSingleScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
+
+    this.fetchOneRecipes();
 
     // TODO: fetch the correct !!!inital!!! saved status of this recipe, I
     // already handled whether or not it should be display as saved or not saved.
@@ -39,23 +48,47 @@ class RecipeSingleScreen extends Component {
     this._navListener.remove();
   }
 
+  fetchOneRecipes = () => {
+    let requestURL = DB_PREFIX + 'recipe/recipe-byid/' + this.state.recipeID;
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        let recipeInfo = res.data;
+        this.setState({recipeObj: recipeInfo});
+      })
+      .catch(error => {
+        alert(error);
+      })
+  }
+
   // Recipe image, name, rating
   renderRecipeSection1() {
     // TODO: replace image source, name of the recipe, and difficulty rating
 
     const tempName = "delicious blueberry and orange pancakes with organic maple syrup";
 
+    const {recipeObj} = this.state;
+
+    if (!recipeObj) {
+      return (
+        <View style={styles.loadingContainer}>
+          <SingleColorSpinner strokeColor="#F56862" />
+        </View>
+      );
+    }
+
     return (
       <View style={recipeStyles.section1Container}>
-        <Image
+        {(recipeObj.recipeImageURL != 'null') ? (
+          <Image
           resizeMode={"center"}
           style={recipeStyles.recipeImg}
-          source={require('./../../../assets/img/photo-1490457843367-34b21b6ccd85.jpeg')}
-        />
-
+          source={{uri: recipeObj.recipeImageURL}}
+        />) : null}
         <View style={recipeStyles.recipeNameWrapper}>
           <Text style={recipeStyles.recipeName}>
-            {tempName}
+            {recipeObj ? recipeObj.title : null}
           </Text>
         </View>
 
@@ -67,8 +100,8 @@ class RecipeSingleScreen extends Component {
             readonly
             // type={'custom'}
             // ratingColor={'#F56862'}
-            startingValue={3}
-            ratingCount={3}
+            startingValue={recipeObj.difficulty}
+            ratingCount={5}
             style={styles.rating}
           />
         </View>
@@ -176,8 +209,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={bottomBarstyles.ingredientsButtonContainer}
             onPress={() => {
-              console.log("ingredients");
-              this.props.navigation.navigate('IngAndDir');
+              this.props.navigation.navigate('IngAndDir', {test: 1});
             }}
           >
             <View style={bottomBarstyles.textWrapper}>
@@ -234,7 +266,17 @@ const styles = StyleSheet.create({
     height: 0.8,
     width: sectionSize,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-  }
+  },
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  spinner: {
+    width: 35,
+    height: 35,
+  },
 });
 const recipeStyles = StyleSheet.create({
   container: {
@@ -385,3 +427,7 @@ const bottomBarstyles = StyleSheet.create({
     fontWeight: '400',
   },
 });
+
+const SingleColorSpinner = MKSpinner.singleColorSpinner()
+  .withStyle(styles.spinner)
+  .build();

@@ -35,7 +35,7 @@ class RecipeList extends Component {
             />
           </View>
         )}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item._id}
         numColumns={numColumns}
         contentContainerStyle={styles.listContentStyle}
       />

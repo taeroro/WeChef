@@ -15,6 +15,7 @@ class DirectionsScreen extends Component {
   }
 
   render() {
+    console.log('test = '+this.props.navigation.state.params.test);
     return (
       <View style={styles.container}>
         <Text>DirectionsScreen</Text>

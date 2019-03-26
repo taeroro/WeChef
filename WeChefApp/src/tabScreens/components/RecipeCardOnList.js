@@ -27,21 +27,22 @@ class RecipeCardOnList extends Component {
   }
 
   render() {
+    const recipeImage = this.props.item.recipeImageURL != 'null' ? this.props.item.recipeImageURL : image;
     return (
       <TouchableOpacity onPress={() => {
         this.props.navigation.navigate('RecipeSingle',
-          {id: this.props.item.id}
+          {id: this.props.item._id}
         );
       }}>
         <View style={[theme.cardStyle, styles.cardContainer]}>
           <Image
-            source={{uri: image}}
+            source={{uri: recipeImage}}
             style={[theme.cardImageStyle, {
               height: this.props.size - 16
             }]}
           />
           <Text style={styles.titleStyle} numberOfLines={1}>
-            {this.props.item.name}
+            {this.props.item.title}
           </Text>
           <View style={styles.ratingContainer}>
             <Rating
@@ -49,8 +50,8 @@ class RecipeCardOnList extends Component {
               readonly
               type={'custom'}
               // ratingColor={'#F56862'}
-              startingValue={this.props.item.difficultyRating}
-              ratingCount={this.props.item.difficultyRating}
+              startingValue={this.props.item.difficulty}
+              ratingCount={this.props.item.difficulty}
               style={styles.rating}
             />
           </View>
