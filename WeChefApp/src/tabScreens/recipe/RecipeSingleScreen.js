@@ -115,6 +115,16 @@ class RecipeSingleScreen extends Component {
     const tempQuestion = "Should I use large free-range organic eggs or just normal eggs?";
     const tempAnswer = "Large top-shelf free-range organic eggs are recommended for the best result";
 
+    const {recipeObj} = this.state;
+
+    if (!recipeObj) {
+      return (
+        <View style={styles.loadingContainer}>
+          <SingleColorSpinner strokeColor="#F56862" />
+        </View>
+      );
+    }
+
     return (
       <View style={recipeStyles.section2Container}>
         <View style={recipeStyles.qnaFirstLine}>
@@ -123,7 +133,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.addQContainer}
             onPress={() => {
-              this.props.navigation.navigate('PostNewQuestion');
+              this.props.navigation.navigate('PostNewQuestion', {recipeID: recipeObj._id});
             }}
           >
             <Text style={recipeStyles.addQText}>Post A New Question</Text>
