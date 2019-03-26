@@ -62,6 +62,7 @@ class RecipePostingScreen extends Component {
   }
 
   backToMain() {
+    this.props.navigation.state.params.onNavigateBack();
     this.props.navigation.navigate('RecipeMain');
   }
 
