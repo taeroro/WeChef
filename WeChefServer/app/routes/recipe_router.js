@@ -44,7 +44,7 @@ recipeRouter.get('/by-owner/:facebookID', (req, res, err) => {
 });
 
 // get one recipe
-recipeRouter.get('recipe-byid/:recipeID', (req, res, err) => {
+recipeRouter.get('/recipe-byid/:recipeID', (req, res, err) => {
 
     Recipe.findById(req.params.recipeID, (err, recipe) => {
         if (err){

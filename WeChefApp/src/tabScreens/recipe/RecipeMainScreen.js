@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import axios from 'axios';
 
 // components
 import SearchBar from '../components/SearchBar';
@@ -27,6 +28,9 @@ const data = [
   {id: '7', name: 'Cinnamon Rolls', difficultyRating: 1},
 ];
 
+// TODO: after deployment, change localhost to heroku url
+const DB_PREFIX = 'http://localhost:8080/';
+
 class RecipeMainScreen extends Component {
   constructor(props) {
     super(props);
@@ -35,7 +39,7 @@ class RecipeMainScreen extends Component {
 
     this.state = {
       isFocusedOnTouchBar: false,
-      displayData: data,
+      displayData: null,
     };
 
     this.searchBarExpand = this.searchBarExpand.bind(this);
@@ -45,10 +49,25 @@ class RecipeMainScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
     });
+
+    this.fetchRecipes();
   }
 
   componentWillUnmount() {
     this._navListener.remove();
+  }
+
+  fetchRecipes = () => {
+    let requestURL = DB_PREFIX + 'recipe/homepage/';
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        this.setState({ displayData: res.data });
+      })
+      .catch(error => {
+        alert(error);
+      })
   }
 
   searchBarExpand(focused) {
