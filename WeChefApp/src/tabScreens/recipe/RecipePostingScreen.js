@@ -264,7 +264,6 @@ class RecipePostingScreen extends Component {
                   placeholder={`Ingredient #${idx + 1} Quantity`}
                   value={ingredient.quantity}
                   onChangeText={(text) => this.handleIngredientQuantityChange(text, idx)}
-                  keyboardType='numeric'
                 />
 
                 <TouchableOpacity
