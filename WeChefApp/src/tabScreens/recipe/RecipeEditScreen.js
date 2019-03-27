@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar, TextInput, TouchableOpacity, Image, ScrollView, Dimensions,KeyboardAvoidingView } from 'react-native';
 import { Input, Rating, AirbnbRating } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
-import FBSDK from 'react-native-fbsdk';
 import axios from 'axios';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
@@ -19,13 +18,15 @@ const options = {
   },
 };
 
+// TODO: after deployment, change localhost to heroku url
+const DB_PREFIX = 'http://localhost:8080/';
+
 
 class RecipeEditScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      ownerID: null,
       title: "",
       difficultyRating: 3,
       directions: [{
@@ -39,9 +40,9 @@ class RecipeEditScreen extends Component {
     };
 
     this.handleRatingChange = this.handleRatingChange.bind(this);
-    this.backToMain = this.backToMain.bind(this);
+    this.backToRecipe = this.backToRecipe.bind(this);
     this.handleSubmitForm = this.handleSubmitForm.bind(this);
-    
+
   }
 
   componentDidMount() {
@@ -51,7 +52,6 @@ class RecipeEditScreen extends Component {
 
     const recipeObj = this.props.navigation.state.params.recipeObj;
     this.setState({
-      ownerID: recipeObj.ownerID,
       title: recipeObj.title,
       difficultyRating: recipeObj.difficulty,
       directions: recipeObj.content.map((content, sidx) => {
@@ -74,9 +74,45 @@ class RecipeEditScreen extends Component {
   }
 
 
-  backToMain() {
+  backToRecipe() {
     this.props.navigation.state.params.onNavigateBack();
-    this.props.navigation.navigate('RecipeMain');
+    this.props.navigation.navigate('RecipeSingle', {id: this.props.navigation.state.params.recipeID});
+  }
+
+  createAndUploadForm (state) {
+    let requestURL = DB_PREFIX + 'recipe/edit/' + this.props.navigation.state.params.recipeID;
+    console.log('requestURL = ' + requestURL);
+    let formdata = new FormData();
+    formdata.append('title', state.title);
+    formdata.append('difficulty', state.difficultyRating);
+    const isDummyImage = this.state.imageSource == image ? true : false;
+    console.log('isDummyImage = ' + isDummyImage);
+    // do not upload the dummy image
+    if (!isDummyImage) {
+      formdata.append('image', { uri: this.state.imageSource, name: 'new_recipe_image.jpg', type: 'image/jpg' });
+    }
+    state.ingredients.forEach((ing, idx) => {
+      const cnt_name = ing.name;
+      const cnt_amount = ing.amount;
+      formdata.append('ingredients['+idx+'][name]', cnt_name);
+      formdata.append('ingredients['+idx+'][amount]', cnt_amount);
+    });
+    state.directions.map((dir) => {
+      formdata.append('content[]', dir.step);
+    });
+
+    axios.put(requestURL, formdata, { headers: {
+          'Content-Type': 'multipart/form-data',
+        }})
+      .then(res => {
+        console.log(res);
+        if (res.status == 200) {
+          this.backToRecipe();
+        }
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 
   handleTitleChange = text => {
@@ -175,15 +211,15 @@ class RecipeEditScreen extends Component {
     console.log(this.state)
 
     // TODO: update all data in this.state to db, if success navigate to main page
-
+    this.createAndUploadForm(this.state);
   }
 
   render() {
     return (
       <View style={styles.container}>
-      <KeyboardAvoidingView 
-        contentContainerStyle={styles.keyboardContainer} 
-        behavior="padding" 
+      <KeyboardAvoidingView
+        contentContainerStyle={styles.keyboardContainer}
+        behavior="padding"
         enabled
         >
       <ScrollView>
@@ -288,7 +324,7 @@ class RecipeEditScreen extends Component {
             ))}
           </View>
 
-          
+
           <TouchableOpacity
             style = {styles.addButtonContainer}
             onPress={() => {
@@ -298,7 +334,7 @@ class RecipeEditScreen extends Component {
           </TouchableOpacity>
 
         </View>
-        
+
         <View style={styles.divider} />
 
         <View style={styles.sectionContainer}>
@@ -312,7 +348,7 @@ class RecipeEditScreen extends Component {
 
       </ScrollView>
       </KeyboardAvoidingView>
-        
+
       </View>
     );
   }
@@ -330,7 +366,7 @@ const styles = StyleSheet.create({
     paddingBottom: getBottomSpace(),
   },
   keyboardContainer:{
-    
+
   },
   titleHeaderContainer: {
     marginTop: 10,
