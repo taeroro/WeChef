@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   ScrollView,
 } from 'react-native';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
@@ -18,7 +17,7 @@ class IngredientsScreen extends Component {
   }
 
   componentDidMount() {
-    this.setState({ ingredients: this.props.navigation.state.params.ingredients })
+    this.setState({ ingredients: this.props.navigation.state.params.ingredients });
   }
 
   render() {
