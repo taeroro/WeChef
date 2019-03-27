@@ -13,7 +13,7 @@ class QandAScreen extends Component {
 
     this.state = {
       recipeID: this.props.navigation.state.params.recipeID,
-      displayQandAs: qa,
+      displayQandAs: null,
     };
   }
 
@@ -59,39 +59,43 @@ class QandAScreen extends Component {
         <ScrollView
           contentContainerStyle={styles.recipeContainer}
         >
-        <View style={styles.titleHeaderContainer}>
-          <Text style={styles.headerTitle}>Q & A</Text>
-        </View>
+          <View style={styles.titleHeaderContainer}>
+            <Text style={styles.headerTitle}>Q & A</Text>
+          </View>
 
-        <View>
-            {this.state.displayQandAs.map((qna, idx) => (
-              <View key={idx} >
-                <View style={styles.qnaContainer}>
-                  <Text style = {styles.qnaContentText}>
-                    Q: {qna.qContent}
-                  </Text>
+          {(this.state.displayQandAs != null) ? (
+            <View>
+              {this.state.displayQandAs.map((qna, idx) => (
+                <View key={idx} >
+                  <View style={styles.qnaContainer}>
 
-                  {(qna.aContent != undefined) ? (
                     <Text style = {styles.qnaContentText}>
-                      A: {qna.aContent}
+                      Q: {qna.qContent}
                     </Text>
-                  ) : (
-                    <TouchableOpacity
-                      style={styles.answerButtonContainer}
-                      onPress={() => {this.props.navigation.navigate('PostNewQuestion', {recipeID: qna._id});
-                    }}>
-                      <Text style = {styles.answerButtonText}> Answer this question </Text>
-                    </TouchableOpacity>
-                  )}
-                
+
+                    {(qna.aContent != undefined) ? (
+                      <Text style = {styles.qnaContentText}>
+                        A: {qna.aContent}
+                      </Text>
+                    ) : (
+                      <TouchableOpacity
+                        style={styles.answerButtonContainer}
+                        onPress={() => {this.props.navigation.navigate('PostNewQuestion', {questionId: qna._id});
+                      }}>
+                        <Text style = {styles.answerButtonText}> Answer this question </Text>
+                      </TouchableOpacity>
+                    )}
+                  
+                  </View>
+
+                  <View style={styles.divider} />
+
                 </View>
 
-                <View style={styles.divider} />
-
-              </View>
-
-            ))}
-          </View>
+              ))}
+            </View>
+          ):null}
+        
 
         </ScrollView>
       </View>
