@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, StatusBar, TextInput, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, TextInput, TouchableOpacity, Image, ScrollView, Dimensions,KeyboardAvoidingView } from 'react-native';
 import { Input, Rating, AirbnbRating } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import FBSDK from 'react-native-fbsdk';
 import axios from 'axios';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 const { AccessToken } = FBSDK;
+const sectionSize = Dimensions.get('window').width - 40;
+
 
 const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 const options = {
@@ -203,9 +206,19 @@ class RecipePostingScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+      <KeyboardAvoidingView 
+        contentContainerStyle={styles.keyboardContainer} 
+        behavior="padding" 
+        enabled
+        >
+      <ScrollView>
+        <View style={styles.titleHeaderContainer}>
+          <Text style={styles.headerTitle}>Post a New Recipe</Text>
+        </View>
+
 
         <View style={styles.sectionContainer}>
-          <Text> Recipe Title </Text>
+          <Text style = {styles.questionText}> Recipe Title </Text>
           <TextInput
             placeholder = "Recipe Title"
             value = {this.state.title}
@@ -213,16 +226,21 @@ class RecipePostingScreen extends Component {
           />
         </View>
 
+        <View style={styles.divider} />
+
         <View style={styles.sectionContainer}>
+        <Text style = {styles.questionText}> Recipe Image </Text>
           <TouchableOpacity onPress={() => this.changeImage()}>
             <Image source={{uri: this.state.imageSource}} style={{width: 50, height: 50}}/>
           </TouchableOpacity>
         </View>
 
+        <View style={styles.divider} />
+
         <View style={styles.sectionContainer}>
-          <Text> Difficulty Level </Text>
+          <Text style = {styles.questionText}> Difficulty Level </Text>
           <AirbnbRating
-            reviews
+            reviews = {[]}
             count={5}
             defaultRating={this.state.difficultyRating}
             size={20}
@@ -230,8 +248,10 @@ class RecipePostingScreen extends Component {
           />
         </View>
 
+        <View style={styles.divider} />
+
         <View style={styles.sectionContainer}>
-          <Text> Ingredients </Text>
+          <Text style = {styles.questionText}> Ingredients </Text>
           <View>
             {this.state.ingredients.map((ingredient, idx) => (
               <View key = {idx}>
@@ -252,7 +272,7 @@ class RecipePostingScreen extends Component {
                   onPress={() => {
                     this.handleRemoveIngredient(idx);
                   }}>
-                    <Text> delete </Text>
+                    <Text style = {styles.removeButtonText}> delete </Text>
                   </TouchableOpacity>
               </View>
 
@@ -260,16 +280,19 @@ class RecipePostingScreen extends Component {
           </View>
 
           <TouchableOpacity
+            style = {styles.addButtonContainer}
             onPress={() => {
               this.handleAddIngredient();
             }}>
-            <Text> Add an ingredient </Text>
+            <Text style = {styles.addButtonText}> Add an ingredient </Text>
           </TouchableOpacity>
 
         </View>
 
+        <View style={styles.divider} />
+
         <View style={styles.sectionContainer}>
-          <Text> Directions </Text>
+          <Text style = {styles.questionText}> Directions </Text>
           <View>
             {this.state.directions.map((direction, idx) => (
               <View key={idx}>
@@ -284,28 +307,38 @@ class RecipePostingScreen extends Component {
                   onPress={() => {
                     this.handleRemoveDirection(idx);
                   }}>
-                    <Text> delete </Text>
+                    <Text style = {styles.removeButtonText}> delete </Text>
                   </TouchableOpacity>
               </View>
 
             ))}
           </View>
 
+          
           <TouchableOpacity
+            style = {styles.addButtonContainer}
             onPress={() => {
               this.handleAddDirection();
             }}>
-            <Text> Add a step </Text>
+            <Text style = {styles.addButtonText}> Add a step </Text>
           </TouchableOpacity>
 
         </View>
+        
+        <View style={styles.divider} />
 
-
-        <TouchableOpacity
+        <View style={styles.sectionContainer}>
+          <TouchableOpacity
+            style = {styles.submitButtonContainer}
             onPress={this.handleSubmitForm}>
-            <Text> Submit </Text>
-        </TouchableOpacity>
+            <Text style = {styles.submitButtonText}> Submit </Text>
+          </TouchableOpacity>
+        </View>
 
+
+      </ScrollView>
+      </KeyboardAvoidingView>
+        
 
       </View>
     );
@@ -317,21 +350,85 @@ export default RecipePostingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    //justifyContent: 'center',
+    //alignItems: 'center',
     backgroundColor: '#FFF',
+    paddingBottom: getBottomSpace(),
+  },
+  keyboardContainer:{
+    
+  },
+  titleHeaderContainer: {
+    marginTop: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
+  },
+  headerTitle: {
+    color: '#3C3C3C',
+    fontSize: 32,
+    fontWeight: 'bold',
   },
   sectionContainer: {
-    flexDirection: 'row',
-    width: '100%',
-    justifyContent:'flex-start',
-    alignItems:'center'
+    marginTop: 5,
+    marginBottom: 5,
+    marginRight: 20,
+    marginLeft: 20,
+    width: sectionSize,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   removeButtonContainer: {
+    marginTop: 10,
+    width: sectionSize,
+    alignItems: 'center',
     flexDirection: 'row',
     width: '100%',
-    //justifyContent:'flex-start',
-    alignItems:'center'
+  },
+  removeButtonText:{
+    fontSize: 12,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#F56862',
+  },
+  questionText: {
+    fontSize: 17,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    color: '#3C3C3C',
+    flex: 1,
+    marginTop: 5,
+    marginBottom: 5
+  },
+  submitButtonContainer:{
+    marginTop: 20,
+    width: sectionSize,
+    alignItems: 'center',
+  },
+  submitButtonText: {
+    fontSize: 18,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#F56862',
+  },
+  addButtonContainer:{
+    marginTop: 10,
+    width: sectionSize,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    fontSize: 12,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#F56862',
+  },
+  divider: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginRight: 20,
+    marginLeft: 20,
+    height: 0.8,
+    width: sectionSize,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
 
 });
