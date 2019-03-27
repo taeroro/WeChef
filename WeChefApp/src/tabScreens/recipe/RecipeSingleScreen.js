@@ -15,8 +15,7 @@ import { MKSpinner } from 'react-native-material-kit';
 import axios from 'axios';
 import FBSDK from 'react-native-fbsdk';
 
-// TODO: after deployment, change localhost to heroku url
-const DB_PREFIX = 'http://localhost:8080/';
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 const { AccessToken } = FBSDK;
 const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 

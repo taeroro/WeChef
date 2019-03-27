@@ -5,8 +5,7 @@ import axios from 'axios';
 
 import RecipeList from '../components/RecipeList';
 
-// TODO: after deployment, change localhost to heroku url
-const DB_PREFIX = 'http://localhost:8080/';
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 
 class ProfileRecipesScreen extends Component {
   constructor(props) {

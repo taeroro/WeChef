@@ -114,10 +114,10 @@ recipeRouter.put('/edit/:recipeID', ImageUpload.recipeImageUpload, (req, res, er
             });
         }
         if (recipe) {
-            recipe.title = req.body.title || recipe.title;
-            recipe.content = req.body.content || recipe.content;
-            recipe.ingredients = req.body.ingredients || recipe.ingredients;
-            recipe.difficulty = req.body.difficulty || recipe.difficulty;
+            recipe.title = req.body.title;
+            recipe.content = req.body.content || [];
+            recipe.ingredients = req.body.ingredients || [];
+            recipe.difficulty = req.body.difficulty;
             let prevImage = recipe.recipeImageID;
 
             if (req.file) {
