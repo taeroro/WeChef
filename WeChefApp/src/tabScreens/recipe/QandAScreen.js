@@ -57,7 +57,7 @@ class QandAScreen extends Component {
     return (
       <View style={styles.container}>
         <ScrollView
-          contentContainerStyle={styles.recipeContainer}
+          contentContainerStyle={styles.scrollContainer}
         >
           <View style={styles.titleHeaderContainer}>
             <Text style={styles.headerTitle}>Q & A</Text>
