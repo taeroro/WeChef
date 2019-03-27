@@ -40,6 +40,10 @@ class QandAScreen extends Component {
     this._navListener.remove();
   }
 
+  handleOnNavigateBack = () => {
+    this.fetchQandAs();
+  }
+
   fetchQandAs = () => {
     let requestURL = DB_PREFIX + 'recipe/qa/' + this.state.recipeID;
 
@@ -62,7 +66,6 @@ class QandAScreen extends Component {
 
   render() {
     console.log(this.state.displayQandAs);
-    console.log(this.state.recipeOwnerID == this.state.currentUserID);
     return (
       <View style={styles.container}>
         <ScrollView
@@ -90,7 +93,9 @@ class QandAScreen extends Component {
                       (this.state.recipeOwnerID === this.state.currentUserID)?(
                         <TouchableOpacity
                           style={styles.answerButtonContainer}
-                          onPress={() => {this.props.navigation.navigate('AnswerAQuestion', {recipeID: this.state.recipeID});
+                          onPress={() => {this.props.navigation.navigate(
+                            'AnswerAQuestion', {onNavigateBack: this.props.navigation.state.params.onNavigateBack,
+                            recipeID: this.state.recipeID, QnAID: qna._id, recipeOwnerID: this.state.recipeOwnerID});
                         }}>
                           <Text style = {styles.answerButtonText}> Answer this question </Text>
                         </TouchableOpacity>

@@ -17,7 +17,7 @@ class AnswerAQuestionScreen extends Component {
 
     this.state = {
       recipeID: this.props.navigation.state.params.recipeID,
-      qOwnerID: null,
+      QnAID: this.props.navigation.state.params.QnAID,
       answer: '',
     };
   }
@@ -25,12 +25,6 @@ class AnswerAQuestionScreen extends Component {
   componentDidMount() {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
-    });
-
-    AccessToken.getCurrentAccessToken().then((data) => {
-      this.setState({
-        qOwnerID: data.userID
-      });
     });
   }
 
@@ -41,27 +35,28 @@ class AnswerAQuestionScreen extends Component {
   handleSubmit = () => {
     console.log(this.state.answer);
 
-    //this.uploadQuestion(this.state);
+    this.answerQuestion(this.state);
   }
 
   backToQnA = () => {
-    this.props.navigation.navigate('QandA', {recipeID: this.state.recipeID});
+    this.props.navigation.state.params.onNavigateBack();
+    this.props.navigation.navigate('RecipeSingle', {id: this.state.recipeID});
   }
 
-  // uploadQuestion = (state) => {
-  //   let requestURL = DB_PREFIX + 'recipe/qa/create/' + state.recipeID;
-  //
-  //   axios.post(requestURL, { qContent: state.question, qOwnerID: state.qOwnerID })
-  //     .then(res => {
-  //       console.log(res);
-  //       if (res.status == 201) {
-  //         this.backToQnA();
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     })
-  // }
+  answerQuestion = (state) => {
+    let requestURL = DB_PREFIX + 'recipe/qa/answer/' + state.QnAID;
+
+    axios.put(requestURL, { aContent: state.answer })
+      .then(res => {
+        console.log(res);
+        if (res.status == 200) {
+          this.backToQnA();
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
 
   render() {
     return (
