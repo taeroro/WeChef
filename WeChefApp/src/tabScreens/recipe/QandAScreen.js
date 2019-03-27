@@ -59,9 +59,6 @@ class QandAScreen extends Component {
   *  NOTE: aContent will be undefined if no one answered yet.
   */
 
- handleAnswerQuestion = () => {
-
- }
 
   render() {
     console.log(this.state.displayQandAs);
@@ -90,12 +87,14 @@ class QandAScreen extends Component {
                         A: {qna.aContent}
                       </Text>
                     ) : (
-                      <TouchableOpacity
-                        style={styles.answerButtonContainer}
-                        onPress={() => {this.props.navigation.navigate('AnswerAQuestion', {recipeID: this.state.recipeID});
-                      }}>
-                        <Text style = {styles.answerButtonText}> Answer this question </Text>
-                      </TouchableOpacity>
+                      (this.state.recipeOwnerID === this.state.currentUserID)?(
+                        <TouchableOpacity
+                          style={styles.answerButtonContainer}
+                          onPress={() => {this.props.navigation.navigate('AnswerAQuestion', {recipeID: this.state.recipeID});
+                        }}>
+                          <Text style = {styles.answerButtonText}> Answer this question </Text>
+                        </TouchableOpacity>
+                        ) : null
                     )}
 
                   </View>
