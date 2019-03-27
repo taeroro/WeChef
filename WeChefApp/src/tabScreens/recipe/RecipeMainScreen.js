@@ -28,8 +28,7 @@ const data = [
   {id: '7', name: 'Cinnamon Rolls', difficultyRating: 1},
 ];
 
-// TODO: after deployment, change localhost to heroku url
-const DB_PREFIX = 'http://localhost:8080/';
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 
 class RecipeMainScreen extends Component {
   constructor(props) {

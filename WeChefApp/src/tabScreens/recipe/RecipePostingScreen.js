@@ -20,8 +20,7 @@ const options = {
   },
 };
 
-// TODO: after deployment, change localhost to heroku url
-const DB_PREFIX = 'http://localhost:8080/';
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 
 class RecipePostingScreen extends Component {
 

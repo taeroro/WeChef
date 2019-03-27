@@ -5,8 +5,8 @@ import FBSDK from 'react-native-fbsdk';
 import axios from 'axios';
 
 const { AccessToken } = FBSDK;
-// TODO: after deployment, change localhost to heroku url
-const DB_PREFIX = 'http://localhost:8080/';
+
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 
 const sectionSize = Dimensions.get('window').width - 40;
 
