@@ -41,7 +41,7 @@ class AnswerAQuestionScreen extends Component {
   handleSubmit = () => {
     console.log(this.state.question);
 
-    this.uploadQuestion(this.state);
+    //this.uploadQuestion(this.state);
   }
 
   backToRecipe = () => {
