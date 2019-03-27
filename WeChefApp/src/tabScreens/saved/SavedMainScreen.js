@@ -1,26 +1,23 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import FBSDK from 'react-native-fbsdk';
+import axios from 'axios';
 
 // components
 import RecipeList from '../components/RecipeList';
 
-const data = [
-  {_id: '1', title: 'Healthy Granola Bowl', difficulty: 4, recipeImageURL: 'null'},
-  {_id: '2', title: 'Butternut Squash Soup', difficulty: 3, recipeImageURL: 'null'},
-  {_id: '3', title: 'Buttermilk Pancakes', difficulty: 2, recipeImageURL: 'null'},
-  {_id: '4', title: 'Shrimp Dumplings', difficulty: 4, recipeImageURL: 'null'},
-  {_id: '5', title: 'Lamb Burger', difficulty: 5, recipeImageURL: 'null'},
-  {_id: '6', title: 'Pesto Pasta with sliced Tomato', difficulty: 4, recipeImageURL: 'null'},
-  {_id: '7', title: 'Cinnamon Rolls', difficulty: 1, recipeImageURL: 'null'},
-];
+const { AccessToken } = FBSDK;
+// TODO: after deployment, change localhost to heroku url
+const DB_PREFIX = 'http://localhost:8080/';
 
 class SavedMainScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      displayData: data,
+      displayData: null,
+      currentUserID: null,
     };
   }
 
@@ -28,10 +25,30 @@ class SavedMainScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
+
+    this.fetchSavedRecipes();
   }
 
   componentWillUnmount() {
     this._navListener.remove();
+  }
+
+  fetchSavedRecipes = () => {
+    AccessToken.getCurrentAccessToken().then((data) => {
+      this.setState({
+        currentUserID: data.userID
+      });
+
+      let requestURL = DB_PREFIX + 'recipe/' + this.state.currentUserID + '/favourite';
+      axios.get(requestURL)
+        .then(res => {
+          console.log(res);
+          this.setState({ displayData: res.data });
+        })
+        .catch(error => {
+          alert(error);
+        });
+    });
   }
 
   render() {
@@ -41,7 +58,7 @@ class SavedMainScreen extends Component {
           <Text style={styles.headerTitle}>Saved Recipes</Text>
         </View>
         <View style={styles.listContainer}>
-          <RecipeList queryData={data} />
+          <RecipeList queryData={this.state.displayData} />
         </View>
       </View>
     );

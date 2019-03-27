@@ -125,13 +125,9 @@ export const RecipeStack = createStackNavigator(
                 backgroundColor: 'transparent'
               }}
               onPress={() => {
-                // TODO: connect to backend, upload whether this recipe is
-                // saved or not.
-
-                // But don't touch the one below. It's for UI. But you can
-                // put this line of code after upload the new saving status
-                // to the backend (e.g. inside of .then())
                 let isSaved = navigation.getParam('saved');
+                let addOrRemoveFavourite = navigation.getParam('favouriteFun');
+                addOrRemoveFavourite(isSaved);
                 navigation.setParams({ saved: !isSaved });
               }}
             />

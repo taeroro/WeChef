@@ -103,7 +103,7 @@ userRouter.put('/profile/:facebookID', (req, res, err) => {
 
             user.userName = req.body.userName || user.userName;
             user.email = req.body.email || user.email;
-            
+
             user.save((err, user2) => {
                 if (err) {
                     if (err.name === 'ValidationError') {
@@ -121,7 +121,7 @@ userRouter.put('/profile/:facebookID', (req, res, err) => {
                         });
                     }
                 }
-        
+
                 return res.status(200).send({
                     message: 'OK',
                 });
@@ -153,7 +153,7 @@ userRouter.put('/photo/:facebookID', ImageUpload.userPhotoUpload, (req, res, err
 
             user.userImageURL = req.file.url;
             user.userImageID = req.file.public_id;
-            
+
             user.save((err, user2) => {
                 if (err) {
 
@@ -188,6 +188,58 @@ userRouter.put('/photo/:facebookID', ImageUpload.userPhotoUpload, (req, res, err
         }
     });
 
+});
+
+userRouter.put('/add-favourite/:facebookID', (req, res, err) => {
+    User.findOneAndUpdate({ facebookID: req.params.facebookID },
+      {$push: {favoriteRecipeIDs: req.body.recipeID}},
+      {safe: true}, (err, user) => {
+          if (err) {
+            if (err.name === 'ValidationError') {
+                return res.status(422).send({
+                    message: err.errors,
+                });
+            } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                return res.status(409).send({
+                    message: 'This Imge has already been used.',
+                });
+            } else {
+                return res.status(500).send({
+                    errorType: 'InternalError',
+                    message: err,
+                });
+            }
+          }
+          return res.status(200).send({
+              message: 'OK',
+          });
+      });
+});
+
+userRouter.put('/remove-favourite/:facebookID', (req, res, err) => {
+    User.findOneAndUpdate({ facebookID: req.params.facebookID },
+      {$pull: {favoriteRecipeIDs: req.body.recipeID}},
+      {safe: true}, (err, user) => {
+          if (err) {
+            if (err.name === 'ValidationError') {
+                return res.status(422).send({
+                    message: err.errors,
+                });
+            } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                return res.status(409).send({
+                    message: 'This Imge has already been used.',
+                });
+            } else {
+                return res.status(500).send({
+                    errorType: 'InternalError',
+                    message: err,
+                });
+            }
+          }
+          return res.status(200).send({
+              message: 'OK',
+          });
+      });
 });
 
 module.exports = userRouter;
