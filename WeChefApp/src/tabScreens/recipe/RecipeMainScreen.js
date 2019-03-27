@@ -9,6 +9,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
+  ScrollView,
+  RefreshControl,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
@@ -39,6 +41,7 @@ class RecipeMainScreen extends Component {
     this.state = {
       isFocusedOnTouchBar: false,
       displayData: null,
+      refreshing: false,
     };
 
     this.searchBarExpand = this.searchBarExpand.bind(this);
@@ -56,6 +59,12 @@ class RecipeMainScreen extends Component {
     this._navListener.remove();
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.fetchRecipes();
+  }
+
+
   handleOnNavigateBack = () => {
     this.fetchRecipes();
   }
@@ -67,6 +76,7 @@ class RecipeMainScreen extends Component {
       .then(res => {
         console.log(res);
         this.setState({ displayData: res.data });
+        this.setState({refreshing: false});
       })
       .catch(error => {
         alert(error);
@@ -186,7 +196,15 @@ class RecipeMainScreen extends Component {
             </LinearGradient>
           </Animated.View>
 
-          <RecipeList queryData={this.state.displayData}/>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+          }>
+            <RecipeList queryData={this.state.displayData}/>
+          </ScrollView>
 
           {this.renderAddButton()}
         </View>
