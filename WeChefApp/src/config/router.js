@@ -20,6 +20,7 @@ import { Button } from 'react-native-elements';
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
 import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
 import RecipePostingScreen from './../tabScreens/recipe/RecipePostingScreen';
+import RecipeEditScreen from './../tabScreens/recipe/RecipeEditScreen';
 import QandAScreen from './../tabScreens/recipe/QandAScreen';
 import PostNewQuestionScreen from './../tabScreens/recipe/PostNewQuestionScreen';
 import AnswerAQuestionScreen from './../tabScreens/recipe/AnswerAQuestionScreen';
@@ -109,7 +110,7 @@ export const RecipeStack = createStackNavigator(
                 backgroundColor: 'transparent'
               }}
               onPress={() => {
-                // navigation.navigate('PostNewQuestion');
+                navigation.navigate('RecipeEdit');
               }}
             />
 
@@ -205,6 +206,18 @@ export const RecipeStack = createStackNavigator(
     },
     RecipePosting: {
       screen: RecipePostingScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
+    RecipeEdit: {
+      screen: RecipeEditScreen,
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
