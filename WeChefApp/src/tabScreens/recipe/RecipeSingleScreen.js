@@ -29,6 +29,7 @@ class RecipeSingleScreen extends Component {
       recipeID: this.props.navigation.state.params.id,
       recipeObj: null,
       isRecipeSaved: false,
+      firstQandA: null,
     };
   }
 
@@ -38,6 +39,7 @@ class RecipeSingleScreen extends Component {
     });
 
     this.fetchOneRecipes();
+    this.fetchFirstQandA();
 
     // TODO: fetch the correct !!!inital!!! saved status of this recipe, I
     // already handled whether or not it should be display as saved or not saved.
@@ -48,6 +50,10 @@ class RecipeSingleScreen extends Component {
     this._navListener.remove();
   }
 
+  handleNavigateBackQnA = () => {
+    this.fetchFirstQandA();
+  }
+
   fetchOneRecipes = () => {
     let requestURL = DB_PREFIX + 'recipe/recipe-byid/' + this.state.recipeID;
 
@@ -56,6 +62,20 @@ class RecipeSingleScreen extends Component {
         console.log(res);
         let recipeInfo = res.data;
         this.setState({recipeObj: recipeInfo});
+      })
+      .catch(error => {
+        alert(error);
+      })
+  }
+
+  fetchFirstQandA = () => {
+    let requestURL = DB_PREFIX + 'recipe/qa/first/' + this.state.recipeID;
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        let latestQandA = res.data;
+        this.setState({firstQandA: latestQandA});
       })
       .catch(error => {
         alert(error);
@@ -115,9 +135,9 @@ class RecipeSingleScreen extends Component {
     const tempQuestion = "Should I use large free-range organic eggs or just normal eggs?";
     const tempAnswer = "Large top-shelf free-range organic eggs are recommended for the best result";
 
-    const {recipeObj} = this.state;
+    const {recipeObj, firstQandA} = this.state;
 
-    if (!recipeObj) {
+    if (!recipeObj || !firstQandA) {
       return (
         <View style={styles.loadingContainer}>
           <SingleColorSpinner strokeColor="#F56862" />
@@ -133,30 +153,32 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.addQContainer}
             onPress={() => {
-              this.props.navigation.navigate('PostNewQuestion', {recipeID: recipeObj._id});
+              this.props.navigation.navigate('PostNewQuestion', {recipeID: recipeObj._id, onNavigateBack: this.handleNavigateBackQnA});
             }}
           >
             <Text style={recipeStyles.addQText}>Post A New Question</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={recipeStyles.qnaSingleContainer}>
-          <Text style={recipeStyles.qnaContentText}>
-            Q: {tempQuestion}
-          </Text>
-          <Text style={recipeStyles.qnaContentText}>
-            A: {tempAnswer}
-          </Text>
+        {(firstQandA.length) ? (
+          <View style={recipeStyles.qnaSingleContainer}>
+            <Text style={recipeStyles.qnaContentText}>
+              Q: {firstQandA[0].qContent}
+            </Text>
+            <Text style={recipeStyles.qnaContentText}>
+              A: {firstQandA[0].aContent || 'No answer yet'}
+            </Text>
 
-          <TouchableOpacity
-            style={recipeStyles.moreQnaButtonContainer}
-            onPress={() => {
-              this.props.navigation.navigate('QandA', {recipeID: recipeObj._id});
-            }}
-          >
-            <Text style={recipeStyles.moreQnaText}>Read All Q & As</Text>
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={recipeStyles.moreQnaButtonContainer}
+              onPress={() => {
+                this.props.navigation.navigate('QandA', {recipeID: recipeObj._id});
+              }}
+            >
+              <Text style={recipeStyles.moreQnaText}>Read All Q & As</Text>
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
     );
   }
