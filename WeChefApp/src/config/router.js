@@ -22,6 +22,7 @@ import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
 import RecipePostingScreen from './../tabScreens/recipe/RecipePostingScreen';
 import QandAScreen from './../tabScreens/recipe/QandAScreen';
 import PostNewQuestionScreen from './../tabScreens/recipe/PostNewQuestionScreen';
+import AnswerAQuestionScreen from './../tabScreens/recipe/AnswerAQuestionScreen';
 import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
 import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
@@ -136,6 +137,22 @@ export const RecipeStack = createStackNavigator(
     },
     QandA: {
       screen: QandAScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    AnswerAQuestion: {
+      screen: AnswerAQuestionScreen,
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
