@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar } from 'react-native';
 
-
 class RecipeEditScreen extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +21,14 @@ class RecipeEditScreen extends Component {
   }
 
   render() {
+    /*
+    *  TODO: edit page
+    *  current recipe information is stored in this.props.navigation.state.params.recipeObj
+    *  recipeObj has many fields, you may look at the below logging.
+    *  examples of recipeObj.content and recipeObj.ingredients can be found in DirectionScreen.js and IngredientsScreen.js
+    */
+    console.log(this.props.navigation.state.params.recipeObj);
+
     return (
       <View style={styles.container}>
         <Text>RecipeEditScreen</Text>

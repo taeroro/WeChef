@@ -62,6 +62,7 @@ class RecipeSingleScreen extends Component {
         console.log(res);
         let recipeInfo = res.data;
         this.setState({recipeObj: recipeInfo});
+        this.props.navigation.setParams({ recipeObj: this.state.recipeObj })
       })
       .catch(error => {
         alert(error);
