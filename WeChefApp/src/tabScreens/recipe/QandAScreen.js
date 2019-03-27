@@ -80,7 +80,7 @@ class QandAScreen extends Component {
                     ) : (
                       <TouchableOpacity
                         style={styles.answerButtonContainer}
-                        onPress={() => {this.props.navigation.navigate('PostNewQuestion', {questionId: qna._id});
+                        onPress={() => {this.props.navigation.navigate('AnswerAQuestion', {questionId: qna._id});
                       }}>
                         <Text style = {styles.answerButtonText}> Answer this question </Text>
                       </TouchableOpacity>

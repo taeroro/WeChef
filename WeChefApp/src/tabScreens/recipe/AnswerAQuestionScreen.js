@@ -80,7 +80,7 @@ class AnswerAQuestionScreen extends Component {
           onPress={() => this.handleSubmit()}
           style={styles.submitContainer}
         >
-          <Text style={styles.submitText} >Submit</Text>
+          <Text style={styles.submitText} >Submit Answer</Text>
         </TouchableOpacity>
 
       </View>
