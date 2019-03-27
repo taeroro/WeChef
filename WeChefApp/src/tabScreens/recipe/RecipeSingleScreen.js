@@ -102,7 +102,7 @@ class RecipeSingleScreen extends Component {
       <View style={recipeStyles.section1Container}>
         {(recipeObj.recipeImageURL != 'null') ? (
           <Image
-          resizeMode={"center"}
+          resizeMode={"cover"}
           style={recipeStyles.recipeImg}
           source={{uri: recipeObj.recipeImageURL}}
         />) : null}

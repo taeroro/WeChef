@@ -20,6 +20,7 @@ import { Button } from 'react-native-elements';
 import RecipeMainScreen from './../tabScreens/recipe/RecipeMainScreen';
 import RecipeSingleScreen from './../tabScreens/recipe/RecipeSingleScreen';
 import RecipePostingScreen from './../tabScreens/recipe/RecipePostingScreen';
+import RecipeEditScreen from './../tabScreens/recipe/RecipeEditScreen';
 import QandAScreen from './../tabScreens/recipe/QandAScreen';
 import PostNewQuestionScreen from './../tabScreens/recipe/PostNewQuestionScreen';
 import AnswerAQuestionScreen from './../tabScreens/recipe/AnswerAQuestionScreen';
@@ -95,27 +96,47 @@ export const RecipeStack = createStackNavigator(
         },
         headerTintColor: '#3C3C3C',
         headerRight: (
-          <Button
-            icon={{
-              name: "bookmark",
-              type:'material-community',
-              size: 26,
-              color: navigation.getParam('saved') ? '#FE444D' : '#3C3C3C'
-            }}
-            buttonStyle={{
-              backgroundColor: 'transparent'
-            }}
-            onPress={() => {
-              // TODO: connect to backend, upload whether this recipe is
-              // saved or not.
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <Button
+              icon={{
+                name: "square-edit-outline",
+                type:'material-community',
+                size: 26,
+                color: '#3C3C3C'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                navigation.navigate('RecipeEdit');
+              }}
+            />
 
-              // But don't touch the one below. It's for UI. But you can
-              // put this line of code after upload the new saving status
-              // to the backend (e.g. inside of .then())
-              let isSaved = navigation.getParam('saved');
-              navigation.setParams({ saved: !isSaved });
-            }}
-          />
+            <Button
+              icon={{
+                name: "bookmark",
+                type:'material-community',
+                size: 26,
+                color: navigation.getParam('saved') ? '#FE444D' : '#A0A2A5'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                // TODO: connect to backend, upload whether this recipe is
+                // saved or not.
+
+                // But don't touch the one below. It's for UI. But you can
+                // put this line of code after upload the new saving status
+                // to the backend (e.g. inside of .then())
+                let isSaved = navigation.getParam('saved');
+                navigation.setParams({ saved: !isSaved });
+              }}
+            />
+          </View>
+
         ),
       }),
     },
@@ -185,6 +206,18 @@ export const RecipeStack = createStackNavigator(
     },
     RecipePosting: {
       screen: RecipePostingScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+      }),
+    },
+    RecipeEdit: {
+      screen: RecipeEditScreen,
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
@@ -267,6 +300,12 @@ export const SavedStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     }
+  },
+  {
+    headerMode: "screen",
+    navigationOptions: ({ navigation }) => ({
+      tabBarVisible: tabbarVisible(navigation),
+    }),
   }
 );
 
@@ -401,6 +440,9 @@ export const ProfileStack = createStackNavigator(
   },
   {
     headerMode: "screen",
+    navigationOptions: ({ navigation }) => ({
+      tabBarVisible: tabbarVisible(navigation),
+    }),
   }
 );
 
