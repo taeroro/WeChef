@@ -266,4 +266,43 @@ recipeRouter.get('/qa/first/:recipeID', (req, res, err) => {
     });
 });
 
+// Update the Q and A
+recipeRouter.put('/qa/answer/:QnAID', (req, res, err) => {
+      QAndA.findById(req.params.QnAID, (err, qna) => {
+        if (err) {
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (qna) {
+            qna.aContent = req.body.aContent;
+            qna.save((err, qna2) => {
+              if (err) {
+                  if (err.name === 'ValidationError') {
+                      return res.status(422).send({
+                          message: err.errors,
+                      });
+                  } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                      return res.status(409).send({
+                          message: 'Violated value unique.',
+                      });
+                  } else {
+                      return res.status(500).send({
+                          errorType: 'InternalError',
+                          message: err,
+                      });
+                  }
+              }
+              return res.status(200).send({
+                  message: 'OK',
+              });
+            })
+        } else {
+            return res.status(404).send({
+                message: 'No QnA exists with given QnAID.',
+            });
+        }
+      })
+})
+
 module.exports = recipeRouter;
