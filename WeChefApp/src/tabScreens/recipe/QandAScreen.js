@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, StatusBar, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
+import FBSDK from 'react-native-fbsdk';
+
+const { AccessToken } = FBSDK;
 
 // TODO: after deployment, change localhost to heroku url
 const DB_PREFIX = 'http://localhost:8080/';
@@ -13,6 +16,8 @@ class QandAScreen extends Component {
 
     this.state = {
       recipeID: this.props.navigation.state.params.recipeID,
+      recipeOwnerID: this.props.navigation.state.params.recipeOwnerID,
+      currentUserID: null,
       displayQandAs: null,
     };
   }
@@ -20,6 +25,12 @@ class QandAScreen extends Component {
   componentDidMount() {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
+    });
+
+    AccessToken.getCurrentAccessToken().then((data) => {
+      this.setState({
+        currentUserID: data.userID
+      });
     });
 
     this.fetchQandAs();
@@ -54,6 +65,7 @@ class QandAScreen extends Component {
 
   render() {
     console.log(this.state.displayQandAs);
+    console.log(this.state.recipeOwnerID == this.state.currentUserID);
     return (
       <View style={styles.container}>
         <ScrollView
@@ -80,12 +92,12 @@ class QandAScreen extends Component {
                     ) : (
                       <TouchableOpacity
                         style={styles.answerButtonContainer}
-                        onPress={() => {this.props.navigation.navigate('AnswerAQuestion', {questionId: qna._id});
+                        onPress={() => {this.props.navigation.navigate('AnswerAQuestion', {recipeID: this.state.recipeID});
                       }}>
                         <Text style = {styles.answerButtonText}> Answer this question </Text>
                       </TouchableOpacity>
                     )}
-                  
+
                   </View>
 
                   <View style={styles.divider} />
@@ -95,7 +107,7 @@ class QandAScreen extends Component {
               ))}
             </View>
           ):null}
-        
+
 
         </ScrollView>
       </View>

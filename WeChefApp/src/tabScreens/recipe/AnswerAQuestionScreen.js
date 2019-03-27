@@ -44,24 +44,24 @@ class AnswerAQuestionScreen extends Component {
     //this.uploadQuestion(this.state);
   }
 
-  backToRecipe = () => {
-    this.props.navigation.navigate('RecipeSingle', {id: this.state.recipeID});
+  backToQnA = () => {
+    this.props.navigation.navigate('QandA', {recipeID: this.state.recipeID});
   }
 
-  uploadQuestion = (state) => {
-    let requestURL = DB_PREFIX + 'recipe/qa/create/' + state.recipeID;
-
-    axios.post(requestURL, { qContent: state.question, qOwnerID: state.qOwnerID })
-      .then(res => {
-        console.log(res);
-        if (res.status == 201) {
-          this.backToRecipe();
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-  }
+  // uploadQuestion = (state) => {
+  //   let requestURL = DB_PREFIX + 'recipe/qa/create/' + state.recipeID;
+  //
+  //   axios.post(requestURL, { qContent: state.question, qOwnerID: state.qOwnerID })
+  //     .then(res => {
+  //       console.log(res);
+  //       if (res.status == 201) {
+  //         this.backToQnA();
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     })
+  // }
 
   render() {
     return (
