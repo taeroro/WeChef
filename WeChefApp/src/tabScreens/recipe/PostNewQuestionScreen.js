@@ -45,6 +45,7 @@ class PostNewQuestionScreen extends Component {
   }
 
   backToRecipe = () => {
+    this.props.navigation.state.params.onNavigateBack();
     this.props.navigation.navigate('RecipeSingle', {id: this.state.recipeID});
   }
 
