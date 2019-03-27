@@ -81,12 +81,11 @@ class RecipeEditScreen extends Component {
 
   createAndUploadForm (state) {
     let requestURL = DB_PREFIX + 'recipe/edit/' + this.props.navigation.state.params.recipeID;
-    console.log('requestURL = ' + requestURL);
+
     let formdata = new FormData();
     formdata.append('title', state.title);
     formdata.append('difficulty', state.difficultyRating);
     const isDummyImage = this.state.imageSource == image ? true : false;
-    console.log('isDummyImage = ' + isDummyImage);
     // do not upload the dummy image
     if (!isDummyImage) {
       formdata.append('image', { uri: this.state.imageSource, name: 'new_recipe_image.jpg', type: 'image/jpg' });
@@ -210,7 +209,6 @@ class RecipeEditScreen extends Component {
   handleSubmitForm () {
     console.log(this.state)
 
-    // TODO: update all data in this.state to db, if success navigate to main page
     this.createAndUploadForm(this.state);
   }
 
