@@ -13,9 +13,11 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { Rating } from 'react-native-elements';
 import { MKSpinner } from 'react-native-material-kit';
 import axios from 'axios';
+import FBSDK from 'react-native-fbsdk';
 
 // TODO: after deployment, change localhost to heroku url
 const DB_PREFIX = 'http://localhost:8080/';
+const { AccessToken } = FBSDK;
 const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 
 const imageSize = Dimensions.get('window').width;
@@ -30,6 +32,7 @@ class RecipeSingleScreen extends Component {
       recipeObj: null,
       isRecipeSaved: false,
       firstQandA: null,
+      currentUser: null,
     };
   }
 
@@ -40,10 +43,8 @@ class RecipeSingleScreen extends Component {
 
     this.fetchOneRecipes();
     this.fetchFirstQandA();
+    this.fetchSavedStatus();
 
-    // TODO: fetch the correct !!!inital!!! saved status of this recipe, I
-    // already handled whether or not it should be display as saved or not saved.
-    this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
   }
 
   componentWillUnmount() {
@@ -83,9 +84,50 @@ class RecipeSingleScreen extends Component {
       })
   }
 
+  addOrRemoveFavourite = (isSaved) => {
+    var requestURL = null;
+    if (isSaved) {
+      requestURL = DB_PREFIX + 'user/remove-favourite/' + this.state.currentUser;
+    } else {
+      requestURL = DB_PREFIX + 'user/add-favourite/' + this.state.currentUser;
+    }
+    axios.put(requestURL, { recipeID: this.state.recipeID })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(error => {
+        alert(error);
+      });
+
+  }
+
+  // TODO
+  fetchSavedStatus = () => {
+    AccessToken.getCurrentAccessToken().then((data) => {
+      this.setState({
+        currentUser: data.userID
+      });
+
+      let requestURL = DB_PREFIX + 'user/' + this.state.currentUser;
+
+      axios.get(requestURL)
+        .then(res => {
+          const userInfo = res.data;
+          if (userInfo.favoriteRecipeIDs.includes(this.state.recipeID)) {
+            this.setState({ isRecipeSaved: true });
+          }
+          // fetch the inital saved status of this recipe
+          this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
+          this.props.navigation.setParams({ favouriteFun: this.addOrRemoveFavourite });
+        })
+        .catch(error => {
+          alert(error);
+        });
+    });
+  }
+
   // Recipe image, name, rating
   renderRecipeSection1() {
-    // TODO: replace image source, name of the recipe, and difficulty rating
 
     const tempName = "delicious blueberry and orange pancakes with organic maple syrup";
 
