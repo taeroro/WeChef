@@ -40,10 +40,6 @@ class QandAScreen extends Component {
     this._navListener.remove();
   }
 
-  handleOnNavigateBack = () => {
-    this.fetchQandAs();
-  }
-
   fetchQandAs = () => {
     let requestURL = DB_PREFIX + 'recipe/qa/' + this.state.recipeID;
 
@@ -95,7 +91,7 @@ class QandAScreen extends Component {
                           style={styles.answerButtonContainer}
                           onPress={() => {this.props.navigation.navigate(
                             'AnswerAQuestion', {onNavigateBack: this.props.navigation.state.params.onNavigateBack,
-                            recipeID: this.state.recipeID, QnAID: qna._id, recipeOwnerID: this.state.recipeOwnerID});
+                            recipeID: this.state.recipeID, QnAID: qna._id});
                         }}>
                           <Text style = {styles.answerButtonText}> Answer this question </Text>
                         </TouchableOpacity>
