@@ -234,7 +234,7 @@ class RecipePostingScreen extends Component {
           <Text> Ingredients </Text>
           <View>
             {this.state.ingredients.map((ingredient, idx) => (
-              <View>
+              <View key = {idx}>
                 <TextInput
                   placeholder={`Ingredient #${idx + 1} Name`}
                   value={ingredient.name}
@@ -272,7 +272,7 @@ class RecipePostingScreen extends Component {
           <Text> Directions </Text>
           <View>
             {this.state.directions.map((direction, idx) => (
-              <View>
+              <View key={idx}>
                 <TextInput
                   placeholder={`Direction #${idx + 1}`}
                   value={direction.step}
