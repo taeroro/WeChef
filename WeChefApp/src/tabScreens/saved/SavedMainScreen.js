@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, StatusBar } from 'react-native';
+import { StyleSheet, View, Text, StatusBar, ScrollView, RefreshControl } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import FBSDK from 'react-native-fbsdk';
 import axios from 'axios';
@@ -18,6 +18,7 @@ class SavedMainScreen extends Component {
     this.state = {
       displayData: null,
       currentUserID: null,
+      refreshing: false,
     };
   }
 
@@ -33,6 +34,11 @@ class SavedMainScreen extends Component {
     this._navListener.remove();
   }
 
+  _onRefresh = () => {
+    this.setState({refreshing: true});
+    this.fetchSavedRecipes();
+  }
+
   fetchSavedRecipes = () => {
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
@@ -44,6 +50,7 @@ class SavedMainScreen extends Component {
         .then(res => {
           console.log(res);
           this.setState({ displayData: res.data });
+          this.setState({refreshing: false});
         })
         .catch(error => {
           alert(error);
@@ -58,7 +65,15 @@ class SavedMainScreen extends Component {
           <Text style={styles.headerTitle}>Saved Recipes</Text>
         </View>
         <View style={styles.listContainer}>
-          <RecipeList queryData={this.state.displayData} />
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+          }>
+            <RecipeList queryData={this.state.displayData} />
+          </ScrollView>
         </View>
       </View>
     );
