@@ -18,7 +18,7 @@ class AnswerAQuestionScreen extends Component {
     this.state = {
       recipeID: this.props.navigation.state.params.recipeID,
       qOwnerID: null,
-      question: '',
+      answer: '',
     };
   }
 
@@ -39,7 +39,7 @@ class AnswerAQuestionScreen extends Component {
   }
 
   handleSubmit = () => {
-    console.log(this.state.question);
+    console.log(this.state.answer);
 
     //this.uploadQuestion(this.state);
   }
@@ -67,9 +67,9 @@ class AnswerAQuestionScreen extends Component {
     return (
       <View style={styles.container}>
         <TextInput
-          label = 'Type your question here'
-          value = {this.state.question}
-          onChangeText= {question => this.setState({question})}
+          label = 'Type your answer here'
+          value = {this.state.answer}
+          onChangeText= {answer => this.setState({answer})}
           multiline
           scrollEnabled
           style = {styles.textInput}
