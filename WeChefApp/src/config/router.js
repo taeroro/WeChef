@@ -238,7 +238,7 @@ export const RecipeStack = createStackNavigator(
       screenInterpolator: props => {
         // Basically you need to create a condition for individual scenes
        if (props.scene.route.routeName === 'IngAndDir'
-          || props.scene.route.routeName === 'QandA'
+          // || props.scene.route.routeName === 'QandA'
           || props.scene.route.routeName === 'PostNewQuestion'
         ) {
 
@@ -250,7 +250,7 @@ export const RecipeStack = createStackNavigator(
 
        // This controls the transition when navigation back to a specific scene
        if (last.route.routeName === 'IngAndDir'
-          || last.route.routeName === 'QandA'
+          // || last.route.routeName === 'QandA'
           || last.route.routeName === 'PostNewQuestion'
         ) {
 
