@@ -199,16 +199,16 @@ class RecipePostingScreen extends Component {
         }
       })
       .catch(error => {
-        console.log(error);
+        alert(error);
       });
   }
 
   render() {
     return (
       <View style={styles.container}>
-      <KeyboardAvoidingView 
-        contentContainerStyle={styles.keyboardContainer} 
-        behavior="padding" 
+      <KeyboardAvoidingView
+        contentContainerStyle={styles.keyboardContainer}
+        behavior="padding"
         enabled
         >
       <ScrollView>
@@ -313,7 +313,7 @@ class RecipePostingScreen extends Component {
             ))}
           </View>
 
-          
+
           <TouchableOpacity
             style = {styles.addButtonContainer}
             onPress={() => {
@@ -323,7 +323,7 @@ class RecipePostingScreen extends Component {
           </TouchableOpacity>
 
         </View>
-        
+
         <View style={styles.divider} />
 
         <View style={styles.sectionContainer}>
@@ -337,7 +337,7 @@ class RecipePostingScreen extends Component {
 
       </ScrollView>
       </KeyboardAvoidingView>
-        
+
 
       </View>
     );
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     paddingBottom: getBottomSpace(),
   },
   keyboardContainer:{
-    
+
   },
   titleHeaderContainer: {
     marginTop: 10,

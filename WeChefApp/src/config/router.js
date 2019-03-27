@@ -110,7 +110,8 @@ export const RecipeStack = createStackNavigator(
                 backgroundColor: 'transparent'
               }}
               onPress={() => {
-                navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj')});
+                navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
+                 recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
               }}
             />
 

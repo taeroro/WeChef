@@ -45,6 +45,8 @@ class RecipeSingleScreen extends Component {
     this.fetchFirstQandA();
     this.fetchSavedStatus();
 
+    this.props.navigation.setParams({ onNavigateBack: this.handleNavigateBackEdit });
+
   }
 
   componentWillUnmount() {
@@ -55,6 +57,10 @@ class RecipeSingleScreen extends Component {
     this.fetchFirstQandA();
   }
 
+  handleNavigateBackEdit = () => {
+    this.fetchOneRecipes();
+  }
+
   fetchOneRecipes = () => {
     let requestURL = DB_PREFIX + 'recipe/recipe-byid/' + this.state.recipeID;
 
@@ -63,7 +69,8 @@ class RecipeSingleScreen extends Component {
         console.log(res);
         let recipeInfo = res.data;
         this.setState({recipeObj: recipeInfo});
-        this.props.navigation.setParams({ recipeObj: this.state.recipeObj })
+        this.props.navigation.setParams({ recipeObj: this.state.recipeObj });
+        this.props.navigation.setParams({ recipeID: this.state.recipeID });
       })
       .catch(error => {
         alert(error);
