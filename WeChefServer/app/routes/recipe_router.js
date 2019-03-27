@@ -178,7 +178,25 @@ recipeRouter.get('/homepage', (req, res, err) => {
 });
 
 // get my fav recipes
-recipeRouter.get('/:facebookID/favourite', (req, res, err) => {});
+recipeRouter.get('/:facebookID/favourite', (req, res, err) => {
+    User.findOne({ facebookID: req.params.facebookID }, (err, user) => {
+      const favouriteRecipeIDs = user.favoriteRecipeIDs;
+      Recipe.find({ _id: {$in: favouriteRecipeIDs} }, (err, recipes) => {
+        if (err){
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (recipes) {
+            res.status(200).send(recipes);
+        } else {
+            return res.status(404).send({
+                message: 'No recipes can be found.',
+            });
+        }
+      })
+    })
+});
 
 // Add Q&A to a recipe
 recipeRouter.post('/qa/create/:recipeID', (req, res, err) => {
