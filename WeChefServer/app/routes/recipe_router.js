@@ -64,6 +64,36 @@ recipeRouter.get('/recipe-byid/:recipeID', (req, res, err) => {
 
 });
 
+/**
+ * search recipe by keywords
+ * pass in whatever inside the search bar
+ * like: "blueburry cheesecake",
+ * tokenization is handleded internally.
+ */
+recipeRouter.get('/search', (req, res, err) => {
+    if (!req.query.keywords) {
+        return res.status(422).send({
+            message: 'No keywords provided.',
+        });
+    }
+    /**
+     * $text will tokenize the search string using whitespace and most punctuation
+     * as delimiters, and perform a logical OR of all such tokens in the search string.
+     */
+    Recipe.find({ '$text': { '$search': req.query.keywords, }})
+        .select({ 'score': { '$meta': 'textScore', }})
+        .sort({ 'score': { '$meta': 'textSocre', }})
+        .exec( (err, recipes) => {
+            if (err) {
+                return res.status(500).send({
+                    message: err,
+                });
+            }
+            // use res.json as the list might be empty
+            res.json(recipes);
+        });
+});
+
 // create recipe
 recipeRouter.post('/create', ImageUpload.recipeImageUpload, (req, res, err) => {
     let new_recipe = new Recipe();

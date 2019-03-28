@@ -53,4 +53,18 @@ let recipe = mongoose.model('Recipe', new Schema({
   timestamps: { createdAt: true, updatedAt: true }
 }));
 
+recipe.index(
+    { 
+        'title': 'text',
+        'content': 'text',
+        'ingredients.name': 'text',
+    }, {
+        'weights': {
+            'title': 5,
+            'content': 2,
+            'ingredients.name': 3,
+        }
+    },
+);
+
 module.exports = recipe;
