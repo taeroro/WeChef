@@ -51,9 +51,7 @@ let recipe = mongoose.model('Recipe', new Schema({
     },
 }, {
   timestamps: { createdAt: true, updatedAt: true }
-}));
-
-recipe.index(
+}).index(
     { 
         'title': 'text',
         'content': 'text',
@@ -65,6 +63,6 @@ recipe.index(
             'ingredients.name': 3,
         }
     },
-);
+));
 
 module.exports = recipe;
