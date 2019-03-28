@@ -82,7 +82,7 @@ recipeRouter.get('/search', (req, res, err) => {
      */
     Recipe.find({ '$text': { '$search': req.query.keywords, }},
         { score: { '$meta': 'textScore', }})
-        .sort({ 'score': { '$meta': 'textSocre', }})
+        .sort({ 'score': { '$meta': 'textScore', }})
         .exec( (err, recipes) => {
             if (err) {
                 return res.status(500).send({
