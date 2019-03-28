@@ -80,8 +80,8 @@ recipeRouter.get('/search', (req, res, err) => {
      * $text will tokenize the search string using whitespace and most punctuation
      * as delimiters, and perform a logical OR of all such tokens in the search string.
      */
-    Recipe.find({ '$text': { '$search': req.query.keywords, }})
-        .select({ 'score': { '$meta': 'textScore', }})
+    Recipe.find({ '$text': { '$search': req.query.keywords, }},
+        { score: { '$meta': 'textScore', }})
         .sort({ 'score': { '$meta': 'textSocre', }})
         .exec( (err, recipes) => {
             if (err) {
