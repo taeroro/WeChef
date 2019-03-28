@@ -235,7 +235,7 @@ class RecipeSingleScreen extends Component {
   }
 
   renderRecipeSection3() {
-    const tempComment = "I tried it out this recipe and it is super delicious!";
+    const tempComment = "I tried out this recipe and it is super delicious!";
     const tempUserName = "Ryan Fan";
 
     return (
