@@ -99,21 +99,30 @@ export const RecipeStack = createStackNavigator(
           <View style={{
             flexDirection: 'row'
           }}>
-            <Button
-              icon={{
-                name: "square-edit-outline",
-                type:'material-community',
-                size: 26,
-                color: '#3C3C3C'
-              }}
-              buttonStyle={{
-                backgroundColor: 'transparent'
-              }}
-              onPress={() => {
-                navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
-                 recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
-              }}
-            />
+            {
+              navigation.getParam('recipeObj')
+              ? navigation.getParam('currentUser')
+                ? navigation.getParam('recipeObj').ownerID === navigation.getParam('currentUser')
+                  ?
+                    <Button
+                      icon={{
+                        name: "square-edit-outline",
+                        type:'material-community',
+                        size: 26,
+                        color: '#3C3C3C'
+                      }}
+                      buttonStyle={{
+                        backgroundColor: 'transparent'
+                      }}
+                      onPress={() => {
+                        navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
+                         recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
+                      }}
+                    />
+                  : <View />
+                : <View />
+              : <View />
+            }
 
             <Button
               icon={{
@@ -274,6 +283,131 @@ export const SavedStack = createStackNavigator(
     },
     RecipeSingle: {
       screen: RecipeSingleScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        headerRight: (
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            {
+              navigation.getParam('recipeObj')
+              ? navigation.getParam('currentUser')
+                ? navigation.getParam('recipeObj').ownerID === navigation.getParam('currentUser')
+                  ?
+                    <Button
+                      icon={{
+                        name: "square-edit-outline",
+                        type:'material-community',
+                        size: 26,
+                        color: '#3C3C3C'
+                      }}
+                      buttonStyle={{
+                        backgroundColor: 'transparent'
+                      }}
+                      onPress={() => {
+                        navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
+                         recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
+                      }}
+                    />
+                  : <View />
+                : <View />
+              : <View />
+            }
+
+            <Button
+              icon={{
+                name: "bookmark",
+                type:'material-community',
+                size: 26,
+                color: navigation.getParam('saved') ? '#FE444D' : '#A0A2A5'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                let isSaved = navigation.getParam('saved');
+                let addOrRemoveFavourite = navigation.getParam('favouriteFun');
+                addOrRemoveFavourite(isSaved);
+                navigation.setParams({ saved: !isSaved });
+              }}
+            />
+          </View>
+
+        ),
+      }),
+    },
+    IngAndDir: {
+      screen: IngAndDirTab,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    QandA: {
+      screen: QandAScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    AnswerAQuestion: {
+      screen: AnswerAQuestionScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    PostNewQuestion: {
+      screen: PostNewQuestionScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    RecipeEdit: {
+      screen: RecipeEditScreen,
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
@@ -284,26 +418,40 @@ export const SavedStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     },
-    IngAndDir: {
-      screen: IngAndDirTab,
-      navigationOptions: () => ({
-        // header: null,
-        headerStyle: {
-          backgroundColor: '#fff',
-          marginHorizontal: 10,
-          marginVertical: 5,
-          borderBottomWidth: 0,
-        },
-        headerTintColor: '#3C3C3C',
-      }),
-    }
   },
   {
     headerMode: "screen",
     navigationOptions: ({ navigation }) => ({
       tabBarVisible: tabbarVisible(navigation),
     }),
-  }
+    transitionConfig: () => ({
+      screenInterpolator: props => {
+        // Basically you need to create a condition for individual scenes
+       if (props.scene.route.routeName === 'IngAndDir'
+          // || props.scene.route.routeName === 'QandA'
+          || props.scene.route.routeName === 'PostNewQuestion'
+        ) {
+
+         // forVertical makes the scene transition for Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       const last = props.scenes[props.scenes.length - 1];
+
+       // This controls the transition when navigation back to a specific scene
+       if (last.route.routeName === 'IngAndDir'
+          // || last.route.routeName === 'QandA'
+          || last.route.routeName === 'PostNewQuestion'
+        ) {
+
+         // Here, forVertical flows from Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       return StackViewStyleInterpolator.forHorizontal(props);
+      }
+    }),
+  },
 );
 
 // 3. List Stack
@@ -411,6 +559,122 @@ export const ProfileStack = createStackNavigator(
     },
     RecipeSingle: {
       screen: RecipeSingleScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        headerRight: (
+          <View style={{
+            flexDirection: 'row'
+          }}>
+            <Button
+              icon={{
+                name: "square-edit-outline",
+                type:'material-community',
+                size: 26,
+                color: '#3C3C3C'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
+                 recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
+              }}
+            />
+
+            <Button
+              icon={{
+                name: "bookmark",
+                type:'material-community',
+                size: 26,
+                color: navigation.getParam('saved') ? '#FE444D' : '#A0A2A5'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                let isSaved = navigation.getParam('saved');
+                let addOrRemoveFavourite = navigation.getParam('favouriteFun');
+                addOrRemoveFavourite(isSaved);
+                navigation.setParams({ saved: !isSaved });
+              }}
+            />
+          </View>
+
+        ),
+      }),
+    },
+    IngAndDir: {
+      screen: IngAndDirTab,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    QandA: {
+      screen: QandAScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    AnswerAQuestion: {
+      screen: AnswerAQuestionScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    PostNewQuestion: {
+      screen: PostNewQuestionScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    RecipeEdit: {
+      screen: RecipeEditScreen,
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
@@ -421,26 +685,40 @@ export const ProfileStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     },
-    IngAndDir: {
-      screen: IngAndDirTab,
-      navigationOptions: () => ({
-        // header: null,
-        headerStyle: {
-          backgroundColor: '#fff',
-          marginHorizontal: 10,
-          marginVertical: 5,
-          borderBottomWidth: 0,
-        },
-        headerTintColor: '#3C3C3C',
-      }),
-    }
   },
   {
     headerMode: "screen",
     navigationOptions: ({ navigation }) => ({
       tabBarVisible: tabbarVisible(navigation),
     }),
-  }
+    transitionConfig: () => ({
+      screenInterpolator: props => {
+        // Basically you need to create a condition for individual scenes
+       if (props.scene.route.routeName === 'IngAndDir'
+          // || props.scene.route.routeName === 'QandA'
+          || props.scene.route.routeName === 'PostNewQuestion'
+        ) {
+
+         // forVertical makes the scene transition for Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       const last = props.scenes[props.scenes.length - 1];
+
+       // This controls the transition when navigation back to a specific scene
+       if (last.route.routeName === 'IngAndDir'
+          // || last.route.routeName === 'QandA'
+          || last.route.routeName === 'PostNewQuestion'
+        ) {
+
+         // Here, forVertical flows from Top to Bottom
+         return StackViewStyleInterpolator.forVertical(props);
+       }
+
+       return StackViewStyleInterpolator.forHorizontal(props);
+      }
+    }),
+  },
 );
 
 // 6. Login Stack
