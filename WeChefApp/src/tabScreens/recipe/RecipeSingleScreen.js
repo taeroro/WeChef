@@ -114,6 +114,8 @@ class RecipeSingleScreen extends Component {
         currentUser: data.userID
       });
 
+      this.props.navigation.setParams({ currentUser: data.userID });
+
       let requestURL = DB_PREFIX + 'user/' + this.state.currentUser;
 
       axios.get(requestURL)

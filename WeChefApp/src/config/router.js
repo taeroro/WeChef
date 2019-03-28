@@ -99,21 +99,30 @@ export const RecipeStack = createStackNavigator(
           <View style={{
             flexDirection: 'row'
           }}>
-            <Button
-              icon={{
-                name: "square-edit-outline",
-                type:'material-community',
-                size: 26,
-                color: '#3C3C3C'
-              }}
-              buttonStyle={{
-                backgroundColor: 'transparent'
-              }}
-              onPress={() => {
-                navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
-                 recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
-              }}
-            />
+            {
+              navigation.getParam('recipeObj')
+              ? navigation.getParam('currentUser')
+                ? navigation.getParam('recipeObj').ownerID === navigation.getParam('currentUser')
+                  ?
+                    <Button
+                      icon={{
+                        name: "square-edit-outline",
+                        type:'material-community',
+                        size: 26,
+                        color: '#3C3C3C'
+                      }}
+                      buttonStyle={{
+                        backgroundColor: 'transparent'
+                      }}
+                      onPress={() => {
+                        navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
+                         recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
+                      }}
+                    />
+                  : <View />
+                : <View />
+              : <View />
+            }
 
             <Button
               icon={{
@@ -286,21 +295,30 @@ export const SavedStack = createStackNavigator(
           <View style={{
             flexDirection: 'row'
           }}>
-            <Button
-              icon={{
-                name: "square-edit-outline",
-                type:'material-community',
-                size: 26,
-                color: '#3C3C3C'
-              }}
-              buttonStyle={{
-                backgroundColor: 'transparent'
-              }}
-              onPress={() => {
-                navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
-                 recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
-              }}
-            />
+            {
+              navigation.getParam('recipeObj')
+              ? navigation.getParam('currentUser')
+                ? navigation.getParam('recipeObj').ownerID === navigation.getParam('currentUser')
+                  ?
+                    <Button
+                      icon={{
+                        name: "square-edit-outline",
+                        type:'material-community',
+                        size: 26,
+                        color: '#3C3C3C'
+                      }}
+                      buttonStyle={{
+                        backgroundColor: 'transparent'
+                      }}
+                      onPress={() => {
+                        navigation.navigate('RecipeEdit', {recipeObj: navigation.getParam('recipeObj'),
+                         recipeID: navigation.getParam('recipeID'), onNavigateBack: navigation.getParam('onNavigateBack')});
+                      }}
+                    />
+                  : <View />
+                : <View />
+              : <View />
+            }
 
             <Button
               icon={{
