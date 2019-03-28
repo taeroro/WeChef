@@ -19,26 +19,51 @@ class RecipeList extends Component {
     super(props);
 
     this.state = {
-
+      dataSize: null,
     };
   }
 
   render() {
     return (
-      <FlatList
-        data={this.props.queryData}
-        renderItem={({item}) => (
-          <View style={styles.itemContainer}>
-            <RecipeCardOnList
-              size={size}
-              item={item}
-            />
+      this.props.queryData
+      ? this.props.queryData.length === 0
+        ? (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No Recipe To Display...</Text>
+            <Text style={styles.pullText}>Pull Down To Refresh</Text>
           </View>
-        )}
-        keyExtractor={item => item._id}
-        numColumns={numColumns}
-        contentContainerStyle={styles.listContentStyle}
-      />
+        )
+        : (
+          <FlatList
+            data={this.props.queryData}
+            renderItem={({item}) => (
+              this.props.queryData.length === 1
+              ? (
+                <View style={{flexDirection: 'row'}}>
+                  <View style={styles.itemContainer}>
+                    <RecipeCardOnList
+                      size={size}
+                      item={item}
+                    />
+                  </View>
+                  <View style={styles.itemContainer} />
+                </View>
+              )
+              : (
+                <View style={styles.itemContainer}>
+                  <RecipeCardOnList
+                    size={size}
+                    item={item}
+                  />
+                </View>
+              )
+            )}
+            keyExtractor={item => item._id}
+            numColumns={numColumns}
+            contentContainerStyle={styles.listContentStyle}
+          />
+        )
+      : <View />
     );
   }
 }
@@ -56,9 +81,22 @@ const styles = StyleSheet.create({
     width: size,
     // height: size,
   },
-  item: {
-    flex: 1,
-    margin: 7,
-    backgroundColor: 'lightblue',
-  }
+  emptyContainer: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height - 197,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#3C3C3C',
+    marginBottom: 5,
+  },
+  pullText: {
+    fontSize: 14,
+    fontWeight: '300',
+    color: '#3C3C3C',
+    marginTop: 5,
+  },
 });
