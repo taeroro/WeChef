@@ -42,6 +42,7 @@ class RecipeMainScreen extends Component {
       isFocusedOnTouchBar: false,
       displayData: null,
       refreshing: false,
+      searchBy: 'name',
     };
 
     this.searchBarExpand = this.searchBarExpand.bind(this);
@@ -158,6 +159,46 @@ class RecipeMainScreen extends Component {
     );
   }
 
+  renderSearchOptions(){
+    return (
+      <View style={searchBarButtonStyles.container}>
+        <Text style={searchBarButtonStyles.title}>Search By:</Text>
+
+        <View style={searchBarButtonStyles.buttoncontainer}>
+          <TouchableOpacity
+            style={[searchBarButtonStyles.nameButtonContainer, {
+              backgroundColor: this.state.searchBy === 'name' ? '#FFF' : 'rgba(160,162,165,0.5)',
+            }]}
+            onPress={() => {
+              this.setState({ searchBy: 'name' });
+            }}
+          >
+            <Text style={[searchBarButtonStyles.textName, {
+              color: this.state.searchBy === 'name' ? '#3C3C3C' : 'rgba(255,255,255,0.5)',
+            }]}>
+              NAME
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[searchBarButtonStyles.ingrButtonContainer, {
+              backgroundColor: this.state.searchBy === 'ingr' ? '#FFF' : 'rgba(160,162,165,0.5)',
+            }]}
+            onPress={() => {
+              this.setState({ searchBy: 'ingr' });
+            }}
+          >
+            <Text style={[searchBarButtonStyles.textIngr, {
+              color: this.state.searchBy === 'ingr' ? '#3C3C3C' : 'rgba(255,255,255,0.5)',
+            }]}>
+              INGREDIENTS
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   render() {
     const endHeight = Dimensions.get('window').height;
     const animatedHeight = this.animatedValue.interpolate({
@@ -193,6 +234,7 @@ class RecipeMainScreen extends Component {
                 }
 
               </View>
+               {this.renderSearchOptions()}
             </LinearGradient>
           </Animated.View>
 
@@ -266,5 +308,56 @@ const styles = StyleSheet.create({
     fontSize: 32,
     marginTop: -4,
     marginLeft: 1,
+  },
+});
+
+const searchBarButtonStyles = StyleSheet.create({
+  container: {
+    width: '100%',
+    marginTop: 26,
+
+    paddingRight: 25,
+    paddingLeft: 25,
+  },
+  buttoncontainer: {
+    flexDirection: 'row',
+    width: '100%',
+    marginTop: 7,
+  },
+  nameButtonContainer: {
+    width: '47%',
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingRight: 10,
+    paddingBottom: 8,
+    paddingLeft: 10,
+    borderRadius: 99,
+  },
+  ingrButtonContainer: {
+    width: '47%',
+    alignItems: 'center',
+    right: 0,
+    position: 'absolute',
+    paddingTop: 8,
+    paddingRight: 10,
+    paddingBottom: 8,
+    paddingLeft: 10,
+    borderRadius: 99,
+  },
+  title: {
+    fontSize: 17,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#FFF',
+  },
+  textName: {
+    fontSize: 13,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+  },
+  textIngr: {
+    fontSize: 13,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
   },
 });
