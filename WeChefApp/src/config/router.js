@@ -45,7 +45,9 @@ const tabbarVisible = (navigation) => {
 
   let showTabbar = true;
   routes.forEach((route) => {
-    if (route.routeName === 'RecipeSingle') {
+    if (route.routeName === 'RecipeSingle'
+      || route.routeName === 'RecipePosting'
+    ) {
       showTabbar = false;
     }
   });
@@ -109,7 +111,7 @@ export const RecipeStack = createStackNavigator(
                         name: "square-edit-outline",
                         type:'material-community',
                         size: 26,
-                        color: '#3C3C3C'
+                        color: '#F56862'
                       }}
                       buttonStyle={{
                         backgroundColor: 'transparent'
@@ -305,7 +307,7 @@ export const SavedStack = createStackNavigator(
                         name: "square-edit-outline",
                         type:'material-community',
                         size: 26,
-                        color: '#3C3C3C'
+                        color: '#F56862'
                       }}
                       buttonStyle={{
                         backgroundColor: 'transparent'
@@ -576,7 +578,7 @@ export const ProfileStack = createStackNavigator(
                 name: "square-edit-outline",
                 type:'material-community',
                 size: 26,
-                color: '#3C3C3C'
+                color: '#F56862'
               }}
               buttonStyle={{
                 backgroundColor: 'transparent'
