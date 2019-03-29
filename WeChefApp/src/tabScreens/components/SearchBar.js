@@ -6,6 +6,9 @@ import {
   Animated,
 } from 'react-native';
 import { Searchbar as _Searchbar } from 'react-native-paper';
+import axios from 'axios';
+
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 
 const results = [
   {id: '1', name: 'Healthy Granola Bowl', difficultyRating: 4},
@@ -22,6 +25,7 @@ class SearchBar extends Component {
     this.state = {
       isFocused: false,
       firstQuery: '',
+      results: null,
     };
 
     this.searchSubmitEvent = this.searchSubmitEvent.bind(this);
@@ -33,8 +37,23 @@ class SearchBar extends Component {
 
     // TODO: when backend is done, use query to get actual results.
     this.props.callbackFromParent(false);
-    this.props.submitCallback(results);
+    this.searchInDB();
     this.focusedAnimation(false);
+  }
+
+  searchInDB = () => {
+    let requestURL = DB_PREFIX + 'recipe/search?keywords=' + this.state.firstQuery;
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        this.setState({ results: res.data });
+        this.props.submitCallback(this.state.results);
+
+      })
+      .catch(error => {
+        alert(error);
+      })
   }
 
   focusedAnimation(focused) {
