@@ -51,7 +51,7 @@ class RecipeCardOnList extends Component {
               type={'custom'}
               // ratingColor={'#F56862'}
               startingValue={this.props.item.difficulty}
-              ratingCount={this.props.item.difficulty}
+              //ratingCount={this.props.item.difficulty}
               style={styles.rating}
             />
           </View>
