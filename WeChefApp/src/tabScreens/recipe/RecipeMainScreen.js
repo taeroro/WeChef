@@ -122,7 +122,7 @@ class RecipeMainScreen extends Component {
   }
 
   searchBarShowAllCallback = () => {
-    this.setState({ displayData: data });
+    this.fetchRecipes();
   }
 
   renderCancelButton() {
