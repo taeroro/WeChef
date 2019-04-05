@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView, Image} from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { TextInput, StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView, Image} from 'react-native';
+//mport { TextInput } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import FBSDK from 'react-native-fbsdk';
@@ -101,7 +101,7 @@ class PostNewReviewScreen extends Component {
           <Text style = {styles.questionText}> Comment </Text>
 
           <TextInput
-            label = 'What do you think of this recipe?'
+            placeholder = 'What do you think of this recipe?'
             value = {this.state.comment}
             onChangeText= {comment => this.setState({comment})}
             multiline
