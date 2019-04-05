@@ -42,6 +42,8 @@ class SearchBar extends Component {
   }
 
   searchInDB = () => {
+    console.log('searchInDB');
+    console.log(this.state.firstQuery);
     let requestURL = DB_PREFIX + 'recipe/search?keywords=' + this.state.firstQuery;
 
     axios.get(requestURL)
