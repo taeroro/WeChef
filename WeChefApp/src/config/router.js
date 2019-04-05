@@ -24,6 +24,8 @@ import RecipeEditScreen from './../tabScreens/recipe/RecipeEditScreen';
 import QandAScreen from './../tabScreens/recipe/QandAScreen';
 import PostNewQuestionScreen from './../tabScreens/recipe/PostNewQuestionScreen';
 import AnswerAQuestionScreen from './../tabScreens/recipe/AnswerAQuestionScreen';
+import ReviewsScreen from './../tabScreens/recipe/ReviewsScreen';
+import PostNewReviewScreen from './../tabScreens/recipe/PostNewReviewScreen';
 import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
 import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
@@ -236,6 +238,38 @@ export const RecipeStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     },
+    Reviews: {
+      screen: ReviewsScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    PostNewReview: {
+      screen: PostNewReviewScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
   },
   {
     headerMode: "screen",
@@ -248,6 +282,7 @@ export const RecipeStack = createStackNavigator(
        if (props.scene.route.routeName === 'IngAndDir'
           // || props.scene.route.routeName === 'QandA'
           || props.scene.route.routeName === 'PostNewQuestion'
+          || props.scene.route.routeName === 'PostNewReview'
         ) {
 
          // forVertical makes the scene transition for Top to Bottom
@@ -260,6 +295,7 @@ export const RecipeStack = createStackNavigator(
        if (last.route.routeName === 'IngAndDir'
           // || last.route.routeName === 'QandA'
           || last.route.routeName === 'PostNewQuestion'
+          || last.route.routeName === 'PostNewReview'
         ) {
 
          // Here, forVertical flows from Top to Bottom
@@ -420,6 +456,38 @@ export const SavedStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     },
+    Reviews: {
+      screen: ReviewsScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    PostNewReview: {
+      screen: PostNewReviewScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
   },
   {
     headerMode: "screen",
@@ -432,6 +500,7 @@ export const SavedStack = createStackNavigator(
        if (props.scene.route.routeName === 'IngAndDir'
           // || props.scene.route.routeName === 'QandA'
           || props.scene.route.routeName === 'PostNewQuestion'
+          || props.scene.route.routeName === 'PostNewReview'
         ) {
 
          // forVertical makes the scene transition for Top to Bottom
@@ -444,6 +513,7 @@ export const SavedStack = createStackNavigator(
        if (last.route.routeName === 'IngAndDir'
           // || last.route.routeName === 'QandA'
           || last.route.routeName === 'PostNewQuestion'
+          || last.route.routeName === 'PostNewReview'
         ) {
 
          // Here, forVertical flows from Top to Bottom
@@ -687,6 +757,38 @@ export const ProfileStack = createStackNavigator(
         headerTintColor: '#3C3C3C',
       }),
     },
+    Reviews: {
+      screen: ReviewsScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    PostNewReview: {
+      screen: PostNewReviewScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
   },
   {
     headerMode: "screen",
@@ -699,6 +801,7 @@ export const ProfileStack = createStackNavigator(
        if (props.scene.route.routeName === 'IngAndDir'
           // || props.scene.route.routeName === 'QandA'
           || props.scene.route.routeName === 'PostNewQuestion'
+          || props.scene.route.routeName === 'PostNewReview'
         ) {
 
          // forVertical makes the scene transition for Top to Bottom
@@ -711,6 +814,7 @@ export const ProfileStack = createStackNavigator(
        if (last.route.routeName === 'IngAndDir'
           // || last.route.routeName === 'QandA'
           || last.route.routeName === 'PostNewQuestion'
+          || last.route.routeName === 'PostNewReview'
         ) {
 
          // Here, forVertical flows from Top to Bottom

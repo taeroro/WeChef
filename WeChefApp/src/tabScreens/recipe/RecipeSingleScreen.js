@@ -207,7 +207,7 @@ class RecipeSingleScreen extends Component {
               this.props.navigation.navigate('PostNewQuestion', {recipeID: recipeObj._id, onNavigateBack: this.handleNavigateBackQnA});
             }}
           >
-            <Text style={recipeStyles.addQText}>Post A New Question</Text>
+            <Text style={recipeStyles.addQText}>Post a Question</Text>
           </TouchableOpacity>
         </View>
 
@@ -234,13 +234,25 @@ class RecipeSingleScreen extends Component {
     );
   }
 
+  // Reviews
   renderRecipeSection3() {
     const tempComment = "I tried out this recipe and it is super delicious!";
     const tempUserName = "Ryan Fan";
 
     return (
       <View style={recipeStyles.section3Container}>
-        <Text style={recipeStyles.qnaText}>Reviews</Text>
+        <View style={recipeStyles.qnaFirstLine}>
+          <Text style={recipeStyles.qnaText}>Reviews</Text>
+
+          <TouchableOpacity
+            style={recipeStyles.addQContainer}
+            onPress={() => {
+              this.props.navigation.navigate('PostNewReview');
+            }}
+          >
+            <Text style={recipeStyles.addQText}>Post a Review</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={recipeStyles.qnaSingleContainer}>
           <Text style={recipeStyles.reviewsUserNameText}>
@@ -253,8 +265,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.moreQnaButtonContainer}
             onPress={() => {
-              console.log("more reviews");
-
+              this.props.navigation.navigate('Reviews');
             }}
           >
             <Text style={recipeStyles.moreQnaText}>Read All Reviews</Text>
