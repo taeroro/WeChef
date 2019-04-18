@@ -387,4 +387,78 @@ recipeRouter.post('/review/create/:recipeID', ImageUpload.reviewImageUpload, (re
     });
 })
 
+// Get the latest review of a recipe
+recipeRouter.get('/review/first/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    Review.find({reviewRecipeIDs: recipeID}, {}, {sort: { createdAt: -1 }, limit: 1}, (err, review) => {
+      if (err){
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (review) {
+          res.status(200).send(review);
+      } else {
+          return res.status(404).send({
+              message: 'No review for the given recipe id.',
+          });
+      }
+    });
+});
+
+// Get reviews of a recipe
+recipeRouter.get('/review/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    Review.find({reviewRecipeIDs: recipeID}, {}, {sort: { createdAt: -1 }}, (err, reviews) => {
+      if (err){
+          console.log(err);
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (reviews) {
+          res.status(200).send(reviews);
+      } else {
+          return res.status(404).send({
+              message: 'No reviews for the given recipe id.',
+          });
+      }
+    });
+});
+
+// get my shopping list recipes
+recipeRouter.get('/:facebookID/shoppinglist', (req, res, err) => {
+    User.findOne({ facebookID: req.params.facebookID }, (err, user) => {
+      const shoppingListRecipeIDs = user.shoppingListRecipeIDs;
+      Recipe.find({ _id: {$in: shoppingListRecipeIDs} }, (err, recipes) => {
+        if (err){
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (recipes) {
+            res.status(200).send(recipes);
+        } else {
+            return res.status(404).send({
+                message: 'No recipes can be found.',
+            });
+        }
+      })
+    })
+});
+
 module.exports = recipeRouter;
