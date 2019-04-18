@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextInput, StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView, Image} from 'react-native';
+import { Alert, TextInput, StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView, Image} from 'react-native';
 //mport { TextInput } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
@@ -44,8 +44,16 @@ class PostNewReviewScreen extends Component {
   }
 
   handleSubmit = () => {
-    console.log(this.state);
 
+    if (this.state.imageSource === image) {
+      Alert.alert(
+        'Please upload a picture',
+        'Upload picture before submission',
+        [{test:'OK', }]
+      );
+      return;
+    }
+    console.log(this.state);
   }
 
   changeImage = () => {
