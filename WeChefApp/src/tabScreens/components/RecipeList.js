@@ -30,7 +30,7 @@ class RecipeList extends Component {
         ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No Recipe To Display...</Text>
-            <Text style={styles.pullText}>Pull Down To Refresh</Text>
+            {/* <Text style={styles.pullText}>Pull Down To Refresh</Text> */}
           </View>
         )
         : (
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     color: '#3C3C3C',
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   pullText: {
     fontSize: 14,

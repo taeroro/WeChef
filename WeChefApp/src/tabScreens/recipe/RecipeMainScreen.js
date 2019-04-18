@@ -43,6 +43,7 @@ class RecipeMainScreen extends Component {
       displayData: null,
       refreshing: false,
       searchBy: 'name',
+      isInSearch: false,
     };
 
     this.searchBarExpand = this.searchBarExpand.bind(this);
@@ -62,7 +63,12 @@ class RecipeMainScreen extends Component {
 
   _onRefresh = () => {
     this.setState({refreshing: true});
-    this.fetchRecipes();
+    if (this.state.isInSearch) {
+      this.refs.childrenSearchBarRef.searchInDB();
+      this.setState({refreshing: false});
+    } else {
+      this.fetchRecipes();
+    }
   }
 
 
@@ -119,9 +125,11 @@ class RecipeMainScreen extends Component {
 
   searchBarSubmitCallback = results => {
     this.setState({ displayData: results });
+    this.setState({ isInSearch: true });
   }
 
   searchBarShowAllCallback = () => {
+    this.setState({ isInSearch: false });
     this.fetchRecipes();
   }
 
