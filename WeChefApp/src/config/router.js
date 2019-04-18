@@ -532,7 +532,8 @@ export const ListStack = createStackNavigator(
     ListMain: {
       screen: ListMainScreen,
       navigationOptions: () => ({
-        // headerBackTitle: strings('header_back_title.toolbox'),
+        header: null,
+        headerBackTitle: null,
       }),
     },
   }
