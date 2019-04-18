@@ -31,7 +31,9 @@ class RecipeSingleScreen extends Component {
       recipeObj: null,
       isRecipeSaved: false,
       firstQandA: null,
+      firstReview: null,
       currentUser: null,
+      isRecipeAddedToCart: false,
     };
   }
 
@@ -42,7 +44,9 @@ class RecipeSingleScreen extends Component {
 
     this.fetchOneRecipes();
     this.fetchFirstQandA();
+    this.fetchFirstReview();
     this.fetchSavedStatus();
+    this.fetchAddToListStatus();
 
     this.props.navigation.setParams({ onNavigateBack: this.handleNavigateBackEdit });
 
@@ -58,6 +62,10 @@ class RecipeSingleScreen extends Component {
 
   handleNavigateBackEdit = () => {
     this.fetchOneRecipes();
+  }
+
+  handleNavigateBackReview = () => {
+    this.fetchFirstReview();
   }
 
   fetchOneRecipes = () => {
@@ -90,6 +98,21 @@ class RecipeSingleScreen extends Component {
       })
   }
 
+  fetchFirstReview = () => {
+    console.log('fetchFirstReview');
+    let requestURL = DB_PREFIX + 'recipe/review/first/' + this.state.recipeID;
+
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        let latestReview = res.data;
+        this.setState({firstReview: latestReview});
+      })
+      .catch(error => {
+        alert(error);
+      });
+  }
+
   addOrRemoveFavourite = (isSaved) => {
     var requestURL = null;
     if (isSaved) {
@@ -107,7 +130,11 @@ class RecipeSingleScreen extends Component {
 
   }
 
-  // TODO
+  addOrRemoveFromCart = (isAdded) => {
+    // TODO: connect to backend
+
+  }
+
   fetchSavedStatus = () => {
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
@@ -127,6 +154,7 @@ class RecipeSingleScreen extends Component {
           // fetch the inital saved status of this recipe
           this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
           this.props.navigation.setParams({ favouriteFun: this.addOrRemoveFavourite });
+
         })
         .catch(error => {
           alert(error);
@@ -134,10 +162,17 @@ class RecipeSingleScreen extends Component {
     });
   }
 
+
+  // TODO
+  fetchAddToListStatus = () => {
+
+    this.props.navigation.setParams({ addedToList: this.state.isRecipeAddedToCart });
+    this.props.navigation.setParams({ addToCartFun: this.addOrRemoveFromCart });
+
+  }
+
   // Recipe image, name, rating
   renderRecipeSection1() {
-
-    const tempName = "delicious blueberry and orange pancakes with organic maple syrup";
 
     const {recipeObj} = this.state;
 
@@ -183,8 +218,6 @@ class RecipeSingleScreen extends Component {
 
   // Q & A
   renderRecipeSection2() {
-    const tempQuestion = "Should I use large free-range organic eggs or just normal eggs?";
-    const tempAnswer = "Large top-shelf free-range organic eggs are recommended for the best result";
 
     const {recipeObj, firstQandA} = this.state;
 
@@ -239,6 +272,15 @@ class RecipeSingleScreen extends Component {
     const tempComment = "I tried out this recipe and it is super delicious!";
     const tempUserName = "Ryan Fan";
 
+    const {recipeObj, firstReview} = this.state;
+    if (!recipeObj || !firstReview) {
+      return (
+        <View style={styles.loadingContainer}>
+          <SingleColorSpinner strokeColor="#F56862" />
+        </View>
+      );
+    }
+
     return (
       <View style={recipeStyles.section3Container}>
         <View style={recipeStyles.qnaFirstLine}>
@@ -247,19 +289,20 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.addQContainer}
             onPress={() => {
-              this.props.navigation.navigate('PostNewReview');
+              this.props.navigation.navigate('PostNewReview', {recipeID: recipeObj._id, onNavigateBack: this.handleNavigateBackReview});
             }}
           >
             <Text style={recipeStyles.addQText}>Post a Review</Text>
           </TouchableOpacity>
         </View>
 
-        <View style={recipeStyles.qnaSingleContainer}>
+        {(firstReview.length) ? (
+          <View style={recipeStyles.qnaSingleContainer}>
           <Text style={recipeStyles.reviewsUserNameText}>
             {tempUserName}:
           </Text>
           <Text style={recipeStyles.qnaContentText}>
-            {tempComment}
+            {firstReview[0].content}
           </Text>
 
           <TouchableOpacity
@@ -271,6 +314,7 @@ class RecipeSingleScreen extends Component {
             <Text style={recipeStyles.moreQnaText}>Read All Reviews</Text>
           </TouchableOpacity>
         </View>
+        ) : null}
       </View>
     );
   }
