@@ -33,6 +33,7 @@ class RecipeSingleScreen extends Component {
       firstQandA: null,
       firstReview: null,
       currentUser: null,
+      isRecipeAddedToCart: false,
     };
   }
 
@@ -45,6 +46,7 @@ class RecipeSingleScreen extends Component {
     this.fetchFirstQandA();
     this.fetchFirstReview();
     this.fetchSavedStatus();
+    this.fetchAddToListStatus();
 
     this.props.navigation.setParams({ onNavigateBack: this.handleNavigateBackEdit });
 
@@ -128,7 +130,11 @@ class RecipeSingleScreen extends Component {
 
   }
 
-  // TODO
+  addOrRemoveFromCart = (isAdded) => {
+    // TODO: connect to backend
+
+  }
+
   fetchSavedStatus = () => {
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
@@ -148,11 +154,21 @@ class RecipeSingleScreen extends Component {
           // fetch the inital saved status of this recipe
           this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
           this.props.navigation.setParams({ favouriteFun: this.addOrRemoveFavourite });
+
         })
         .catch(error => {
           alert(error);
         });
     });
+  }
+
+
+  // TODO
+  fetchAddToListStatus = () => {
+
+    this.props.navigation.setParams({ addedToList: this.state.isRecipeAddedToCart });
+    this.props.navigation.setParams({ addToCartFun: this.addOrRemoveFromCart });
+
   }
 
   // Recipe image, name, rating
