@@ -440,4 +440,25 @@ recipeRouter.get('/review/:recipeID', (req, res, err) => {
     });
 });
 
+// get my shopping list recipes
+recipeRouter.get('/:facebookID/shoppinglist', (req, res, err) => {
+    User.findOne({ facebookID: req.params.facebookID }, (err, user) => {
+      const shoppingListRecipeIDs = user.shoppingListRecipeIDs;
+      Recipe.find({ _id: {$in: shoppingListRecipeIDs} }, (err, recipes) => {
+        if (err){
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (recipes) {
+            res.status(200).send(recipes);
+        } else {
+            return res.status(404).send({
+                message: 'No recipes can be found.',
+            });
+        }
+      })
+    })
+});
+
 module.exports = recipeRouter;
