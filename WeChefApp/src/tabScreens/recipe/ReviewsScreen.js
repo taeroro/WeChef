@@ -32,7 +32,6 @@ class ReviewsScreen extends Component {
   }
 
   fetchAllReviews = () => {
-    console.log('fetchAllReviews()');
     let requestURL = DB_PREFIX + 'recipe/review/' + this.state.recipeID;
 
     axios.get(requestURL)
@@ -66,7 +65,12 @@ class ReviewsScreen extends Component {
                       style={styles.reviewImage}
                       source={{uri: review.reviewImageURL}}
                     />
-
+                    <Text style = {styles.qnaContentText}>
+                      Authored by:
+                    </Text>
+                    <Text style = {styles.commentContentText}>
+                      {review.reviewOwnerName}
+                    </Text>
                     <Text style = {styles.ratingText}>
                       Rating:
                     </Text>
