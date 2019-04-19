@@ -314,7 +314,7 @@ class RecipeSingleScreen extends Component {
         {(firstReview.length) ? (
           <View style={recipeStyles.qnaSingleContainer}>
           <Text style={recipeStyles.reviewsUserNameText}>
-            {tempUserName}:
+            {firstReview[0].reviewOwnerName}:
           </Text>
           <Text style={recipeStyles.qnaContentText}>
             {firstReview[0].content}
