@@ -25,6 +25,9 @@ module.exports = mongoose.model('Review', new Schema({
         type: String,
         required: true,
     },
+    reviewOwnerName: {
+        type: String,
+    },
     quality: {
         type: Number,
     },
