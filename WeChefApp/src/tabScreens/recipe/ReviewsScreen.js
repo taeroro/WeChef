@@ -3,24 +3,18 @@ import { StyleSheet, View, Text, StatusBar, ScrollView, Dimensions, Image, } fro
 import axios from 'axios';
 import { AirbnbRating } from 'react-native-elements';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
-import FBSDK from 'react-native-fbsdk';
 
 const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 const sectionSize = Dimensions.get('window').width - 40;
 
 const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
-const tempReview = [
-  {rating: 5, comment: 'good', imageSource: image}, 
-  {rating: 3, comment: 'its okay.. i followed all the steps but i cannot make it look as pretty as yours', imageSource: image}, 
-  {rating: 4, comment: 'good', imageSource: image}, 
-  {rating: 4, comment: 'good', imageSource: image}, 
-];
 
 class ReviewsScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      recipeID: this.props.navigation.state.params.recipeID,
       allReviews: null,
     };
   }
@@ -38,9 +32,17 @@ class ReviewsScreen extends Component {
   }
 
   fetchAllReviews = () => {
-    this.setState({allReviews: tempReview});
+    console.log('fetchAllReviews()');
+    let requestURL = DB_PREFIX + 'recipe/review/' + this.state.recipeID;
 
-    // TODO: load data to this.state.allReviews
+    axios.get(requestURL)
+      .then(res => {
+        console.log(res);
+        this.setState({ allReviews: res.data });
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 
   render() {
@@ -57,15 +59,13 @@ class ReviewsScreen extends Component {
             <View>
               {this.state.allReviews.map((review, idx) => (
                 <View key={idx} >
-                
+
                   <View style={styles.qnaContainer}>
-                    {review.imageSource != null ? 
-                      <Image
-                        resizeMode={"cover"}
-                        style={styles.reviewImage}
-                        source={{uri: review.imageSource}}
-                      /> : null
-                    }
+                    <Image
+                      resizeMode={"cover"}
+                      style={styles.reviewImage}
+                      source={{uri: review.reviewImageURL}}
+                    />
 
                     <Text style = {styles.ratingText}>
                       Rating:
@@ -73,16 +73,16 @@ class ReviewsScreen extends Component {
                     <AirbnbRating
                       reviews = {[]}
                       count={5}
-                      defaultRating={review.rating}
+                      defaultRating={review.quality}
                       size={20}
                       isDisabled='true'
                     />
 
                     <Text style = {styles.qnaContentText}>
-                      Comment: 
+                      Comment:
                     </Text>
                     <Text style = {styles.commentContentText}>
-                      {review.comment}
+                      {review.content}
                     </Text>
 
 

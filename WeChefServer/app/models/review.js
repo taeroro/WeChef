@@ -28,4 +28,6 @@ module.exports = mongoose.model('Review', new Schema({
     quality: {
         type: Number,
     },
+}, {
+  timestamps: { createdAt: true, updatedAt: true }
 }));

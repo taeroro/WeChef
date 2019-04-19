@@ -99,7 +99,6 @@ class RecipeSingleScreen extends Component {
   }
 
   fetchFirstReview = () => {
-    console.log('fetchFirstReview');
     let requestURL = DB_PREFIX + 'recipe/review/first/' + this.state.recipeID;
 
     axios.get(requestURL)
@@ -308,7 +307,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.moreQnaButtonContainer}
             onPress={() => {
-              this.props.navigation.navigate('Reviews');
+              this.props.navigation.navigate('Reviews', {recipeID: recipeObj._id});
             }}
           >
             <Text style={recipeStyles.moreQnaText}>Read All Reviews</Text>
