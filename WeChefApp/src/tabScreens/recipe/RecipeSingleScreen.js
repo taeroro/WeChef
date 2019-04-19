@@ -45,8 +45,7 @@ class RecipeSingleScreen extends Component {
     this.fetchOneRecipes();
     this.fetchFirstQandA();
     this.fetchFirstReview();
-    this.fetchSavedStatus();
-    this.fetchAddToListStatus();
+    this.fetchStatus();
 
     this.props.navigation.setParams({ onNavigateBack: this.handleNavigateBackEdit });
 
@@ -99,7 +98,6 @@ class RecipeSingleScreen extends Component {
   }
 
   fetchFirstReview = () => {
-    console.log('fetchFirstReview');
     let requestURL = DB_PREFIX + 'recipe/review/first/' + this.state.recipeID;
 
     axios.get(requestURL)
@@ -130,12 +128,35 @@ class RecipeSingleScreen extends Component {
 
   }
 
-  addOrRemoveFromCart = (isAdded) => {
-    // TODO: connect to backend
+  addOrRemoveFromCart = (isInCart) => {
+    var requestURL = DB_PREFIX;
+    let currentUserID = this.state.currentUser;
+    if (isInCart) {
+      requestURL = requestURL + 'user/remove-list/' + currentUserID;
+    } else {
+      requestURL = requestURL + 'user/add-list/' + currentUserID;
+    }
 
+    axios.put(requestURL, { recipeID: this.state.recipeID })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(error => {
+        alert(error);
+      });
   }
 
-  fetchSavedStatus = () => {
+  fetchSavedAndCartStatus = () => {
+    this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
+    this.props.navigation.setParams({ addedToList: this.state.isRecipeAddedToCart });
+  }
+
+  setSaveAndCartFunction = () => {
+    this.props.navigation.setParams({ favouriteFun: this.addOrRemoveFavourite });
+    this.props.navigation.setParams({ addToCartFun: this.addOrRemoveFromCart });
+  }
+
+  fetchStatus = () => {
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
         currentUser: data.userID
@@ -148,27 +169,21 @@ class RecipeSingleScreen extends Component {
       axios.get(requestURL)
         .then(res => {
           const userInfo = res.data;
-          if (userInfo.favoriteRecipeIDs.includes(this.state.recipeID)) {
+          const currentRecipeID = this.state.recipeID;
+          if (userInfo.favoriteRecipeIDs.includes(currentRecipeID)) {
             this.setState({ isRecipeSaved: true });
           }
-          // fetch the inital saved status of this recipe
-          this.props.navigation.setParams({ saved: this.state.isRecipeSaved });
-          this.props.navigation.setParams({ favouriteFun: this.addOrRemoveFavourite });
+          if (userInfo.shoppingListRecipeIDs.includes(currentRecipeID)) {
+            this.setState({ isRecipeAddedToCart: true });
+          }
 
+          this.fetchSavedAndCartStatus();
+          this.setSaveAndCartFunction();
         })
         .catch(error => {
           alert(error);
         });
     });
-  }
-
-
-  // TODO
-  fetchAddToListStatus = () => {
-
-    this.props.navigation.setParams({ addedToList: this.state.isRecipeAddedToCart });
-    this.props.navigation.setParams({ addToCartFun: this.addOrRemoveFromCart });
-
   }
 
   // Recipe image, name, rating
@@ -308,7 +323,7 @@ class RecipeSingleScreen extends Component {
           <TouchableOpacity
             style={recipeStyles.moreQnaButtonContainer}
             onPress={() => {
-              this.props.navigation.navigate('Reviews');
+              this.props.navigation.navigate('Reviews', {recipeID: recipeObj._id});
             }}
           >
             <Text style={recipeStyles.moreQnaText}>Read All Reviews</Text>

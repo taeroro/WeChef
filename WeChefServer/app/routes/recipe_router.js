@@ -355,36 +355,39 @@ recipeRouter.put('/qa/answer/:QnAID', (req, res, err) => {
 
 // Add a review to a recipe
 recipeRouter.post('/review/create/:recipeID', ImageUpload.reviewImageUpload, (req, res, err) => {
-    let new_review = new Review();
-    new_review.content = req.body.content;
-    new_review.reviewRecipeIDs = req.params.recipeID;
-    new_review.reviewOwnerID = req.body.reviewOwnerID;
-    new_review.quality = req.body.quality;
-    new_review.reviewImageURL = req.file.url;
-    new_review.reviewImageID = req.file.public_id;
+    User.findOne({ facebookID: req.body.reviewOwnerID }, (error, user) => {
+      let new_review = new Review();
+      new_review.content = req.body.content;
+      new_review.reviewRecipeIDs = req.params.recipeID;
+      new_review.reviewOwnerID = req.body.reviewOwnerID;
+      new_review.reviewOwnerName = user.userName;
+      new_review.quality = req.body.quality;
+      new_review.reviewImageURL = req.file.url;
+      new_review.reviewImageID = req.file.public_id;
 
-    new_review.save((err, review) => {
-      if (err) {
-        if (err.name === 'ValidationError') {
-            return res.status(422).send({
-                message: err.errors,
-            });
-        } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
-            return res.status(409).send({
-                message: 'This review has already been created.',
-            });
-        } else {
-            return res.status(500).send({
-                message: err,
-            });
+      new_review.save((err, review) => {
+        if (err) {
+          if (err.name === 'ValidationError') {
+              return res.status(422).send({
+                  message: err.errors,
+              });
+          } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+              return res.status(409).send({
+                  message: 'This review has already been created.',
+              });
+          } else {
+              return res.status(500).send({
+                  message: err,
+              });
+          }
         }
-      }
-      return res.status(201).send({
-          message: 'OK',
-          review: review,
-          review_image: new_review.reviewImageURL,
+        return res.status(201).send({
+            message: 'OK',
+            review: review,
+            review_image: new_review.reviewImageURL,
+        });
       });
-    });
+    })
 })
 
 // Get the latest review of a recipe
