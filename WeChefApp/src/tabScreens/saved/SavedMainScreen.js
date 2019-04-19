@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, StatusBar, ScrollView, RefreshControl } from 'r
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import FBSDK from 'react-native-fbsdk';
 import axios from 'axios';
+import { NavigationEvents } from "react-navigation";
 
 // components
 import RecipeList from '../components/RecipeList';
@@ -61,6 +62,9 @@ class SavedMainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onWillFocus={this.fetchSavedRecipes}
+        />
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Saved Recipes</Text>
         </View>
