@@ -14,12 +14,15 @@ import {
   MKCheckbox
 } from 'react-native-material-kit';
 
+var tempCheckValues = [];
+
 class ListMainScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       listData: null,
+      checkBoxChecked: [],
     };
   }
 
@@ -30,7 +33,7 @@ class ListMainScreen extends Component {
 
     tempData = [
       {
-        id: "0",
+        id: "a0",
         recipeName: "Buttermilk Pancakes",
         ingredients: [
           { name: "Eggs", quantity: "2" },
@@ -39,7 +42,7 @@ class ListMainScreen extends Component {
         ]
       },
       {
-        id: "1",
+        id: "a1",
         recipeName: "Lamb Burger",
         ingredients: [
           { name: "Lamb", quantity: "2 lbs" },
@@ -47,19 +50,47 @@ class ListMainScreen extends Component {
           { name: "Onion", quantity: "1" },
         ]
       },
-    ]
-    this.setState({ listData: tempData });
+    ];
+
+    // store data to this.state.listData and update checkbox array
+    this.setState({ listData: tempData }, () => {
+      let tempCheck = [];
+      this.state.listData.map((item, index) => {
+        tempCheck[index] = {id: item.id, checked: false};
+      });
+      this.setState({ checkBoxChecked: tempCheck });
+    });
   }
 
   componentWillUnmount() {
     this._navListener.remove();
   }
 
+  checkBoxChanged(id, value) {
+    this.setState({
+      checkBoxChecked: tempCheckValues
+    })
+
+    var tempCheckBoxChecked = this.state.checkBoxChecked;
+    tempCheckBoxChecked[id].checked = !value;
+
+    this.setState({
+      checkBoxChecked: tempCheckBoxChecked
+    });
+
+    console.log(JSON.stringify(this.state.checkBoxChecked));
+  }
+
   renderIngredients(recipe) {
-    console.log(recipe);
+    // this.checkBoxChanged(recipe.id, true);
+    let recipeIndex = this.state.checkBoxChecked.findIndex(obj => obj.id === recipe.id);
 
     return (
       <View style={styles.recipeContainer}>
+        <MKCheckbox
+          checked={recipeIndex !== -1 ? this.state.checkBoxChecked[recipeIndex].checked : false}
+          onCheckedChange={() => this.checkBoxChanged(recipeIndex, this.state.checkBoxChecked[recipeIndex].checked)}
+        />
         <Text>{recipe.recipeName}</Text>
 
         <FlatList
