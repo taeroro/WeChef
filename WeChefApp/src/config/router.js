@@ -28,6 +28,7 @@ import ReviewsScreen from './../tabScreens/recipe/ReviewsScreen';
 import PostNewReviewScreen from './../tabScreens/recipe/PostNewReviewScreen';
 import IngredientsScreen from './../tabScreens/recipe/topTabBar/IngredientsScreen';
 import DirectionsScreen from './../tabScreens/recipe/topTabBar/DirectionsScreen';
+import AuthorScreen from './../tabScreens/recipe/AuthorScreen';
 import SavedMainScreen from './../tabScreens/saved/SavedMainScreen';
 import ListMainScreen from './../tabScreens/list/ListMainScreen';
 import ToolsMainScreen from './../tabScreens/tools/ToolsMainScreen';
@@ -287,6 +288,22 @@ export const RecipeStack = createStackNavigator(
         },
       }),
     },
+    Author: {
+      screen: AuthorScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
   },
   {
     headerMode: "screen",
@@ -522,6 +539,22 @@ export const SavedStack = createStackNavigator(
         },
       }),
     },
+    Author: {
+      screen: AuthorScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
   },
   {
     headerMode: "screen",
@@ -566,7 +599,8 @@ export const ListStack = createStackNavigator(
     ListMain: {
       screen: ListMainScreen,
       navigationOptions: () => ({
-        // headerBackTitle: strings('header_back_title.toolbox'),
+        header: null,
+        headerBackTitle: null,
       }),
     },
   }
@@ -826,6 +860,22 @@ export const ProfileStack = createStackNavigator(
     },
     PostNewReview: {
       screen: PostNewReviewScreen,
+      navigationOptions: () => ({
+        headerStyle: {
+          backgroundColor: '#fff',
+          marginHorizontal: 10,
+          marginVertical: 5,
+          borderBottomWidth: 0,
+        },
+        headerTintColor: '#3C3C3C',
+        // headerBackImage: <Image source={require('./../../assets/img/icons8-multiply.png')} />,
+        headerBackTitleStyle: {
+          color: '#fff'
+        },
+      }),
+    },
+    Author: {
+      screen: AuthorScreen,
       navigationOptions: () => ({
         headerStyle: {
           backgroundColor: '#fff',
