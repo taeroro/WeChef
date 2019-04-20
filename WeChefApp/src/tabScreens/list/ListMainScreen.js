@@ -6,8 +6,10 @@ import {
   StatusBar,
   FlatList,
   SectionList,
+  Animated,
+  TouchableOpacity,
 } from 'react-native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper';
 import {
   MKColor,
   setTheme,
@@ -20,9 +22,13 @@ class ListMainScreen extends Component {
   constructor(props) {
     super(props);
 
+    this.animatedValue = new Animated.Value(0);
+
     this.state = {
       listData: null,
       checkBoxChecked: [],
+      displayPopup: false,
+      isSelectAll: false,
     };
   }
 
@@ -76,38 +82,100 @@ class ListMainScreen extends Component {
 
     this.setState({
       checkBoxChecked: tempCheckBoxChecked
+    }, () => {
+      // check if popup should display or not
+      let trueIndex = this.state.checkBoxChecked.findIndex(obj => obj.checked === true);
+      if (trueIndex === -1) {
+        this.setState({ displayPopup: false });
+        this.animatedValue.setValue(1);
+        Animated.timing(
+          this.animatedValue,
+          {
+            toValue: 0,
+            duration: 100,
+          }
+        ).start();
+      }
+      else if (trueIndex !== -1 && this.state.displayPopup === false) {
+        this.setState({ displayPopup: true });
+        this.animatedValue.setValue(0);
+        Animated.timing(
+          this.animatedValue,
+          {
+            toValue: 1,
+            duration: 100,
+          }
+        ).start();
+      }
+
     });
 
     console.log(JSON.stringify(this.state.checkBoxChecked));
   }
 
+  selectAll() {
+    this.setState({isSelectAll: !this.state.isSelectAll}, () => {
+      console.log(this.state.isSelectAll)
+    });
+
+    let tempCheck = [];
+    this.state.listData.map((item, index) => {
+      tempCheck[index] = {id: item.id, checked: true};
+    });
+    this.setState({ checkBoxChecked: tempCheck });
+  }
+
+  unselectAll() {
+    this.setState({isSelectAll: !this.state.isSelectAll}, () => {
+      console.log(this.state.isSelectAll)
+    });
+
+    let tempCheck = [];
+    this.state.listData.map((item, index) => {
+      tempCheck[index] = {id: item.id, checked: false};
+    });
+    this.setState({ checkBoxChecked: tempCheck });
+
+    // hide button bar
+    this.setState({ displayPopup: false });
+    this.animatedValue.setValue(1);
+    Animated.timing(
+      this.animatedValue,
+      {
+        toValue: 0,
+        duration: 100,
+      }
+    ).start();
+  }
+
   renderIngredients(recipe) {
-    // this.checkBoxChanged(recipe.id, true);
     let recipeIndex = this.state.checkBoxChecked.findIndex(obj => obj.id === recipe.id);
 
-    return (
-      <View style={styles.recipeContainer}>
-        <MKCheckbox
-          checked={recipeIndex !== -1 ? this.state.checkBoxChecked[recipeIndex].checked : false}
-          onCheckedChange={() => this.checkBoxChanged(recipeIndex, this.state.checkBoxChecked[recipeIndex].checked)}
-        />
-        <Text>{recipe.recipeName}</Text>
+    if (recipeIndex !== -1) {
+      return (
+        <View style={styles.recipeContainer}>
+          <MKCheckbox
+            checked={this.state.checkBoxChecked[recipeIndex].checked}
+            onCheckedChange={() => this.checkBoxChanged(recipeIndex, this.state.checkBoxChecked[recipeIndex].checked)}
+          />
+          <Text>{recipe.recipeName}</Text>
 
-        <FlatList
-          data={recipe.ingredients}
-          renderItem={({item}) => (
-            <View style={styles.singleIngredient}>
-              <Text>{item.name}</Text>
-              <Text>{item.quantity}</Text>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={1}
-          // contentContainerStyle={styles.listContentStyle}
-        />
+          <FlatList
+            data={recipe.ingredients}
+            renderItem={({item}) => (
+              <View style={styles.singleIngredient}>
+                <Text>{item.name}</Text>
+                <Text>{item.quantity}</Text>
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={1}
+            // contentContainerStyle={styles.listContentStyle}
+          />
 
-      </View>
-    );
+        </View>
+      );
+    }
   }
 
   renderShoppingList() {
@@ -117,6 +185,7 @@ class ListMainScreen extends Component {
         renderItem={({item}) => (
           this.renderIngredients(item)
         )}
+        extraData={this.state}
         keyExtractor={item => item.id}
         numColumns={1}
         contentContainerStyle={styles.listContentStyle}
@@ -124,9 +193,54 @@ class ListMainScreen extends Component {
     );
   }
 
+  renderButtonPopupView() {
+    // const startY = getStatusBarHeight() + 40 + 45;
+    const startY = 49;
+    const animatedY = this.animatedValue.interpolate({
+      inputRange: [0, 1],
+      outputRange: [startY, 0]
+    });
+
+    return (
+      <Animated.View style={[buttonPopupStyle.container, {
+         transform: [{ translateY: animatedY }]
+      }]}>
+
+      <View style={buttonPopupStyle.selectAllBt}>
+        <TouchableOpacity
+          style={buttonPopupStyle.touchable}
+          onPress={() => {
+            if (this.state.isSelectAll === false) {
+              this.selectAll();
+            }
+            else {
+              this.unselectAll();
+            }
+        }}>
+          <Text style={buttonPopupStyle.buttonText}>
+            {this.state.isSelectAll === true
+              ? "UNSELECT ALL"
+              : "SELECT ALL"
+            }
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={buttonPopupStyle.deleteBt}>
+        <Text style={buttonPopupStyle.buttonText}>
+          DELETE
+        </Text>
+      </View>
+
+      </Animated.View>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        {this.renderButtonPopupView()}
+
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Shopping List</Text>
         </View>
@@ -160,6 +274,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   contentContainer: {
+    // zIndex: 7,
     flex: 1,
   },
   listContentStyle: {
@@ -175,4 +290,40 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: 'rgba(255, 0, 0, 0.2)'
   },
+});
+const buttonPopupStyle = StyleSheet.create({
+  container: {
+    // height: getStatusBarHeight() + 40 + 45,
+    zIndex: 5,
+    height: 49,
+    bottom: 0,
+    width: "100%",
+    position: "absolute",
+    flexDirection: 'row',
+  },
+  selectAllBt: {
+    width: '50%',
+    backgroundColor: '#3c3c3c',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteBt: {
+    width: '50%',
+    backgroundColor: '#F93822',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    textTransform: 'uppercase',
+    color: '#FFF',
+    fontSize: 15,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+  },
+  touchable: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
