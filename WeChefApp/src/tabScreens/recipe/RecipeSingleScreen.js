@@ -136,9 +136,6 @@ class RecipeSingleScreen extends Component {
 
   // Recipe image, name, rating
   renderRecipeSection1() {
-
-    const tempName = "delicious blueberry and orange pancakes with organic maple syrup";
-
     const {recipeObj} = this.state;
 
     if (!recipeObj) {
@@ -175,6 +172,27 @@ class RecipeSingleScreen extends Component {
             ratingCount={5}
             style={styles.rating}
           />
+        </View>
+
+      </View>
+    );
+  }
+
+  // Author
+  renderRecipeSection1_5() {
+    const temp_image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
+    const temp_name = "Ryan Fan";
+
+    return (
+      <View style={authorStyles.section1_5Container}>
+        <Text style={authorStyles.authorText}>Posted by:</Text>
+
+        <View style={authorStyles.contentContainer}>
+          <Image
+            source={{uri: temp_image}}
+            style={authorStyles.profileImage}
+          />
+          <Text style={authorStyles.authorNameText}>{temp_name}</Text>
         </View>
 
       </View>
@@ -287,6 +305,8 @@ class RecipeSingleScreen extends Component {
           style={{width: "100%"}}
         >
           {this.renderRecipeSection1()}
+          {this.renderDivider()}
+          {this.renderRecipeSection1_5()}
           {this.renderDivider()}
           {this.renderRecipeSection2()}
           {this.renderDivider()}
@@ -510,6 +530,42 @@ const recipeStyles = StyleSheet.create({
     color: '#3C3C3C',
   },
 });
+
+const authorStyles = StyleSheet.create({
+  section1_5Container: {
+    marginRight: 20,
+    marginLeft: 20,
+    width: sectionSize,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  authorText: {
+    marginBottom: 3,
+    fontSize: 17,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    color: '#3C3C3C',
+  },
+  contentContainer: {
+    marginTop: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    marginRight: 15,
+    resizeMode: 'cover',
+  },
+  authorNameText: {
+    fontSize: 15,
+    fontFamily: 'Poppins',
+    fontWeight: '400',
+    color: '#3C3C3C',
+  },
+});
+
 const bottomBarstyles = StyleSheet.create({
   ingredientsButtonContainer: {
     width: '100%',

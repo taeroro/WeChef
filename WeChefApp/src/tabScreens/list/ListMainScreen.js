@@ -5,6 +5,7 @@ import {
   Text,
   StatusBar,
   FlatList,
+  SectionList,
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import {
@@ -29,6 +30,7 @@ class ListMainScreen extends Component {
 
     tempData = [
       {
+        id: "0",
         recipeName: "Buttermilk Pancakes",
         ingredients: [
           { name: "Eggs", quantity: "2" },
@@ -37,6 +39,7 @@ class ListMainScreen extends Component {
         ]
       },
       {
+        id: "1",
         recipeName: "Lamb Burger",
         ingredients: [
           { name: "Lamb", quantity: "2 lbs" },
@@ -52,16 +55,38 @@ class ListMainScreen extends Component {
     this._navListener.remove();
   }
 
+  renderIngredients(recipe) {
+    console.log(recipe);
+
+    return (
+      <View style={styles.recipeContainer}>
+        <Text>{recipe.recipeName}</Text>
+
+        <FlatList
+          data={recipe.ingredients}
+          renderItem={({item}) => (
+            <View style={styles.singleIngredient}>
+              <Text>{item.name}</Text>
+              <Text>{item.quantity}</Text>
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={1}
+          // contentContainerStyle={styles.listContentStyle}
+        />
+
+      </View>
+    );
+  }
+
   renderShoppingList() {
     return (
       <FlatList
         data={this.state.listData}
         renderItem={({item}) => (
-            <View style={styles.itemContainer}>
-              <Text>HI</Text>
-            </View>
+          this.renderIngredients(item)
         )}
-        keyExtractor={item => item._id}
+        keyExtractor={item => item.id}
         numColumns={1}
         contentContainerStyle={styles.listContentStyle}
       />
@@ -105,13 +130,18 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-
-    // backgroundColor: 'lightblue',
   },
   listContentStyle: {
     width: '100%',
-    paddingTop: 35 - 10,
-    paddingBottom: 35 - 10,
     justifyContent: 'center',
+
+    backgroundColor: 'lightblue',
+  },
+  recipeContainer: {
+
+  },
+  singleIngredient: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 0, 0, 0.2)'
   },
 });
