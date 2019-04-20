@@ -8,6 +8,7 @@ import {
   SectionList,
   Animated,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper';
 import {
@@ -50,6 +51,42 @@ class ListMainScreen extends Component {
       {
         id: "a1",
         recipeName: "Lamb Burger",
+        ingredients: [
+          { name: "Lamb", quantity: "2 lbs" },
+          { name: "Blue cheese", quantity: "2 cups" },
+          { name: "Onion", quantity: "1" },
+        ]
+      },
+      {
+        id: "a2",
+        recipeName: "AA",
+        ingredients: [
+          { name: "Eggs", quantity: "2" },
+          { name: "Buttermilk", quantity: "2 cups" },
+          { name: "Flour", quantity: "2 cups" },
+        ]
+      },
+      {
+        id: "a3",
+        recipeName: "BB",
+        ingredients: [
+          { name: "Lamb", quantity: "2 lbs" },
+          { name: "Blue cheese", quantity: "2 cups" },
+          { name: "Onion", quantity: "1" },
+        ]
+      },
+      {
+        id: "a4",
+        recipeName: "CC",
+        ingredients: [
+          { name: "Eggs", quantity: "2" },
+          { name: "Buttermilk", quantity: "2 cups" },
+          { name: "Flour", quantity: "2 cups" },
+        ]
+      },
+      {
+        id: "a5",
+        recipeName: "DD",
         ingredients: [
           { name: "Lamb", quantity: "2 lbs" },
           { name: "Blue cheese", quantity: "2 cups" },
@@ -148,6 +185,31 @@ class ListMainScreen extends Component {
     ).start();
   }
 
+  deleteItem() {
+    let tempCheck = this.state.checkBoxChecked;
+    let tempData = this.state.listData;
+    let toDelete = [];
+
+    for (let i = 0; i < tempCheck.length; i++) {
+      if (tempCheck[i].checked === true) {
+        toDelete.push(i);
+      }
+    }
+
+    console.log(toDelete);
+
+    for (let i = toDelete.length - 1; i >= 0; i--) {
+      console.log(toDelete[i]);
+      tempCheck.splice(toDelete[i], 1);
+      tempData.splice(toDelete[i], 1);
+    }
+
+    this.setState({ checkBoxChecked: tempCheck });
+    this.setState({ listData: tempData });
+
+    this.unselectAll();
+  }
+
   renderIngredients(recipe) {
     let recipeIndex = this.state.checkBoxChecked.findIndex(obj => obj.id === recipe.id);
 
@@ -188,7 +250,9 @@ class ListMainScreen extends Component {
         extraData={this.state}
         keyExtractor={item => item.id}
         numColumns={1}
-        contentContainerStyle={styles.listContentStyle}
+        contentContainerStyle={[styles.listContentStyle, {
+          paddingBottom: this.state.displayPopup === true ? 49 : 0,
+        }]}
       />
     );
   }
@@ -227,9 +291,29 @@ class ListMainScreen extends Component {
       </View>
 
       <View style={buttonPopupStyle.deleteBt}>
-        <Text style={buttonPopupStyle.buttonText}>
-          DELETE
-        </Text>
+        <TouchableOpacity
+          style={buttonPopupStyle.touchable}
+          onPress={() => {
+            Alert.alert(
+              'Are you sure you want to delete?',
+              'This action cannot be undone',
+              [
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                {text: 'Delete', onPress: () => {
+                  // deleting in local
+                  this.deleteItem();
+
+                  // TODO: delete connect to backend here
+
+                }, style: 'destructive'},
+              ],
+              { cancelable: false }
+            )
+        }}>
+          <Text style={buttonPopupStyle.buttonText}>
+            DELETE
+          </Text>
+        </TouchableOpacity>
       </View>
 
       </Animated.View>
@@ -239,8 +323,6 @@ class ListMainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {this.renderButtonPopupView()}
-
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Shopping List</Text>
         </View>
@@ -248,6 +330,8 @@ class ListMainScreen extends Component {
         <View style={styles.contentContainer}>
           {this.renderShoppingList()}
         </View>
+
+        {this.renderButtonPopupView()}
       </View>
     );
   }
