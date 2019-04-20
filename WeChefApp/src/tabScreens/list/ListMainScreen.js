@@ -9,6 +9,7 @@ import {
   Animated,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from 'react-native';
 import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper';
 import {
@@ -17,7 +18,15 @@ import {
   MKCheckbox
 } from 'react-native-material-kit';
 
+const deviceWidth = Dimensions.get('window').width;
 var tempCheckValues = [];
+
+setTheme({checkboxStyle: {
+  fillColor: "#F93822",
+  borderOnColor: "#F93822",
+  // rippleColor: `rgba(${MKColor.RGBTeal},.15)`,
+}});
+
 
 class ListMainScreen extends Component {
   constructor(props) {
@@ -215,19 +224,30 @@ class ListMainScreen extends Component {
 
     if (recipeIndex !== -1) {
       return (
-        <View style={styles.recipeContainer}>
-          <MKCheckbox
-            checked={this.state.checkBoxChecked[recipeIndex].checked}
-            onCheckedChange={() => this.checkBoxChanged(recipeIndex, this.state.checkBoxChecked[recipeIndex].checked)}
-          />
-          <Text>{recipe.recipeName}</Text>
+        <View style={[styles.recipeContainer, {
+          backgroundColor: this.state.checkBoxChecked[recipeIndex].checked
+            ? 'rgba(249,56,34,0.2)'
+            : 'rgba(249,56,34,0)',
+          width: this.state.checkBoxChecked[recipeIndex].checked
+            ? deviceWidth
+            : '100%',
+        }]}>
+          <View style={styles.checkBoxWrapper}>
+            <MKCheckbox
+              checked={this.state.checkBoxChecked[recipeIndex].checked}
+              onCheckedChange={() => this.checkBoxChanged(recipeIndex, this.state.checkBoxChecked[recipeIndex].checked)}
+            />
+            <Text style={styles.recipeTitleText}>{recipe.recipeName}</Text>
+          </View>
 
           <FlatList
             data={recipe.ingredients}
             renderItem={({item}) => (
               <View style={styles.singleIngredient}>
-                <Text>{item.name}</Text>
-                <Text>{item.quantity}</Text>
+                <Text style={styles.ingredientText}>{item.name}</Text>
+                <Text style={[styles.ingredientText, styles.quantityText]}>{item.quantity}</Text>
+
+                {/* <View style={styles.divider} /> */}
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
@@ -251,7 +271,7 @@ class ListMainScreen extends Component {
         keyExtractor={item => item.id}
         numColumns={1}
         contentContainerStyle={[styles.listContentStyle, {
-          paddingBottom: this.state.displayPopup === true ? 49 : 0,
+          paddingBottom: this.state.displayPopup === true ? 74 : 25,
         }]}
       />
     );
@@ -364,16 +384,49 @@ const styles = StyleSheet.create({
   listContentStyle: {
     width: '100%',
     justifyContent: 'center',
-
-    backgroundColor: 'lightblue',
+    marginTop: 5,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   recipeContainer: {
-
+    marginTop: 20,
+    paddingBottom: 10,
+  },
+  checkBoxWrapper: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   singleIngredient: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255, 0, 0, 0.2)'
+    marginLeft: 45,
+    marginTop: 15,
   },
+  recipeTitleText: {
+    marginLeft: 5,
+    fontFamily: 'Poppins',
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#3C3C3C',
+  },
+  ingredientText: {
+    fontFamily: 'Poppins',
+    fontSize: 13,
+    fontWeight: '400',
+    color: '#3C3C3C',
+  },
+  quantityText: {
+    position: 'absolute',
+    right: 0,
+  },
+  // divider: {
+  //   height: 0.8,
+  //   width: '100%',
+  //   backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  //   position: 'absolute',
+  //   bottom: 0,
+  //   transform: [{ translateY: 7 }]
+  // },
 });
 const buttonPopupStyle = StyleSheet.create({
   container: {
