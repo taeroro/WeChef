@@ -104,6 +104,23 @@ export const RecipeStack = createStackNavigator(
           <View style={{
             flexDirection: 'row'
           }}>
+            <Button
+              icon={{
+                name: "cart-plus",
+                type:'material-community',
+                size: 26,
+                color: navigation.getParam('addedToList') ? '#FE444D' : '#A0A2A5'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                let isAddedToList = navigation.getParam('addedToList');
+                let addOrRemoveFromCart = navigation.getParam('addToCartFun');
+                addOrRemoveFromCart(isAddedToList);
+                navigation.setParams({ addedToList: !isAddedToList });
+              }}
+            />
             {
               navigation.getParam('recipeObj')
               ? navigation.getParam('currentUser')
@@ -350,6 +367,23 @@ export const SavedStack = createStackNavigator(
           <View style={{
             flexDirection: 'row'
           }}>
+            <Button
+              icon={{
+                name: "cart-plus",
+                type:'material-community',
+                size: 26,
+                color: navigation.getParam('addedToList') ? '#FE444D' : '#A0A2A5'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                let isAddedToList = navigation.getParam('addedToList');
+                let addOrRemoveFromCart = navigation.getParam('addToCartFun');
+                addOrRemoveFromCart(isAddedToList);
+                navigation.setParams({ addedToList: !isAddedToList });
+              }}
+            />
             {
               navigation.getParam('recipeObj')
               ? navigation.getParam('currentUser')
@@ -677,6 +711,23 @@ export const ProfileStack = createStackNavigator(
           <View style={{
             flexDirection: 'row'
           }}>
+            <Button
+              icon={{
+                name: "cart-plus",
+                type:'material-community',
+                size: 26,
+                color: navigation.getParam('addedToList') ? '#FE444D' : '#A0A2A5'
+              }}
+              buttonStyle={{
+                backgroundColor: 'transparent'
+              }}
+              onPress={() => {
+                let isAddedToList = navigation.getParam('addedToList');
+                let addOrRemoveFromCart = navigation.getParam('addToCartFun');
+                addOrRemoveFromCart(isAddedToList);
+                navigation.setParams({ addedToList: !isAddedToList });
+              }}
+            />
             <Button
               icon={{
                 name: "square-edit-outline",

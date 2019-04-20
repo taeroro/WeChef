@@ -14,7 +14,7 @@ module.exports = mongoose.model('Review', new Schema({
         type: String,
         unique: true,
         sparse: true,
-        required: true,    
+        required: true,
     },
     reviewRecipeIDs: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,4 +25,12 @@ module.exports = mongoose.model('Review', new Schema({
         type: String,
         required: true,
     },
+    reviewOwnerName: {
+        type: String,
+    },
+    quality: {
+        type: Number,
+    },
+}, {
+  timestamps: { createdAt: true, updatedAt: true }
 }));

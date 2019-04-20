@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextInput, StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView, Image} from 'react-native';
+import { Alert, TextInput, StyleSheet, View, Text, StatusBar, Dimensions, TouchableOpacity, ScrollView, KeyboardAvoidingView, Image} from 'react-native';
 //mport { TextInput } from 'react-native-paper';
 import { AirbnbRating } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
@@ -7,6 +7,8 @@ import FBSDK from 'react-native-fbsdk';
 import axios from 'axios';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
+const { AccessToken } = FBSDK;
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
 const options = {
   title: 'Change Recipe Picture',
@@ -17,7 +19,6 @@ const options = {
   },
 };
 
-const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 const sectionSize = Dimensions.get('window').width - 40;
 
 class PostNewReviewScreen extends Component {
@@ -25,9 +26,11 @@ class PostNewReviewScreen extends Component {
     super(props);
 
     this.state = {
+      recipeID: this.props.navigation.state.params.recipeID,
       comment: '',
       rating:5,
       imageSource: image,
+      reviewOwnerID: null,
 
     };
   }
@@ -37,6 +40,12 @@ class PostNewReviewScreen extends Component {
       StatusBar.setBarStyle('dark-content');
     });
 
+    AccessToken.getCurrentAccessToken().then((data) => {
+      this.setState({
+        reviewOwnerID: data.userID
+      });
+    });
+
   }
 
   componentWillUnmount() {
@@ -44,13 +53,48 @@ class PostNewReviewScreen extends Component {
   }
 
   handleSubmit = () => {
-    console.log(this.state);
 
+    if (this.state.imageSource === image) {
+      Alert.alert(
+        'Please upload a picture',
+        'Upload picture before submission',
+        [{test:'OK', }]
+      );
+      return;
+    }
+    this.uploadReview(this.state);
+  }
+
+  backToRecipe = () => {
+    this.props.navigation.state.params.onNavigateBack();
+    this.props.navigation.navigate('RecipeSingle', {id: this.state.recipeID});
+  }
+
+  uploadReview = (state) => {
+    let requestURL = DB_PREFIX + 'recipe/review/create/' + state.recipeID;
+
+    let formdata = new FormData();
+
+    formdata.append('content', state.comment);
+    formdata.append('reviewRecipeIDs', state.recipeID);
+    formdata.append('reviewOwnerID', state.reviewOwnerID);
+    formdata.append('quality', state.rating);
+    formdata.append('image', {uri: state.imageSource, name: 'new_review_image.jpg', type: 'image/jpg'});
+
+    axios.post(requestURL, formdata, { headers: {'Content-Type': 'multipart/form-data',} })
+      .then(res => {
+        console.log(res);
+        if (res.status == 201) {
+          this.backToRecipe();
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   changeImage = () => {
     ImagePicker.showImagePicker(options, (response) => {
-      console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');

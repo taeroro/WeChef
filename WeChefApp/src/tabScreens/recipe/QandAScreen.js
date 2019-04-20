@@ -52,13 +52,6 @@ class QandAScreen extends Component {
       })
   }
 
-  /* TODO: display Q and As
-  *  backend data in this.state.displayQandAs as an array
-  *  e.g. [{_id: "5c9a6869c5df2d2355892920", qContent: "What is the doneness of your lamb?", aContent: "It is medium."}]
-  *  NOTE: aContent will be undefined if no one answered yet.
-  */
-
-
   render() {
     console.log(this.state.displayQandAs);
     return (

@@ -353,4 +353,115 @@ recipeRouter.put('/qa/answer/:QnAID', (req, res, err) => {
       })
 })
 
+// Add a review to a recipe
+recipeRouter.post('/review/create/:recipeID', ImageUpload.reviewImageUpload, (req, res, err) => {
+    User.findOne({ facebookID: req.body.reviewOwnerID }, (error, user) => {
+      let new_review = new Review();
+      new_review.content = req.body.content;
+      new_review.reviewRecipeIDs = req.params.recipeID;
+      new_review.reviewOwnerID = req.body.reviewOwnerID;
+      new_review.reviewOwnerName = user.userName;
+      new_review.quality = req.body.quality;
+      new_review.reviewImageURL = req.file.url;
+      new_review.reviewImageID = req.file.public_id;
+
+      new_review.save((err, review) => {
+        if (err) {
+          if (err.name === 'ValidationError') {
+              return res.status(422).send({
+                  message: err.errors,
+              });
+          } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+              return res.status(409).send({
+                  message: 'This review has already been created.',
+              });
+          } else {
+              return res.status(500).send({
+                  message: err,
+              });
+          }
+        }
+        return res.status(201).send({
+            message: 'OK',
+            review: review,
+            review_image: new_review.reviewImageURL,
+        });
+      });
+    })
+})
+
+// Get the latest review of a recipe
+recipeRouter.get('/review/first/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    Review.find({reviewRecipeIDs: recipeID}, {}, {sort: { createdAt: -1 }, limit: 1}, (err, review) => {
+      if (err){
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (review) {
+          res.status(200).send(review);
+      } else {
+          return res.status(404).send({
+              message: 'No review for the given recipe id.',
+          });
+      }
+    });
+});
+
+// Get reviews of a recipe
+recipeRouter.get('/review/:recipeID', (req, res, err) => {
+    let recipeID = req.params.recipeID;
+
+    if (!recipeID) {
+        return res.status(422).send({
+            message: 'No recipeID provided.',
+        });
+    }
+
+    Review.find({reviewRecipeIDs: recipeID}, {}, {sort: { createdAt: -1 }}, (err, reviews) => {
+      if (err){
+          console.log(err);
+          return res.status(500).send({
+              message: err,
+          });
+      }
+      if (reviews) {
+          res.status(200).send(reviews);
+      } else {
+          return res.status(404).send({
+              message: 'No reviews for the given recipe id.',
+          });
+      }
+    });
+});
+
+// get my shopping list recipes
+recipeRouter.get('/:facebookID/shoppinglist', (req, res, err) => {
+    User.findOne({ facebookID: req.params.facebookID }, (err, user) => {
+      const shoppingListRecipeIDs = user.shoppingListRecipeIDs;
+      Recipe.find({ _id: {$in: shoppingListRecipeIDs} }, (err, recipes) => {
+        if (err){
+            return res.status(500).send({
+                message: err,
+            });
+        }
+        if (recipes) {
+            res.status(200).send(recipes);
+        } else {
+            return res.status(404).send({
+                message: 'No recipes can be found.',
+            });
+        }
+      })
+    })
+});
+
 module.exports = recipeRouter;

@@ -12,6 +12,7 @@ import {
   ScrollView,
   RefreshControl,
 } from 'react-native';
+import { NavigationEvents } from "react-navigation";
 import LinearGradient from 'react-native-linear-gradient';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import axios from 'axios';
@@ -77,6 +78,7 @@ class RecipeMainScreen extends Component {
   }
 
   fetchRecipes = () => {
+    console.log('fetchRecipes()');
     let requestURL = DB_PREFIX + 'recipe/homepage/';
 
     axios.get(requestURL)
@@ -217,6 +219,9 @@ class RecipeMainScreen extends Component {
     return (
       // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
+          <NavigationEvents
+            onWillFocus={this.fetchRecipes}
+          />
           <Animated.View
             style={{
               width: '100%',
