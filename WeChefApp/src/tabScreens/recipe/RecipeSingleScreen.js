@@ -185,15 +185,19 @@ class RecipeSingleScreen extends Component {
 
     return (
       <View style={authorStyles.section1_5Container}>
-        <Text style={authorStyles.authorText}>Posted by:</Text>
+        <Text style={authorStyles.authorText}>Author</Text>
 
-        <View style={authorStyles.contentContainer}>
-          <Image
-            source={{uri: temp_image}}
-            style={authorStyles.profileImage}
-          />
-          <Text style={authorStyles.authorNameText}>{temp_name}</Text>
-        </View>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('Author');
+        }}>
+          <View style={authorStyles.contentContainer}>
+            <Image
+              source={{uri: temp_image}}
+              style={authorStyles.profileImage}
+            />
+            <Text style={authorStyles.authorNameText}>{temp_name}</Text>
+          </View>
+        </TouchableOpacity>
 
       </View>
     );
@@ -548,6 +552,7 @@ const authorStyles = StyleSheet.create({
   },
   contentContainer: {
     marginTop: 3,
+    width: sectionSize,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -559,7 +564,7 @@ const authorStyles = StyleSheet.create({
     resizeMode: 'cover',
   },
   authorNameText: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: 'Poppins',
     fontWeight: '400',
     color: '#3C3C3C',
