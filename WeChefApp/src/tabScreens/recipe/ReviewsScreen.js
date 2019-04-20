@@ -71,6 +71,7 @@ class ReviewsScreen extends Component {
                     <Text style = {styles.commentContentText}>
                       {review.reviewOwnerName}
                     </Text>
+                    
                     <Text style = {styles.ratingText}>
                       Rating:
                     </Text>
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: Dimensions.get('window').width-40,
     height: Dimensions.get('window').width-40,
+    marginBottom: -5
   },
   qnaContainer: {
     marginTop: 5,
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#3C3C3C',
     flex: 1,
-    marginTop: 5,
+    marginTop: 20,
     marginBottom: -35
   },
   divider: {
