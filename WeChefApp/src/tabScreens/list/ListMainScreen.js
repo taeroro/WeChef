@@ -179,9 +179,7 @@ class ListMainScreen extends Component {
   }
 
   selectAll() {
-    this.setState({isSelectAll: !this.state.isSelectAll}, () => {
-      console.log(this.state.isSelectAll)
-    });
+    this.setState({isSelectAll: true});
 
     let tempCheck = [];
     this.state.listData.map((item, index) => {
@@ -191,9 +189,7 @@ class ListMainScreen extends Component {
   }
 
   unselectAll() {
-    this.setState({isSelectAll: !this.state.isSelectAll}, () => {
-      console.log(this.state.isSelectAll)
-    });
+    this.setState({isSelectAll: false});
 
     let tempCheck = [];
     this.state.listData.map((item, index) => {
@@ -233,10 +229,7 @@ class ListMainScreen extends Component {
       }
     }
 
-    console.log(toDelete);
-
     for (let i = toDelete.length - 1; i >= 0; i--) {
-      console.log(toDelete[i]);
       tempCheck.splice(toDelete[i], 1);
       tempData.splice(toDelete[i], 1);
     }
@@ -244,7 +237,11 @@ class ListMainScreen extends Component {
     this.setState({ checkBoxChecked: tempCheck });
     this.setState({ listData: tempData });
 
+    console.log(this.state.isSelectAll);
+
     this.unselectAll();
+
+    console.log(this.state.isSelectAll);
   }
 
   renderIngredients(recipe) {
