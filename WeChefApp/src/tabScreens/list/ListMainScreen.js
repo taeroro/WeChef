@@ -179,15 +179,16 @@ class ListMainScreen extends Component {
 
   deleteItemInDB = (deleteList) => {
     var toDeleteObj = {recipeIDs: deleteList};
-  //   toDeleteObj = JSON.stringify(toDeleteObj);
-  //   let requestURL = DB_PREFIX + 'user/remove-list-multi/' + this.state.currentUserID;
-  //
-  //   axios.post(requestURL, toDeleteObj, {
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       }
-  //   }
-  // );
+    toDeleteObj = JSON.stringify(toDeleteObj);
+    let requestURL = DB_PREFIX + 'user/remove-list-multi/' + this.state.currentUserID;
+
+    axios.put(requestURL, toDeleteObj, { headers: { 'Content-Type': 'application/json',} })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(error => {
+      alert(error);
+    });
   }
 
   deleteItem() {
