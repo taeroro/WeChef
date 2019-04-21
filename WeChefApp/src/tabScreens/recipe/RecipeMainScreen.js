@@ -54,8 +54,6 @@ class RecipeMainScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('light-content');
     });
-
-    this.fetchRecipes();
   }
 
   componentWillUnmount() {
@@ -215,13 +213,19 @@ class RecipeMainScreen extends Component {
       inputRange: [0, 1],
       outputRange: [getStatusBarHeight() + 124, endHeight]
     });
+    const isInSearch = this.state.isInSearch;
 
     return (
       // <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          <NavigationEvents
+          {!isInSearch ? (
+            <NavigationEvents
             onWillFocus={this.fetchRecipes}
-          />
+          />) :
+          (
+            <NavigationEvents
+            onWillFocus={this.refs.childrenSearchBarRef.searchInDB}
+          />)}
           <Animated.View
             style={{
               width: '100%',

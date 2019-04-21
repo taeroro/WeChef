@@ -11,6 +11,7 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
+import { NavigationEvents } from "react-navigation";
 import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper';
 import {
   MKColor,
@@ -52,7 +53,13 @@ class ListMainScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
+  }
 
+  componentWillUnmount() {
+    this._navListener.remove();
+  }
+
+  fetchList = () => {
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
         currentUserID: data.userID
@@ -74,10 +81,6 @@ class ListMainScreen extends Component {
           });
       });
     });
-  }
-
-  componentWillUnmount() {
-    this._navListener.remove();
   }
 
   checkBoxChanged(idx, value) {
@@ -179,15 +182,16 @@ class ListMainScreen extends Component {
 
   deleteItemInDB = (deleteList) => {
     var toDeleteObj = {recipeIDs: deleteList};
-  //   toDeleteObj = JSON.stringify(toDeleteObj);
-  //   let requestURL = DB_PREFIX + 'user/remove-list-multi/' + this.state.currentUserID;
-  //
-  //   axios.post(requestURL, toDeleteObj, {
-  //       headers: {
-  //           'Content-Type': 'application/json',
-  //       }
-  //   }
-  // );
+    toDeleteObj = JSON.stringify(toDeleteObj);
+    let requestURL = DB_PREFIX + 'user/remove-list-multi/' + this.state.currentUserID;
+
+    axios.put(requestURL, toDeleteObj, { headers: { 'Content-Type': 'application/json',} })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(error => {
+      alert(error);
+    });
   }
 
   deleteItem() {
@@ -374,6 +378,9 @@ class ListMainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onWillFocus={this.fetchList}
+        />
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Shopping List</Text>
         </View>
