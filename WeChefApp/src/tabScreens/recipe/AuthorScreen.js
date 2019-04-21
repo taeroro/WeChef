@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: '#3C3C3C',
-    fontSize: 32,
+    fontSize: 40,
     fontWeight: 'bold',
   },
   profileContainer: {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatarStyle: {
-    marginTop: 20,
+    marginTop: 40,
     borderRadius: 150,
     width: 300,
     height: 300,
