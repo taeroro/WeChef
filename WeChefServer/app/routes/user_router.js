@@ -242,6 +242,7 @@ userRouter.put('/remove-favourite/:facebookID', (req, res, err) => {
       });
 });
 
+// Add one recipe to cart
 userRouter.put('/add-list/:facebookID', (req, res, err) => {
     User.findOneAndUpdate({ facebookID: req.params.facebookID },
       {$push: {shoppingListRecipeIDs: req.body.recipeID}},
@@ -268,9 +269,37 @@ userRouter.put('/add-list/:facebookID', (req, res, err) => {
       });
 });
 
+// Remove one recipe from cart
 userRouter.put('/remove-list/:facebookID', (req, res, err) => {
     User.findOneAndUpdate({ facebookID: req.params.facebookID },
       {$pull: {shoppingListRecipeIDs: req.body.recipeID}},
+      {safe: true}, (err, user) => {
+          if (err) {
+            if (err.name === 'ValidationError') {
+                return res.status(422).send({
+                    message: err.errors,
+                });
+            } else if (err.name === 'BulkWriteError' || err.name === 'MongoError') {
+                return res.status(409).send({
+                    message: 'This Imge has already been used.',
+                });
+            } else {
+                return res.status(500).send({
+                    errorType: 'InternalError',
+                    message: err,
+                });
+            }
+          }
+          return res.status(200).send({
+              message: 'OK',
+          });
+      });
+});
+
+// Remove several recipes from cart
+userRouter.put('/remove-list-multi/:facebookID', (req, res, err) => {
+    User.findOneAndUpdate({ facebookID: req.params.facebookID },
+      {$pull: {shoppingListRecipeIDs: { $in: req.body.recipeIDs }}},
       {safe: true}, (err, user) => {
           if (err) {
             if (err.name === 'ValidationError') {
