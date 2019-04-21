@@ -9,8 +9,8 @@ class AuthorScreen extends Component {
     super(props);
 
     this.state = {
-      imageSource: image,
-      author: "Monika",
+      imageSource: this.props.navigation.state.params.authorImage,
+      author: this.props.navigation.state.params.authorName,
     };
   }
 

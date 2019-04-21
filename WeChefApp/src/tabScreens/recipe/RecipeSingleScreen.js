@@ -34,6 +34,7 @@ class RecipeSingleScreen extends Component {
       firstReview: null,
       currentUser: null,
       isRecipeAddedToCart: false,
+      authorNameAndImage: null,
     };
   }
 
@@ -74,7 +75,19 @@ class RecipeSingleScreen extends Component {
       .then(res => {
         console.log(res);
         let recipeInfo = res.data;
-        this.setState({recipeObj: recipeInfo});
+        this.setState({recipeObj: recipeInfo}, () => {
+          const ownerID = this.state.recipeObj.ownerID;
+          let requestOwnerURL = DB_PREFIX + 'user/' + ownerID;
+
+          axios.get(requestOwnerURL)
+            .then(res => {
+              const authorInfo = res.data;
+              this.setState({ authorNameAndImage: { name: authorInfo.userName, image: authorInfo.userImageURL } });
+            })
+            .catch(error => {
+              alert(error);
+            });
+        });
         this.props.navigation.setParams({ recipeObj: this.state.recipeObj });
         this.props.navigation.setParams({ recipeID: this.state.recipeID });
       })
@@ -232,22 +245,29 @@ class RecipeSingleScreen extends Component {
 
   // Author
   renderRecipeSection1_5() {
-    const temp_image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
-    const temp_name = "Ryan Fan";
+    const { authorNameAndImage } = this.state;
+
+    if (!authorNameAndImage) {
+      return (
+        <View style={styles.loadingContainer}>
+          <SingleColorSpinner strokeColor="#F56862" />
+        </View>
+      );
+    }
 
     return (
       <View style={authorStyles.section1_5Container}>
         <Text style={authorStyles.authorText}>Author</Text>
 
         <TouchableOpacity onPress={() => {
-          this.props.navigation.navigate('Author');
+          this.props.navigation.navigate('Author', { authorName: authorNameAndImage.name, authorImage: authorNameAndImage.image });
         }}>
           <View style={authorStyles.contentContainer}>
             <Image
-              source={{uri: temp_image}}
+              source={{uri: authorNameAndImage.image}}
               style={authorStyles.profileImage}
             />
-            <Text style={authorStyles.authorNameText}>{temp_name}</Text>
+            <Text style={authorStyles.authorNameText}>{authorNameAndImage.name}</Text>
           </View>
         </TouchableOpacity>
 
