@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet,View,Text,StatusBar,TouchableOpacity,Image,Dimensions} from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
-const image = 'http://www.getmdl.io/assets/demos/welcome_card.jpg';
-
 class AuthorScreen extends Component {
   constructor(props) {
     super(props);

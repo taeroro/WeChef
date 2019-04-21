@@ -277,7 +277,6 @@ class RecipeSingleScreen extends Component {
 
   // Q & A
   renderRecipeSection2() {
-
     const {recipeObj, firstQandA} = this.state;
 
     if (!recipeObj || !firstQandA) {
@@ -328,9 +327,6 @@ class RecipeSingleScreen extends Component {
 
   // Reviews
   renderRecipeSection3() {
-    const tempComment = "I tried out this recipe and it is super delicious!";
-    const tempUserName = "Ryan Fan";
-
     const {recipeObj, firstReview} = this.state;
     if (!recipeObj || !firstReview) {
       return (
