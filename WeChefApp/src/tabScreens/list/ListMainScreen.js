@@ -53,8 +53,6 @@ class ListMainScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
-
-    this.fetchList();
   }
 
   componentWillUnmount() {

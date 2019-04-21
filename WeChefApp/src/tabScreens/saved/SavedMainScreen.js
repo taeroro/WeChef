@@ -27,8 +27,6 @@ class SavedMainScreen extends Component {
     this._navListener = this.props.navigation.addListener('didFocus', () => {
       StatusBar.setBarStyle('dark-content');
     });
-
-    this.fetchSavedRecipes();
   }
 
   componentWillUnmount() {
