@@ -11,6 +11,7 @@ import {
   Alert,
   Dimensions,
 } from 'react-native';
+import { NavigationEvents } from "react-navigation";
 import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper';
 import {
   MKColor,
@@ -53,6 +54,14 @@ class ListMainScreen extends Component {
       StatusBar.setBarStyle('dark-content');
     });
 
+    this.fetchList();
+  }
+
+  componentWillUnmount() {
+    this._navListener.remove();
+  }
+
+  fetchList = () => {
     AccessToken.getCurrentAccessToken().then((data) => {
       this.setState({
         currentUserID: data.userID
@@ -74,10 +83,6 @@ class ListMainScreen extends Component {
           });
       });
     });
-  }
-
-  componentWillUnmount() {
-    this._navListener.remove();
   }
 
   checkBoxChanged(idx, value) {
@@ -375,6 +380,9 @@ class ListMainScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <NavigationEvents
+          onWillFocus={this.fetchList}
+        />
         <View style={styles.titleHeaderContainer}>
           <Text style={styles.headerTitle}>Shopping List</Text>
         </View>

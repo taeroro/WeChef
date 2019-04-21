@@ -446,6 +446,11 @@ recipeRouter.get('/review/:recipeID', (req, res, err) => {
 // get my shopping list recipes
 recipeRouter.get('/:facebookID/shoppinglist', (req, res, err) => {
     User.findOne({ facebookID: req.params.facebookID }, (err, user) => {
+      if (!user) {
+        return res.status(404).send({
+            message: 'No user with requested id can be found.',
+        });
+      }
       const shoppingListRecipeIDs = user.shoppingListRecipeIDs;
       Recipe.find({ _id: {$in: shoppingListRecipeIDs} }, (err, recipes) => {
         if (err){
