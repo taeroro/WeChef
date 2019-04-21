@@ -33,6 +33,7 @@ class ListMainScreen extends Component {
     super(props);
 
     this.animatedValue = new Animated.Value(0);
+    this.animatedValue1 = new Animated.Value(0);
 
     this.state = {
       listData: null,
@@ -141,6 +142,15 @@ class ListMainScreen extends Component {
             duration: 100,
           }
         ).start();
+
+        this.animatedValue1.setValue(1);
+        Animated.timing(
+          this.animatedValue1,
+          {
+            toValue: 0,
+            duration: 150,
+          }
+        ).start();
       }
       else if (trueIndex !== -1 && this.state.displayPopup === false) {
         this.setState({ displayPopup: true });
@@ -150,6 +160,15 @@ class ListMainScreen extends Component {
           {
             toValue: 1,
             duration: 100,
+          }
+        ).start();
+
+        this.animatedValue1.setValue(0);
+        Animated.timing(
+          this.animatedValue1,
+          {
+            toValue: 1,
+            duration: 150,
           }
         ).start();
       }
@@ -192,6 +211,15 @@ class ListMainScreen extends Component {
         duration: 100,
       }
     ).start();
+
+    this.animatedValue1.setValue(1);
+    Animated.timing(
+      this.animatedValue1,
+      {
+        toValue: 0,
+        duration: 150,
+      }
+    ).start();
   }
 
   deleteItem() {
@@ -222,15 +250,36 @@ class ListMainScreen extends Component {
   renderIngredients(recipe) {
     let recipeIndex = this.state.checkBoxChecked.findIndex(obj => obj.id === recipe.id);
 
+    const startColor = 'rgba(249,56,34,0)';
+    const endColor = 'rgba(249,56,34,0.2)';
+    const animatedColor = this.animatedValue1.interpolate({
+      inputRange: [0, 1],
+      outputRange: [startColor, endColor]
+    });
+
     if (recipeIndex !== -1) {
       return (
-        <View style={[styles.recipeContainer, {
+        <Animated.View style={[styles.recipeContainer, {
+          // backgroundColor: this.state.checkBoxChecked[recipeIndex].checked
+          //   ? 'rgba(249,56,34,0.2)'
+          //   : 'rgba(249,56,34,0)',
           backgroundColor: this.state.checkBoxChecked[recipeIndex].checked
-            ? 'rgba(249,56,34,0.2)'
-            : 'rgba(249,56,34,0)',
+            ? animatedColor
+            : 'transparent',
+          transform: [{
+            translateX: this.state.checkBoxChecked[recipeIndex].checked
+            ? -20
+            : 0
+          }],
           width: this.state.checkBoxChecked[recipeIndex].checked
             ? deviceWidth
             : '100%',
+          paddingLeft: this.state.checkBoxChecked[recipeIndex].checked
+            ? 20
+            : 0,
+          paddingRight: this.state.checkBoxChecked[recipeIndex].checked
+            ? 20
+            : 0,
         }]}>
           <View style={styles.checkBoxWrapper}>
             <MKCheckbox
@@ -255,26 +304,35 @@ class ListMainScreen extends Component {
             // contentContainerStyle={styles.listContentStyle}
           />
 
-        </View>
+        </Animated.View>
       );
     }
   }
 
   renderShoppingList() {
-    return (
-      <FlatList
-        data={this.state.listData}
-        renderItem={({item}) => (
-          this.renderIngredients(item)
-        )}
-        extraData={this.state}
-        keyExtractor={item => item.id}
-        numColumns={1}
-        contentContainerStyle={[styles.listContentStyle, {
-          paddingBottom: this.state.displayPopup === true ? 74 : 25,
-        }]}
-      />
-    );
+    if (this.state.listData && this.state.listData.length === 0) {
+      return (
+        <View style={styles.nothingContainer}>
+          <Text style={styles.nothingText}>There's nothing in your shopping list :/</Text>
+        </View>
+      );
+    }
+    else {
+      return (
+        <FlatList
+          data={this.state.listData}
+          renderItem={({item}) => (
+            this.renderIngredients(item)
+          )}
+          extraData={this.state}
+          keyExtractor={item => item.id}
+          numColumns={1}
+          contentContainerStyle={[styles.listContentStyle, {
+            paddingBottom: this.state.displayPopup === true ? 74 : 25,
+          }]}
+        />
+      );
+    }
   }
 
   renderButtonPopupView() {
@@ -427,6 +485,22 @@ const styles = StyleSheet.create({
   //   bottom: 0,
   //   transform: [{ translateY: 7 }]
   // },
+  nothingContainer: {
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 25,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+  nothingText: {
+    fontFamily: 'Poppins',
+    fontSize: 16,
+    fontWeight: '500',
+    color: '#8E8E93',
+    paddingBottom: 20,
+  },
 });
 const buttonPopupStyle = StyleSheet.create({
   container: {
@@ -453,7 +527,7 @@ const buttonPopupStyle = StyleSheet.create({
   buttonText: {
     textTransform: 'uppercase',
     color: '#FFF',
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: 'Poppins',
     fontWeight: '400',
   },
