@@ -66,7 +66,7 @@ class ReviewsScreen extends Component {
                       source={{uri: review.reviewImageURL}}
                     />
                     <Text style = {styles.qnaContentText}>
-                      Authored by:
+                      Posted by:
                     </Text>
                     <Text style = {styles.commentContentText}>
                       {review.reviewOwnerName}
