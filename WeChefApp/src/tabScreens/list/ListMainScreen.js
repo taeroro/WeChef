@@ -17,7 +17,11 @@ import {
   setTheme,
   MKCheckbox
 } from 'react-native-material-kit';
+import FBSDK from 'react-native-fbsdk';
+import axios from 'axios';
 
+const { AccessToken } = FBSDK;
+const DB_PREFIX = 'https://wechef-server-dev.herokuapp.com/';
 const deviceWidth = Dimensions.get('window').width;
 var tempCheckValues = [];
 
@@ -40,6 +44,7 @@ class ListMainScreen extends Component {
       checkBoxChecked: [],
       displayPopup: false,
       isSelectAll: false,
+      currentUserID: null,
     };
   }
 
@@ -48,70 +53,26 @@ class ListMainScreen extends Component {
       StatusBar.setBarStyle('dark-content');
     });
 
-    tempData = [
-      {
-        id: "a0",
-        recipeName: "Buttermilk Pancakes",
-        ingredients: [
-          { name: "Eggs", quantity: "2" },
-          { name: "Buttermilk", quantity: "2 cups" },
-          { name: "Flour", quantity: "2 cups" },
-        ]
-      },
-      {
-        id: "a1",
-        recipeName: "Lamb Burger",
-        ingredients: [
-          { name: "Lamb", quantity: "2 lbs" },
-          { name: "Blue cheese", quantity: "2 cups" },
-          { name: "Onion", quantity: "1" },
-        ]
-      },
-      {
-        id: "a2",
-        recipeName: "AA",
-        ingredients: [
-          { name: "Eggs", quantity: "2" },
-          { name: "Buttermilk", quantity: "2 cups" },
-          { name: "Flour", quantity: "2 cups" },
-        ]
-      },
-      {
-        id: "a3",
-        recipeName: "BB",
-        ingredients: [
-          { name: "Lamb", quantity: "2 lbs" },
-          { name: "Blue cheese", quantity: "2 cups" },
-          { name: "Onion", quantity: "1" },
-        ]
-      },
-      {
-        id: "a4",
-        recipeName: "CC",
-        ingredients: [
-          { name: "Eggs", quantity: "2" },
-          { name: "Buttermilk", quantity: "2 cups" },
-          { name: "Flour", quantity: "2 cups" },
-        ]
-      },
-      {
-        id: "a5",
-        recipeName: "DD",
-        ingredients: [
-          { name: "Lamb", quantity: "2 lbs" },
-          { name: "Blue cheese", quantity: "2 cups" },
-          { name: "Onion", quantity: "1" },
-        ]
-      },
-    ];
-
-    // store data to this.state.listData and update checkbox array
-    this.setState({ listData: tempData }, () => {
-      let tempCheck = [];
-      this.state.listData.map((item, index) => {
-        tempCheck[index] = {id: item.id, checked: false};
+    AccessToken.getCurrentAccessToken().then((data) => {
+      this.setState({
+        currentUserID: data.userID
+      }, () => {
+        let requestURL = DB_PREFIX + 'recipe/' + this.state.currentUserID + '/shoppinglist';
+        axios.get(requestURL)
+          .then(res => {
+            console.log(res);
+            this.setState({ listData: res.data }, () => {
+              let tempCheck = [];
+              this.state.listData.map((item, index) => {
+                tempCheck[index] = {id: item._id, checked: false};
+              });
+              this.setState({ checkBoxChecked: tempCheck });
+            });
+          })
+          .catch(error => {
+            alert(error);
+          });
       });
-      this.setState({ checkBoxChecked: tempCheck });
     });
   }
 
@@ -119,13 +80,13 @@ class ListMainScreen extends Component {
     this._navListener.remove();
   }
 
-  checkBoxChanged(id, value) {
+  checkBoxChanged(idx, value) {
     this.setState({
       checkBoxChecked: tempCheckValues
     })
 
     var tempCheckBoxChecked = this.state.checkBoxChecked;
-    tempCheckBoxChecked[id].checked = !value;
+    tempCheckBoxChecked[idx].checked = !value;
 
     this.setState({
       checkBoxChecked: tempCheckBoxChecked
@@ -174,8 +135,6 @@ class ListMainScreen extends Component {
       }
 
     });
-
-    console.log(JSON.stringify(this.state.checkBoxChecked));
   }
 
   selectAll() {
@@ -183,7 +142,7 @@ class ListMainScreen extends Component {
 
     let tempCheck = [];
     this.state.listData.map((item, index) => {
-      tempCheck[index] = {id: item.id, checked: true};
+      tempCheck[index] = {id: item._id, checked: true};
     });
     this.setState({ checkBoxChecked: tempCheck });
   }
@@ -193,7 +152,7 @@ class ListMainScreen extends Component {
 
     let tempCheck = [];
     this.state.listData.map((item, index) => {
-      tempCheck[index] = {id: item.id, checked: false};
+      tempCheck[index] = {id: item._id, checked: false};
     });
     this.setState({ checkBoxChecked: tempCheck });
 
@@ -218,16 +177,33 @@ class ListMainScreen extends Component {
     ).start();
   }
 
+  deleteItemInDB = (deleteList) => {
+    var toDeleteObj = {recipeIDs: deleteList};
+  //   toDeleteObj = JSON.stringify(toDeleteObj);
+  //   let requestURL = DB_PREFIX + 'user/remove-list-multi/' + this.state.currentUserID;
+  //
+  //   axios.post(requestURL, toDeleteObj, {
+  //       headers: {
+  //           'Content-Type': 'application/json',
+  //       }
+  //   }
+  // );
+  }
+
   deleteItem() {
     let tempCheck = this.state.checkBoxChecked;
     let tempData = this.state.listData;
     let toDelete = [];
+    let toDeleteIDs = [];
 
     for (let i = 0; i < tempCheck.length; i++) {
       if (tempCheck[i].checked === true) {
         toDelete.push(i);
+        toDeleteIDs.push(tempCheck[i].id);
       }
     }
+
+    this.deleteItemInDB(toDeleteIDs);
 
     for (let i = toDelete.length - 1; i >= 0; i--) {
       tempCheck.splice(toDelete[i], 1);
@@ -245,7 +221,7 @@ class ListMainScreen extends Component {
   }
 
   renderIngredients(recipe) {
-    let recipeIndex = this.state.checkBoxChecked.findIndex(obj => obj.id === recipe.id);
+    let recipeIndex = this.state.checkBoxChecked.findIndex(obj => obj.id === recipe._id);
 
     const startColor = 'rgba(249,56,34,0)';
     const endColor = 'rgba(249,56,34,0.2)';
@@ -283,7 +259,7 @@ class ListMainScreen extends Component {
               checked={this.state.checkBoxChecked[recipeIndex].checked}
               onCheckedChange={() => this.checkBoxChanged(recipeIndex, this.state.checkBoxChecked[recipeIndex].checked)}
             />
-            <Text style={styles.recipeTitleText}>{recipe.recipeName}</Text>
+            <Text style={styles.recipeTitleText}>{recipe.title}</Text>
           </View>
 
           <FlatList
@@ -291,7 +267,7 @@ class ListMainScreen extends Component {
             renderItem={({item}) => (
               <View style={styles.singleIngredient}>
                 <Text style={styles.ingredientText}>{item.name}</Text>
-                <Text style={[styles.ingredientText, styles.quantityText]}>{item.quantity}</Text>
+                <Text style={[styles.ingredientText, styles.quantityText]}>{item.amount}</Text>
 
                 {/* <View style={styles.divider} /> */}
               </View>
@@ -322,7 +298,7 @@ class ListMainScreen extends Component {
             this.renderIngredients(item)
           )}
           extraData={this.state}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item._id}
           numColumns={1}
           contentContainerStyle={[styles.listContentStyle, {
             paddingBottom: this.state.displayPopup === true ? 74 : 25,
