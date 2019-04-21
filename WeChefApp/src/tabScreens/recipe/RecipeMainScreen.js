@@ -76,7 +76,6 @@ class RecipeMainScreen extends Component {
   }
 
   fetchRecipes = () => {
-    console.log('fetchRecipes()');
     let requestURL = DB_PREFIX + 'recipe/homepage/';
 
     axios.get(requestURL)

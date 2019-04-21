@@ -27,6 +27,7 @@ let recipeImageUpload = multer({ storage: recipeImageStorage, }).single('image')
 let reviewStorage = cloudinaryStorage({
     cloudinary: cloudinary,
     folder: 'review',
+    transformation: [{ width: 500, height: 500, crop: 'fit', }],
 });
 
 let reviewImageUpload = multer({ storage: reviewStorage, }).single('image');
