@@ -1,4 +1,4 @@
-describe('Structure', () => {
+describe('add to favorite', () => {
   beforeEach(async () => {
     await device.reloadReactNative();
   });

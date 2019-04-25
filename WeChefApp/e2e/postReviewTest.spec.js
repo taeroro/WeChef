@@ -1,4 +1,4 @@
-describe('Structure', () => {
+describe('post review', () => {
   beforeEach(async () => {
     await device.reloadReactNative();
   });
