@@ -57,7 +57,7 @@ class PostNewReviewScreen extends Component {
     if (this.state.imageSource === image) {
       Alert.alert(
         'Please upload a picture',
-        'Upload picture before submission',
+        'Upload a picture before submission',
         [{test:'OK', }]
       );
       return;
@@ -154,7 +154,7 @@ class PostNewReviewScreen extends Component {
             underlineColor = '#F56862'
           />
         </View>
-        
+
         <View style={styles.divider} />
 
         <View style={styles.sectionContainer}>
@@ -165,7 +165,7 @@ class PostNewReviewScreen extends Component {
         </View>
 
         <View style={styles.divider} />
-        
+
 
         <View style={styles.sectionContainer}>
           <TouchableOpacity
