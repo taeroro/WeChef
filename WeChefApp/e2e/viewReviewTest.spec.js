@@ -1,4 +1,4 @@
-describe('RecipeSingleScreen', () => {
+describe('Structure', () => {
   beforeEach(async () => {
     await device.reloadReactNative();
   });

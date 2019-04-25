@@ -1,4 +1,4 @@
-describe('RecipeSingleScreen', () => {
+describe('post review', () => {
   beforeEach(async () => {
     await device.reloadReactNative();
   });
